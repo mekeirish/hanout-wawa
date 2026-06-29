@@ -321,6 +321,7 @@
     const removeFromCart = (id) => setCart(prev => prev.filter(i => i.id !== id));
     const getTotal = () => cart.reduce((sum, i) => sum + i.price * i.quantity, 0).toFixed(2);
 
+    // ---- CHECKOUT (modifié pour un message ntfy structuré en Markdown) ----
     const checkout = async () => {
       if (cart.length === 0) { alert("Panier vide"); return; }
       if (!order.name.trim() || !order.address.trim() || !order.phone.trim()) {
@@ -329,8 +330,26 @@
       }
       const topic = editableData?.settings?.ntfyTopic;
       if (topic) {
-        const summary = cart.map(i => `${i.name} x${i.quantity} = ${(i.price * i.quantity).toFixed(2)}${editableData?.settings?.currency || "€"}`).join("\n");
-        const msg = `📋 COMMANDE\n👤 ${order.name}\n📍 ${order.address}\n📞 ${order.phone}\n💬 ${order.comments || "Aucun"}\n🛒 ${summary}\n💰 TOTAL: ${getTotal()}${editableData?.settings?.currency || "€"}`;
+        const currencySymbol = editableData?.settings?.currency || "€";
+        const itemsList = cart.map(i => 
+          `- **${i.name}** ×${i.quantity} → ${(i.price * i.quantity).toFixed(2)} ${currencySymbol}`
+        ).join("\n");
+        const total = getTotal();
+        const msg = `## 📋 Récapitulatif
+
+**👤 Client :** ${order.name}
+**📍 Adresse :** ${order.address}
+**📞 Tél :** ${order.phone}
+**💬 Remarque :** ${order.comments || "Aucun"}
+
+---
+
+### 🛒 Articles commandés
+${itemsList}
+
+---
+
+### 💰 **TOTAL : ${total} ${currencySymbol}**`;
         await fetch(`https://ntfy.sh/${topic}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
