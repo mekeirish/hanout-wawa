@@ -24,8 +24,8 @@
   function App() {
 
     // ---- CONSTANTES INJECTÉES PAR LE FORKEUR ----
-    const VENDOR = "{{VENDOR}}";
-    const PASSWORD_HASH = "{{PASSWORD_HASH}}";
+    const VENDOR = "wawa";
+    const PASSWORD_HASH = "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e";
 
     // ---- DÉDUCTION AUTOMATIQUE DU VENDEUR ----
     const params = new URLSearchParams(window.location.search);
@@ -97,7 +97,7 @@
     // ---- CHARGEMENT DES DONNÉES ----
     useEffect(() => {
       const load = async () => {
-        if (!vendeur || vendeur === "{{VENDOR}}") {
+        if (!vendeur || vendeur === "wawa") {
           setIsLoading(false);
           return;
         }
@@ -391,7 +391,7 @@
       );
     }
 
-    if (!vendeur || vendeur === "{{VENDOR}}") {
+    if (!vendeur || vendeur === "wawa") {
       return (
         <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
           <div className="bg-slate-900/95 border border-red-500/30 rounded-2xl p-8 max-w-md w-full text-center">
