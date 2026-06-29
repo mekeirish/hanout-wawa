@@ -1,18 +1,48 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="forest">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   <title>Hanout - Catalogue</title>
+  <!-- Tailwind + DaisyUI -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" />
+  <!-- React + ReactDOM (UMD) -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel Standalone -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
-    body { background: #0f172a; }
+    /* Ajustements légers pour le thème forest */
+    .card-compact .card-body {
+      padding: 1rem;
+    }
+    .btn-sm {
+      min-height: 2rem;
+      height: 2rem;
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+      font-size: 0.875rem;
+    }
+    .modal-box {
+      max-width: 95vw;
+    }
+    @media (min-width: 640px) {
+      .modal-box {
+        max-width: 28rem;
+      }
+    }
+    /* Cache le scrollbar sur mobile pour un meilleur rendu */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#4b6cb7">
+  <meta name="theme-color" content="#1a2e1a">
   <link rel="apple-touch-icon" href="icon.png">
 </head>
 <body>
@@ -26,14 +56,15 @@
     // ---- CONSTANTES INJECTÉES PAR LE FORKEUR ----
     const VENDOR = "wawa";
     const PASSWORD_HASH = "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e";
+    const isPlaceholder = VENDOR.startsWith("{{");
 
-    // ---- DÉDUCTION AUTOMATIQUE DU VENDEUR ----
+    // ---- DÉDUCTION AUTOMATIQUE ----
     const params = new URLSearchParams(window.location.search);
     const repoName = window.location.pathname.split('/')[1] || '';
     const deducedVendor = repoName.startsWith('hanout-') ? repoName.replace('hanout-', '') : null;
     const vendeur = params.get("vendeur") || deducedVendor || localStorage.getItem("vendeur_name") || VENDOR;
 
-    // ---- TOKEN DÉDIÉ (demandé uniquement quand nécessaire) ----
+    // ---- TOKEN (demandé uniquement au commit) ----
     let MASTER_TOKEN = null;
     function getToken() {
       if (MASTER_TOKEN) return MASTER_TOKEN;
@@ -41,9 +72,8 @@
       let token = localStorage.getItem(tokenKey);
       if (!token) {
         token = prompt(`🔐 Entrez le token pour ${repoName} :`);
-        if (token) {
-          localStorage.setItem(tokenKey, token);
-        } else {
+        if (token) localStorage.setItem(tokenKey, token);
+        else {
           alert("Token requis pour cette action.");
           return null;
         }
@@ -71,7 +101,7 @@
     const [searchQuery, setSearchQuery] = useState("");
     const [order, setOrder] = useState({ name: "", address: "", phone: "", comments: "" });
 
-    // ---- SCHÉMA DE DONNÉES ----
+    // ---- SCHÉMA ----
     const schema = {
       categories: {
         label: "Catégories",
@@ -94,70 +124,53 @@
       }
     };
 
-    // ---- CHARGEMENT DES DONNÉES ----
+    // ---- CHARGEMENT (sans token) ----
     useEffect(() => {
       const load = async () => {
-        if (!vendeur || vendeur === "wawa") {
-          setIsLoading(false);
-          return;
-        }
-        const token = getToken();
-        if (!token) {
-          setIsLoading(false);
-          setMsg({ text: "❌ Token requis pour charger les données.", type: "error" });
-          return;
-        }
+        if (!vendeur || isPlaceholder) { setIsLoading(false); return; }
         try {
           const url = `https://api.github.com/repos/mekeirish/${repoName}/contents/don.json`;
-          const res = await fetch(url, { headers: { Authorization: `token ${token}` } });
+          const res = await fetch(url);
           if (res.status === 404) {
             const defaultData = {
               settings: { title: `Boutique de ${vendeur}`, currency: "DZD", showStock: true, ntfyTopic: `${vendeur}_commandes` },
               categories: [],
               products: [],
             };
-            await saveFile(defaultData);
             setData(defaultData);
             setEditableData(defaultData);
           } else if (res.ok) {
             const d = await res.json();
-            const content = JSON.parse(atob(d.content));
-            setData(content);
-            setEditableData(content);
-          } else {
-            throw new Error(`Erreur ${res.status}`);
+            setData(JSON.parse(atob(d.content)));
+            setEditableData(JSON.parse(atob(d.content)));
           }
         } catch (err) {
-          setMsg({ text: `❌ Erreur : ${err.message}`, type: "error" });
+          setMsg({ text: `❌ Erreur: ${err.message}`, type: "error" });
         }
         setIsLoading(false);
       };
       load();
     }, []);
 
-    // ---- SAUVEGARDE ----
+    // ---- SAUVEGARDE (avec token) ----
     const saveFile = async (content) => {
       const token = getToken();
       if (!token) throw new Error("Token requis.");
       const url = `https://api.github.com/repos/mekeirish/${repoName}/contents/don.json`;
-      const jsonContent = JSON.stringify(content, null, 2);
-      const encoded = btoa(unescape(encodeURIComponent(jsonContent)));
+      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2))));
       let sha = null;
       try {
         const getRes = await fetch(url, { headers: { Authorization: `token ${token}` } });
         if (getRes.ok) { const d = await getRes.json(); sha = d.sha; }
       } catch (e) {}
-      const payload = { message: "Mise à jour des données", content: encoded, branch: "main" };
+      const payload = { message: "Mise à jour", content: encoded, branch: "main" };
       if (sha) payload.sha = sha;
       const putRes = await fetch(url, {
         method: "PUT",
         headers: { Authorization: `token ${token}`, "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!putRes.ok) {
-        const err = await putRes.json();
-        throw new Error(`GitHub ${putRes.status}: ${err.message || "inconnue"}`);
-      }
+      if (!putRes.ok) { const err = await putRes.json(); throw new Error(`GitHub ${putRes.status}: ${err.message}`); }
       return putRes.json();
     };
 
@@ -166,12 +179,11 @@
       setData(editableData);
     };
 
-    // ---- AUTHENTIFICATION ADMIN ----
+    // ---- AUTH ADMIN ----
     const sha256 = async (message) => {
       const msgBuffer = new TextEncoder().encode(message);
       const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
     };
 
     const handleAdminLogin = async () => {
@@ -318,14 +330,12 @@
       const topic = editableData?.settings?.ntfyTopic;
       if (topic) {
         const summary = cart.map(i => `${i.name} x${i.quantity} = ${(i.price * i.quantity).toFixed(2)}${editableData?.settings?.currency || "€"}`).join("\n");
-        const msg = `📋 COMMANDE\n\n👤 ${order.name}\n📍 ${order.address}\n📞 ${order.phone}\n💬 ${order.comments || "Aucun"}\n\n🛒 ${summary}\n\n💰 TOTAL: ${getTotal()}${editableData?.settings?.currency || "€"}`;
-        try {
-          await fetch(`https://ntfy.sh/${topic}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ topic, title: "🛍️ NOUVELLE COMMANDE", message: msg, tags: ["shopping_cart"], priority: 5 }),
-          });
-        } catch (e) { console.error("ntfy error", e); }
+        const msg = `📋 COMMANDE\n👤 ${order.name}\n📍 ${order.address}\n📞 ${order.phone}\n💬 ${order.comments || "Aucun"}\n🛒 ${summary}\n💰 TOTAL: ${getTotal()}${editableData?.settings?.currency || "€"}`;
+        await fetch(`https://ntfy.sh/${topic}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ topic, title: "🛍️ NOUVELLE COMMANDE", message: msg, priority: 5 }),
+        }).catch(console.error);
       }
       setCart([]);
       setOrder({ name: "", address: "", phone: "", comments: "" });
@@ -339,12 +349,8 @@
 
     const hasPending = (item, type) => {
       if (!data) return false;
-      const orig = type === "product"
-        ? data.products.find(p => p.id === item.id)
-        : data.categories.find(c => c.id === item.id);
-      const draft = type === "product"
-        ? editableData.products.find(p => p.id === item.id)
-        : editableData.categories.find(c => c.id === item.id);
+      const orig = type === "product" ? data.products.find(p => p.id === item.id) : data.categories.find(c => c.id === item.id);
+      const draft = type === "product" ? editableData.products.find(p => p.id === item.id) : editableData.categories.find(c => c.id === item.id);
       return JSON.stringify(orig) !== JSON.stringify(draft);
     };
 
@@ -368,35 +374,38 @@
       if (field.type === "select") {
         const options = field.options === "categories" ? (editableData?.categories || []) : [];
         return (
-          <select key={field.key} value={val} onChange={onChange} className="w-full bg-slate-800/70 border border-slate-700/80 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-cyan-500/50 text-base mb-3">
+          <select key={field.key} value={val} onChange={onChange} className="select select-bordered w-full">
             <option value="">Choisir...</option>
             {options.map(opt => <option key={opt.id} value={opt.id}>{opt.icon} {opt.name}</option>)}
           </select>
         );
       }
       if (field.type === "textarea") {
-        return <textarea key={field.key} value={val} onChange={onChange} placeholder={field.label} rows={field.rows || 2} className="w-full bg-slate-800/70 border border-slate-700/80 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:ring-2 focus:ring-cyan-500/50 text-base resize-none mb-3" />;
+        return <textarea key={field.key} value={val} onChange={onChange} placeholder={field.label} rows={field.rows || 2} className="textarea textarea-bordered w-full" />;
       }
       return (
-        <input key={field.key} type={field.type || "text"} step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="w-full bg-slate-800/70 border border-slate-700/80 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:ring-2 focus:ring-cyan-500/50 text-base mb-3" />
+        <input key={field.key} type={field.type || "text"} step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="input input-bordered w-full" />
       );
     };
 
     // ---- CHARGEMENT ----
     if (isLoading) {
       return (
-        <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-          <div className="text-cyan-400 font-mono text-xl animate-pulse">⏳ Chargement du catalogue...</div>
+        <div className="min-h-screen flex items-center justify-center">
+          <span className="loading loading-spinner loading-lg text-primary"></span>
         </div>
       );
     }
 
-    if (!vendeur || vendeur === "wawa") {
+    if (!vendeur || isPlaceholder) {
       return (
-        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
-          <div className="bg-slate-900/95 border border-red-500/30 rounded-2xl p-8 max-w-md w-full text-center">
-            <h1 className="text-2xl font-bold text-red-400 mb-4">⚙️ Configuration requise</h1>
-            <p className="text-slate-400">Le vendeur n'a pas été configuré correctement.</p>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="card bg-base-200 shadow-xl max-w-md w-full">
+            <div className="card-body text-center">
+              <h2 className="card-title text-error justify-center">⚙️ Configuration requise</h2>
+              <p>{isPlaceholder ? "Le template n'a pas été configuré." : "Le vendeur n'a pas été configuré correctement."}</p>
+              <p className="text-sm opacity-70">Utilisez le forkeur pour créer une boutique.</p>
+            </div>
           </div>
         </div>
       );
@@ -406,105 +415,254 @@
     const currency = settings.currency || "€";
 
     return (
-      <div className="min-h-screen bg-slate-950 font-sans">
-        <button onClick={handleAdminClick} className="fixed top-4 left-4 z-50 text-2xl bg-slate-800/80 p-3 rounded-xl border border-slate-700/60 hover:border-cyan-400/40 transition">🔑</button>
-        <button onClick={() => setShowCart(!showCart)} className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-cyan-600 to-purple-600 text-white text-2xl p-4 rounded-full transition hover:scale-105">
-          🛒
-          {cart.length > 0 && <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">{cart.reduce((s, i) => s + i.quantity, 0)}</span>}
-        </button>
+      <div className="min-h-screen bg-base-200">
 
-        {isAdmin && isAdminAuthenticated ? (
-          <div className="p-4 pt-20 min-h-screen">
-            <div className="max-w-5xl mx-auto">
-              <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 mb-6 text-center">🛠️ PANEL ADMIN</h2>
-              <div className="mb-6 p-4 bg-slate-900/50 rounded-xl border border-slate-700/50">
-                <h4 className="text-sm font-bold text-white mb-2">⚙️ Configuration</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <input type="text" value={editableData?.settings?.title || ""} onChange={e => setEditableData({ ...editableData, settings: { ...editableData.settings, title: e.target.value } })} placeholder="Titre" className="bg-slate-800/70 border border-slate-700/80 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:ring-2 focus:ring-cyan-500/50 text-sm" />
-                  <input type="text" value={editableData?.settings?.currency || ""} onChange={e => setEditableData({ ...editableData, settings: { ...editableData.settings, currency: e.target.value } })} placeholder="Devise" className="bg-slate-800/70 border border-slate-700/80 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:ring-2 focus:ring-cyan-500/50 text-sm" />
-                  <input type="text" value={editableData?.settings?.ntfyTopic || ""} onChange={e => setEditableData({ ...editableData, settings: { ...editableData.settings, ntfyTopic: e.target.value } })} placeholder="Topic ntfy" className="bg-slate-800/70 border border-slate-700/80 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:ring-2 focus:ring-cyan-500/50 text-sm" />
+        {/* Header avec boutons admin et panier */}
+        <div className="navbar bg-base-300 shadow-md sticky top-0 z-30">
+          <div className="flex-1">
+            <h1 className="text-xl font-bold text-primary">{settings.title || "⚡ Catalogue"}</h1>
+          </div>
+          <div className="flex gap-2">
+            <button onClick={handleAdminClick} className="btn btn-ghost btn-sm">
+              🔑
+            </button>
+            <button onClick={() => setShowCart(!showCart)} className="btn btn-ghost btn-sm relative">
+              🛒
+              {cart.length > 0 && (
+                <span className="badge badge-secondary badge-sm absolute -top-2 -right-2">
+                  {cart.reduce((s, i) => s + i.quantity, 0)}
+                </span>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Contenu principal */}
+        <div className="container mx-auto px-4 pb-32 pt-4">
+
+          {isAdmin && isAdminAuthenticated ? (
+            // ---- ADMIN ----
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-primary">🛠️ PANEL ADMIN</h2>
+
+              {/* Settings */}
+              <div className="card bg-base-100 shadow-md">
+                <div className="card-body">
+                  <h3 className="font-semibold">⚙️ Configuration</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <input type="text" value={editableData?.settings?.title || ""} onChange={e => setEditableData({ ...editableData, settings: { ...editableData.settings, title: e.target.value } })} placeholder="Titre" className="input input-bordered input-sm w-full" />
+                    <input type="text" value={editableData?.settings?.currency || ""} onChange={e => setEditableData({ ...editableData, settings: { ...editableData.settings, currency: e.target.value } })} placeholder="Devise" className="input input-bordered input-sm w-full" />
+                    <input type="text" value={editableData?.settings?.ntfyTopic || ""} onChange={e => setEditableData({ ...editableData, settings: { ...editableData.settings, ntfyTopic: e.target.value } })} placeholder="Topic ntfy" className="input input-bordered input-sm w-full" />
+                  </div>
                 </div>
               </div>
 
-              <div className="mb-8">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-xl font-bold text-white">{schema.categories.icon} {schema.categories.label}</h3>
-                  <button onClick={() => openCatModal(null)} className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-xl transition text-sm">＋ Ajouter</button>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {(editableData?.categories || []).map(c => (
-                    <div key={c.id} className={`bg-slate-900/80 rounded-xl border p-3 flex items-center justify-between ${hasPending(c, "category") ? 'border-yellow-500/60' : 'border-slate-700/70'}`}>
-                      <span className="text-2xl mr-2">{c.icon}</span>
-                      <span className={`flex-1 text-sm ${hasPending(c, "category") ? 'text-yellow-400' : 'text-white'}`}>{c.name}</span>
-                      <button onClick={() => openCatModal(c)} className="bg-slate-700/60 hover:bg-cyan-600/40 text-white px-2 py-1 rounded border border-slate-600 text-xs">✎</button>
-                      <button onClick={() => deleteCategory(c.id)} className="bg-slate-700/60 hover:bg-red-600/40 text-white px-2 py-1 rounded border border-slate-600 text-xs ml-1">✕</button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-xl font-bold text-white">{schema.products.icon} {schema.products.label}</h3>
-                  <button onClick={() => openProdModal(null)} className="bg-green-600 hover:bg-green-500 text-white font-bold py-2 px-4 rounded-xl transition text-sm">＋ Ajouter</button>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {(editableData?.products || []).map(p => (
-                    <div key={p.id} className={`bg-slate-900/80 rounded-xl border p-3 flex items-center justify-between ${hasPending(p, "product") ? 'border-yellow-500/60' : 'border-slate-700/70'}`}>
-                      <img src={p.image} alt={p.name} className="w-10 h-10 object-cover rounded-full border border-cyan-500/30" onError={e => e.target.src = "https://via.placeholder.com/50"} />
-                      <div className="flex-1 ml-3">
-                        <p className={`text-sm ${hasPending(p, "product") ? 'text-yellow-400' : 'text-white'}`}>{p.name}</p>
-                        <p className="text-xs text-cyan-300">{p.price}{currency} · {getCategoryName(p.categoryId)} · stock:{p.stock}</p>
+              {/* Catégories */}
+              <div className="card bg-base-100 shadow-md">
+                <div className="card-body">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="font-semibold">{schema.categories.icon} {schema.categories.label}</h3>
+                    <button onClick={() => openCatModal(null)} className="btn btn-success btn-sm">＋ Ajouter</button>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {(editableData?.categories || []).map(c => (
+                      <div key={c.id} className={`flex items-center gap-2 p-2 rounded-lg border ${hasPending(c, "category") ? 'border-warning bg-warning/10' : 'border-base-300'}`}>
+                        <span className="text-xl">{c.icon}</span>
+                        <span className="flex-1 text-sm truncate">{c.name}</span>
+                        <button onClick={() => openCatModal(c)} className="btn btn-ghost btn-xs">✎</button>
+                        <button onClick={() => deleteCategory(c.id)} className="btn btn-ghost btn-xs text-error">✕</button>
                       </div>
-                      <button onClick={() => openProdModal(p)} className="bg-slate-700/60 hover:bg-cyan-600/40 text-white px-2 py-1 rounded border border-slate-600 text-xs">✎</button>
-                      <button onClick={() => deleteProduct(p.id)} className="bg-slate-700/60 hover:bg-red-600/40 text-white px-2 py-1 rounded border border-slate-600 text-xs ml-1">✕</button>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              <div className="mt-10 border-t border-slate-800/60 pt-6">
-                <button onClick={handleCommit} disabled={isCommitting} className={`w-full bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white font-bold py-3 px-6 rounded-xl transition ${isCommitting ? 'opacity-50' : ''}`}>
-                  {isCommitting ? '⏳ Sauvegarde...' : '💾 Sauvegarder (Commit)'}
-                </button>
-                {msg.text && <p className={`mt-2 text-sm font-mono ${msg.type === 'success' ? 'text-green-400' : msg.type === 'error' ? 'text-red-400' : 'text-yellow-400'}`}>{msg.text}</p>}
+              {/* Produits */}
+              <div className="card bg-base-100 shadow-md">
+                <div className="card-body">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="font-semibold">{schema.products.icon} {schema.products.label}</h3>
+                    <button onClick={() => openProdModal(null)} className="btn btn-success btn-sm">＋ Ajouter</button>
+                  </div>
+                  <div className="space-y-2">
+                    {(editableData?.products || []).map(p => (
+                      <div key={p.id} className={`flex items-center gap-3 p-2 rounded-lg border ${hasPending(p, "product") ? 'border-warning bg-warning/10' : 'border-base-300'}`}>
+                        <img src={p.image} alt={p.name} className="w-10 h-10 object-cover rounded-full" onError={e => e.target.src = "https://via.placeholder.com/50"} />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">{p.name}</p>
+                          <p className="text-xs opacity-70">{p.price}{currency} · {getCategoryName(p.categoryId)} · stock:{p.stock}</p>
+                        </div>
+                        <button onClick={() => openProdModal(p)} className="btn btn-ghost btn-xs">✎</button>
+                        <button onClick={() => deleteProduct(p.id)} className="btn btn-ghost btn-xs text-error">✕</button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Commit */}
+              <div className="card bg-base-100 shadow-md">
+                <div className="card-body">
+                  <button onClick={handleCommit} disabled={isCommitting} className={`btn btn-primary w-full ${isCommitting ? 'loading' : ''}`}>
+                    {isCommitting ? '⏳ Sauvegarde...' : '💾 Sauvegarder (Commit)'}
+                  </button>
+                  {msg.text && <p className={`text-sm mt-2 ${msg.type === 'success' ? 'text-success' : msg.type === 'error' ? 'text-error' : 'text-warning'}`}>{msg.text}</p>}
+                </div>
               </div>
             </div>
-          </div>
-        ) : (
-          <div className="p-4 pb-32">
-            <div className="max-w-6xl mx-auto">
-              <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500 mb-6 text-center">{settings.title || "⚡ Catalogue"}</h1>
-              <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="🔍 Rechercher..." className="w-full bg-slate-900/80 border border-slate-700/80 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:ring-2 focus:ring-cyan-500/50 mb-6" />
-              <div className="flex flex-wrap gap-2 mb-8">
-                <button onClick={() => setSelectedCategoryId(null)} className={`px-4 py-2 rounded-lg text-sm transition ${!selectedCategoryId ? 'bg-cyan-600 text-white' : 'bg-slate-800/60 text-slate-400 hover:bg-slate-700/60 border border-slate-700/50'}`}>🏠 Tous</button>
+          ) : (
+            // ---- CATALOGUE ----
+            <>
+              {/* Recherche */}
+              <div className="mb-4">
+                <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="🔍 Rechercher..." className="input input-bordered w-full" />
+              </div>
+
+              {/* Catégories (filtres) */}
+              <div className="flex flex-wrap gap-2 mb-4 overflow-x-auto pb-2 no-scrollbar">
+                <button onClick={() => setSelectedCategoryId(null)} className={`btn btn-sm ${!selectedCategoryId ? 'btn-primary' : 'btn-ghost'}`}>🏠 Tous</button>
                 {(editableData?.categories || []).map(c => (
-                  <button key={c.id} onClick={() => setSelectedCategoryId(c.id)} className={`px-4 py-2 rounded-lg text-sm transition ${selectedCategoryId === c.id ? 'bg-cyan-600 text-white' : 'bg-slate-800/60 text-slate-400 hover:bg-slate-700/60 border border-slate-700/50'}`}>{c.icon} {c.name}</button>
+                  <button key={c.id} onClick={() => setSelectedCategoryId(c.id)} className={`btn btn-sm ${selectedCategoryId === c.id ? 'btn-primary' : 'btn-ghost'}`}>
+                    {c.icon} {c.name}
+                  </button>
                 ))}
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+              {/* Grille produits */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                 {getFiltered().map(p => (
-                  <div key={p.id} className="bg-slate-900/80 rounded-2xl border border-slate-700/80 p-6 hover:border-cyan-400/60 transition hover:-translate-y-1">
-                    <img src={p.image} alt={p.name} onClick={() => setExpandedImage(p.image)} className="w-32 h-32 mx-auto object-cover rounded-full border-2 border-cyan-500/50 hover:scale-110 transition cursor-pointer" onError={e => e.target.src = "https://via.placeholder.com/200"} />
-                    <div className="text-center mt-2 text-xs text-slate-500">{getCategoryIcon(p.categoryId)} {getCategoryName(p.categoryId)}</div>
-                    <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent mx-auto my-2"></div>
-                    <h2 className="text-xl font-semibold text-cyan-300 text-center uppercase">{p.name}</h2>
-                    <p className="text-xl font-mono font-bold text-white text-center mt-2 bg-slate-800/50 px-4 py-1 rounded-full inline-block w-full">{p.price}{currency}</p>
-                    {settings.showStock && <p className="text-xs text-slate-500 text-center mt-1">Stock: {p.stock > 0 ? p.stock : '⚠️ Rupture'}</p>}
-                    <button onClick={() => addToCart(p)} disabled={p.stock <= 0} className={`w-full mt-3 py-2 rounded-xl font-bold text-sm transition ${p.stock > 0 ? 'bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white' : 'bg-slate-700/50 text-slate-500 cursor-not-allowed'}`}>🛒 Ajouter</button>
+                  <div key={p.id} className="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+                    <figure className="px-2 pt-2">
+                      <img src={p.image} alt={p.name} onClick={() => setExpandedImage(p.image)} className="w-full h-32 object-cover rounded-xl cursor-pointer" onError={e => e.target.src = "https://via.placeholder.com/200"} />
+                    </figure>
+                    <div className="card-body p-3">
+                      <span className="text-xs opacity-70">{getCategoryIcon(p.categoryId)} {getCategoryName(p.categoryId)}</span>
+                      <h3 className="text-sm font-semibold truncate">{p.name}</h3>
+                      <p className="text-base font-bold text-primary">{p.price}{currency}</p>
+                      {settings.showStock && <p className="text-xs opacity-70">Stock: {p.stock > 0 ? p.stock : '⚠️ Rupture'}</p>}
+                      <button onClick={() => addToCart(p)} disabled={p.stock <= 0} className={`btn btn-primary btn-sm w-full ${p.stock <= 0 ? 'btn-disabled' : ''}`}>
+                        🛒 Ajouter
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
-              <div className="mt-8 text-center text-xs text-slate-600 border-t border-slate-800/50 pt-4">
-                <span className="text-cyan-500/40">[ SYSTEME : ACTIF ]</span> — {(data?.products || []).length} PRODUITS · {(data?.categories || []).length} CATÉGORIES
-                {settings.ntfyTopic && <span className="ml-4 text-cyan-500/40">🔔 ntfy: {settings.ntfyTopic}</span>}
+
+              {getFiltered().length === 0 && (
+                <div className="text-center py-10 opacity-70">
+                  {searchQuery ? "Aucun produit ne correspond." : "Aucun produit dans cette catégorie."}
+                </div>
+              )}
+
+              {/* Footer */}
+              <div className="mt-8 text-center text-xs opacity-50 border-t border-base-300 pt-4">
+                {(data?.products || []).length} PRODUITS · {(data?.categories || []).length} CATÉGORIES
+                {settings.ntfyTopic && <span className="ml-4">🔔 {settings.ntfyTopic}</span>}
               </div>
+            </>
+          )}
+        </div>
+
+        {/* ---- MODALS ---- */}
+        {/* Modal mot de passe */}
+        {showPasswordModal && (
+          <div className="modal modal-open" onClick={() => setShowPasswordModal(false)}>
+            <div className="modal-box" onClick={e => e.stopPropagation()}>
+              <h3 className="font-bold text-lg">🔐 Accès admin</h3>
+              <p className="text-sm opacity-70 mb-4">Entrez votre mot de passe.</p>
+              <input type="password" value={adminPassword} onChange={e => setAdminPassword(e.target.value)} placeholder="Mot de passe" className="input input-bordered w-full" onKeyDown={e => e.key === "Enter" && handleAdminLogin()} />
+              <div className="modal-action">
+                <button onClick={handleAdminLogin} className="btn btn-primary">✅ Valider</button>
+                <button onClick={() => setShowPasswordModal(false)} className="btn btn-ghost">Annuler</button>
+              </div>
+              {msg.text && msg.type === "error" && <p className="text-error text-sm mt-2">{msg.text}</p>}
             </div>
           </div>
         )}
 
-        {/* ---- MODALS (inchangées) ---- */}
-        {/* (je les inclus pas ici pour la lisibilité, mais elles sont identiques à avant) */}
+        {/* Modal image agrandie */}
+        {expandedImage && (
+          <div className="modal modal-open" onClick={() => setExpandedImage(null)}>
+            <div className="modal-box max-w-3xl p-0 bg-transparent shadow-none" onClick={e => e.stopPropagation()}>
+              <img src={expandedImage} alt="Agrandissement" className="w-full rounded-xl" onError={e => e.target.src = "https://via.placeholder.com/800"} />
+              <button onClick={() => setExpandedImage(null)} className="btn btn-ghost btn-sm absolute top-2 right-2 text-white">✕</button>
+            </div>
+          </div>
+        )}
+
+        {/* Modal Panier */}
+        {showCart && (
+          <div className="modal modal-open" onClick={() => setShowCart(false)}>
+            <div className="modal-box max-w-md" onClick={e => e.stopPropagation()}>
+              <h3 className="font-bold text-lg">🛒 Mon Panier</h3>
+              {cart.length === 0 ? (
+                <p className="py-4 text-center opacity-70">Panier vide</p>
+              ) : (
+                <>
+                  <div className="space-y-2 max-h-60 overflow-y-auto my-4">
+                    {cart.map(i => (
+                      <div key={i.id} className="flex items-center gap-3 bg-base-200 p-2 rounded-lg">
+                        <img src={i.image} alt={i.name} className="w-12 h-12 object-cover rounded-full" onError={e => e.target.src = "https://via.placeholder.com/50"} />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">{i.name}</p>
+                          <p className="text-xs opacity-70">{i.price}{currency}</p>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <button onClick={() => updateQty(i.id, -1)} className="btn btn-ghost btn-xs">-</button>
+                          <span className="w-6 text-center">{i.quantity}</span>
+                          <button onClick={() => updateQty(i.id, 1)} className="btn btn-ghost btn-xs">+</button>
+                          <button onClick={() => removeFromCart(i.id)} className="btn btn-ghost btn-xs text-error">✕</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex justify-between font-bold border-t border-base-300 pt-2">
+                    <span>Total</span>
+                    <span className="text-primary">{getTotal()}{currency}</span>
+                  </div>
+
+                  {/* Champs commande */}
+                  <div className="space-y-2 mt-4">
+                    <input type="text" value={order.name} onChange={e => setOrder({ ...order, name: e.target.value })} placeholder="Nom complet *" className="input input-bordered input-sm w-full" />
+                    <input type="text" value={order.address} onChange={e => setOrder({ ...order, address: e.target.value })} placeholder="Adresse *" className="input input-bordered input-sm w-full" />
+                    <input type="tel" value={order.phone} onChange={e => setOrder({ ...order, phone: e.target.value })} placeholder="Téléphone *" className="input input-bordered input-sm w-full" />
+                    <textarea value={order.comments} onChange={e => setOrder({ ...order, comments: e.target.value })} placeholder="Commentaires (facultatif)" rows="2" className="textarea textarea-bordered w-full textarea-sm"></textarea>
+                  </div>
+
+                  <div className="modal-action">
+                    <button onClick={checkout} className="btn btn-primary w-full">✅ Valider la commande</button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Modal générique (création/édition) */}
+        {modal.open && (
+          <div className="modal modal-open" onClick={closeModal}>
+            <div className="modal-box" onClick={e => e.stopPropagation()}>
+              <h3 className="font-bold text-lg">
+                {modal.creating ? `✦ Nouveau ${modal.type === "category" ? "catégorie" : "produit"}` : `✦ Modifier ${modal.type === "category" ? "la catégorie" : "le produit"}`}
+              </h3>
+              <div className="space-y-3 mt-4">
+                {modal.type === "category"
+                  ? schema.categories.fields.map(renderField)
+                  : schema.products.fields.map(f => {
+                      if (f.key === "categoryId") return renderField({ ...f, options: "categories" });
+                      return renderField(f);
+                    })
+                }
+              </div>
+              <div className="modal-action">
+                <button onClick={modal.type === "category" ? saveCategory : saveProduct} className="btn btn-primary">
+                  {modal.creating ? '✅ Créer' : '💾 Sauvegarder'}
+                </button>
+                <button onClick={closeModal} className="btn btn-ghost">Annuler</button>
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
     );
