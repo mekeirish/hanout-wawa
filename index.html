@@ -1,77 +1,183 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="forest">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   <title>Hanout - Catalogue</title>
-  <!-- Tailwind + DaisyUI -->
+  <!-- Tailwind CSS (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" />
   <!-- React + ReactDOM (UMD) -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <!-- Babel Standalone -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
-    /* Ajustements légers pour le thème forest */
-    .card-compact .card-body {
-      padding: 1rem;
+    /* Styles néumorphiques */
+    .neu-card {
+      background: #1e293b;
+      border-radius: 1.5rem;
+      box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.05),
+                  inset -2px -2px 4px rgba(0, 0, 0, 0.8),
+                  6px 6px 12px rgba(0, 0, 0, 0.6);
     }
-    .btn-sm {
-      min-height: 2rem;
-      height: 2rem;
-      padding-left: 0.75rem;
-      padding-right: 0.75rem;
-      font-size: 0.875rem;
+    .neu-button {
+      background: #1e293b;
+      color: white;
+      border-radius: 0.75rem;
+      padding: 0.5rem 1rem;
+      box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.1),
+                  inset -2px -2px 4px rgba(0, 0, 0, 0.9),
+                  4px 4px 8px rgba(0, 0, 0, 0.6);
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+      font-weight: 500;
     }
-    .modal-box {
-      max-width: 95vw;
+    .neu-button:hover {
+      box-shadow: inset -2px -2px 4px rgba(255, 255, 255, 0.05),
+                  inset 2px 2px 4px rgba(0, 0, 0, 0.9);
+      transform: scale(0.98);
     }
-    @media (min-width: 640px) {
-      .modal-box {
-        max-width: 28rem;
-      }
+    .neu-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
     }
-    /* Cache le scrollbar sur mobile pour un meilleur rendu */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    .neu-input {
+      background: #1e293b;
+      color: white;
+      border-radius: 0.75rem;
+      padding: 0.5rem 1rem;
+      box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.8),
+                  inset -2px -2px 4px rgba(255, 255, 255, 0.05);
+      border: none;
+      outline: none;
+      width: 100%;
+      transition: box-shadow 0.2s;
     }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+    .neu-input:focus {
+      box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.9),
+                  inset -2px -2px 4px rgba(255, 255, 255, 0.1),
+                  0 0 0 2px #3b82f6;
+    }
+    .neu-input::placeholder {
+      color: #94a3b8;
+    }
+    .neu-select {
+      background: #1e293b;
+      color: white;
+      border-radius: 0.75rem;
+      padding: 0.5rem 1rem;
+      box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.8),
+                  inset -2px -2px 4px rgba(255, 255, 255, 0.05);
+      border: none;
+      outline: none;
+      width: 100%;
+      appearance: none;
+    }
+    .neu-select:focus {
+      box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.9),
+                  inset -2px -2px 4px rgba(255, 255, 255, 0.1),
+                  0 0 0 2px #3b82f6;
+    }
+    .modal-overlay {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+    }
+    .cart-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #ef4444;
+      color: white;
+      border-radius: 9999px;
+      font-size: 0.6rem;
+      padding: 0.1rem 0.4rem;
+      min-width: 1.2rem;
+      text-align: center;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 8px;
+    }
+    .spinner {
+      border: 3px solid #1e293b;
+      border-top: 3px solid #3b82f6;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1a2e1a">
-  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="apple-touch-icon" href="icon.png" />
 </head>
 <body>
 <div id="root"></div>
 
 <script type="text/babel">
-  const { useState, useEffect } = React;
+  // ---- PROTOCOLE LB REAACTOR ----
+  const { useState, useEffect, useRef, useMemo } = React;
 
   function App() {
 
     // ---- CONSTANTES INJECTÉES PAR LE FORKEUR ----
-    const VENDOR = "wawa";
-    const PASSWORD_HASH = "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e";
-    const isPlaceholder = VENDOR.startsWith("{{");
+    var VENDOR = "wawa";
+    var PASSWORD_HASH = "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e";
+    var isPlaceholder = VENDOR.startsWith("{{");
 
     // ---- DÉDUCTION AUTOMATIQUE ----
-    const params = new URLSearchParams(window.location.search);
-    const repoName = window.location.pathname.split('/')[1] || '';
-    const deducedVendor = repoName.startsWith('hanout-') ? repoName.replace('hanout-', '') : null;
-    const vendeur = params.get("vendeur") || deducedVendor || localStorage.getItem("vendeur_name") || VENDOR;
+    var params = new URLSearchParams(window.location.search);
+    var repoName = window.location.pathname.split('/')[1] || '';
+    var deducedVendor = repoName.startsWith('hanout-') ? repoName.replace('hanout-', '') : null;
+    var vendeur = params.get("vendeur") || deducedVendor || localStorage.getItem("vendeur_name") || VENDOR;
+
+    // ---- ÉTAT POUR L'UTILISATEUR SOG ----
+    var [sogUser, setSogUser] = useState(null);
+    var [isReady, setIsReady] = useState(false);
+
+    // ---- ÉCOUTE DES MESSAGES DE SOG ----
+    useEffect(function() {
+      var handleMessage = function(event) {
+        console.log("📩 Message reçu dans l'iframe :", event.data);
+        
+        if (event.data.type === 'SOG_AUTH') {
+          setSogUser(event.data.payload.user);
+          console.log("✅ Utilisateur SOG reçu :", event.data.payload.user);
+        }
+      };
+      
+      window.addEventListener('message', handleMessage);
+
+      // Envoyer un message pour dire que l'iframe est prête
+      window.parent.postMessage({ type: 'SOG_READY' }, '*');
+      setIsReady(true);
+      console.log("🚀 Iframe SOG prête !");
+
+      return function() {
+        window.removeEventListener('message', handleMessage);
+      };
+    }, []);
 
     // ---- TOKEN (demandé uniquement au commit) ----
-    let MASTER_TOKEN = null;
+    var MASTER_TOKEN = null;
     function getToken() {
       if (MASTER_TOKEN) return MASTER_TOKEN;
-      const tokenKey = `fgt_token_${repoName}`;
-      let token = localStorage.getItem(tokenKey);
+      var tokenKey = "fgt_token_" + repoName;
+      var token = localStorage.getItem(tokenKey);
       if (!token) {
-        token = prompt(`🔐 Entrez le token pour ${repoName} :`);
+        token = prompt("🔐 Entrez le token pour " + repoName + " :");
         if (token) localStorage.setItem(tokenKey, token);
         else {
           alert("Token requis pour cette action.");
@@ -83,26 +189,26 @@
     }
 
     // ---- ÉTATS ----
-    const [isLoading, setIsLoading] = useState(true);
-    const [data, setData] = useState(null);
-    const [editableData, setEditableData] = useState(null);
-    const [isAdmin, setIsAdmin] = useState(false);
-    const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
-    const [showPasswordModal, setShowPasswordModal] = useState(false);
-    const [adminPassword, setAdminPassword] = useState("");
-    const [msg, setMsg] = useState({ text: "", type: "" });
-    const [isCommitting, setIsCommitting] = useState(false);
-    const [modal, setModal] = useState({ open: false, type: "", item: null, creating: false });
-    const [formData, setFormData] = useState({});
-    const [cart, setCart] = useState([]);
-    const [showCart, setShowCart] = useState(false);
-    const [expandedImage, setExpandedImage] = useState(null);
-    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [order, setOrder] = useState({ name: "", address: "", phone: "", comments: "" });
+    var [isLoading, setIsLoading] = useState(true);
+    var [data, setData] = useState(null);
+    var [editableData, setEditableData] = useState(null);
+    var [isAdmin, setIsAdmin] = useState(false);
+    var [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+    var [showPasswordModal, setShowPasswordModal] = useState(false);
+    var [adminPassword, setAdminPassword] = useState("");
+    var [msg, setMsg] = useState({ text: "", type: "" });
+    var [isCommitting, setIsCommitting] = useState(false);
+    var [modal, setModal] = useState({ open: false, type: "", item: null, creating: false });
+    var [formData, setFormData] = useState({});
+    var [cart, setCart] = useState([]);
+    var [showCart, setShowCart] = useState(false);
+    var [expandedImage, setExpandedImage] = useState(null);
+    var [selectedCategoryId, setSelectedCategoryId] = useState(null);
+    var [searchQuery, setSearchQuery] = useState("");
+    var [order, setOrder] = useState({ name: "", address: "", phone: "", comments: "" });
 
     // ---- SCHÉMA ----
-    const schema = {
+    var schema = {
       categories: {
         label: "Catégories",
         icon: "📂",
@@ -125,27 +231,27 @@
     };
 
     // ---- CHARGEMENT (sans token) ----
-    useEffect(() => {
-      const load = async () => {
+    useEffect(function() {
+      var load = async function() {
         if (!vendeur || isPlaceholder) { setIsLoading(false); return; }
         try {
-          const url = `https://api.github.com/repos/mekeirish/${repoName}/contents/don.json`;
-          const res = await fetch(url);
+          var url = "https://api.github.com/repos/mekeirish/" + repoName + "/contents/don.json";
+          var res = await fetch(url);
           if (res.status === 404) {
-            const defaultData = {
-              settings: { title: `Boutique de ${vendeur}`, currency: "DZD", showStock: true, ntfyTopic: `${vendeur}_commandes` },
+            var defaultData = {
+              settings: { title: "Boutique de " + vendeur, currency: "DZD", showStock: true, ntfyTopic: vendeur + "_commandes" },
               categories: [],
               products: [],
             };
             setData(defaultData);
             setEditableData(defaultData);
           } else if (res.ok) {
-            const d = await res.json();
+            var d = await res.json();
             setData(JSON.parse(atob(d.content)));
             setEditableData(JSON.parse(atob(d.content)));
           }
         } catch (err) {
-          setMsg({ text: `❌ Erreur: ${err.message}`, type: "error" });
+          setMsg({ text: "❌ Erreur: " + err.message, type: "error" });
         }
         setIsLoading(false);
       };
@@ -153,41 +259,41 @@
     }, []);
 
     // ---- SAUVEGARDE (avec token) ----
-    const saveFile = async (content) => {
-      const token = getToken();
+    var saveFile = async function(content) {
+      var token = getToken();
       if (!token) throw new Error("Token requis.");
-      const url = `https://api.github.com/repos/mekeirish/${repoName}/contents/don.json`;
-      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2))));
-      let sha = null;
+      var url = "https://api.github.com/repos/mekeirish/" + repoName + "/contents/don.json";
+      var encoded = btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2))));
+      var sha = null;
       try {
-        const getRes = await fetch(url, { headers: { Authorization: `token ${token}` } });
-        if (getRes.ok) { const d = await getRes.json(); sha = d.sha; }
+        var getRes = await fetch(url, { headers: { Authorization: "token " + token } });
+        if (getRes.ok) { var d = await getRes.json(); sha = d.sha; }
       } catch (e) {}
-      const payload = { message: "Mise à jour", content: encoded, branch: "main" };
+      var payload = { message: "Mise à jour", content: encoded, branch: "main" };
       if (sha) payload.sha = sha;
-      const putRes = await fetch(url, {
+      var putRes = await fetch(url, {
         method: "PUT",
-        headers: { Authorization: `token ${token}`, "Content-Type": "application/json" },
+        headers: { Authorization: "token " + token, "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!putRes.ok) { const err = await putRes.json(); throw new Error(`GitHub ${putRes.status}: ${err.message}`); }
+      if (!putRes.ok) { var err = await putRes.json(); throw new Error("GitHub " + putRes.status + ": " + err.message); }
       return putRes.json();
     };
 
-    const saveEditableData = async () => {
+    var saveEditableData = async function() {
       await saveFile(editableData);
       setData(editableData);
     };
 
     // ---- AUTH ADMIN ----
-    const sha256 = async (message) => {
-      const msgBuffer = new TextEncoder().encode(message);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-      return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    var sha256 = async function(message) {
+      var msgBuffer = new TextEncoder().encode(message);
+      var hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      return Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
     };
 
-    const handleAdminLogin = async () => {
-      const hash = await sha256(adminPassword);
+    var handleAdminLogin = async function() {
+      var hash = await sha256(adminPassword);
       if (hash === PASSWORD_HASH) {
         setIsAdminAuthenticated(true);
         setShowPasswordModal(false);
@@ -199,7 +305,7 @@
       }
     };
 
-    const handleAdminClick = () => {
+    var handleAdminClick = function() {
       if (isAdminAuthenticated) {
         setIsAdmin(!isAdmin);
       } else {
@@ -208,21 +314,29 @@
     };
 
     // ---- CRUD CATÉGORIES ----
-    const openCatModal = (cat = null) => {
+    var openCatModal = function(cat) {
+      if (cat === undefined) cat = null;
       setModal({ open: true, type: "category", item: cat, creating: !cat });
-      const defaultVals = {};
-      schema.categories.fields.forEach(f => defaultVals[f.key] = cat?.[f.key] || f.default || "");
+      var defaultVals = {};
+      schema.categories.fields.forEach(function(f) {
+        defaultVals[f.key] = cat?.[f.key] || f.default || "";
+      });
       setFormData(defaultVals);
     };
 
-    const saveCategory = () => {
-      const newCat = {
-        id: modal.creating ? Math.max(...editableData.categories.map(c => c.id), 0) + 1 : modal.item.id
+    var saveCategory = function() {
+      var maxId = 0;
+      editableData.categories.forEach(function(c) { if (c.id > maxId) maxId = c.id; });
+      var newCat = {
+        id: modal.creating ? maxId + 1 : modal.item.id
       };
-      schema.categories.fields.forEach(f => newCat[f.key] = formData[f.key] || f.default);
-      if (modal.creating) editableData.categories.push(newCat);
-      else {
-        const idx = editableData.categories.findIndex(c => c.id === modal.item.id);
+      schema.categories.fields.forEach(function(f) {
+        newCat[f.key] = formData[f.key] || f.default;
+      });
+      if (modal.creating) {
+        editableData.categories.push(newCat);
+      } else {
+        var idx = editableData.categories.findIndex(function(c) { return c.id === modal.item.id; });
         if (idx > -1) editableData.categories[idx] = newCat;
       }
       setEditableData({ ...editableData });
@@ -230,23 +344,24 @@
       setMsg({ text: "Catégorie sauvegardée", type: "info" });
     };
 
-    const deleteCategory = (id) => {
+    var deleteCategory = function(id) {
       if (!confirm("Supprimer cette catégorie ?")) return;
       setEditableData({
         ...editableData,
-        categories: editableData.categories.filter(c => c.id !== id),
-        products: editableData.products.filter(p => p.categoryId !== id),
+        categories: editableData.categories.filter(function(c) { return c.id !== id; }),
+        products: editableData.products.filter(function(p) { return p.categoryId !== id; }),
       });
       setMsg({ text: "Catégorie supprimée", type: "info" });
     };
 
     // ---- CRUD PRODUITS ----
-    const openProdModal = (prod = null) => {
+    var openProdModal = function(prod) {
+      if (prod === undefined) prod = null;
       setModal({ open: true, type: "product", item: prod, creating: !prod });
-      const defaultVals = {};
-      schema.products.fields.forEach(f => {
+      var defaultVals = {};
+      schema.products.fields.forEach(function(f) {
         if (f.key === "categoryId") {
-          const defaultCategory = selectedCategoryId || editableData.categories[0]?.id || "";
+          var defaultCategory = selectedCategoryId || (editableData.categories[0] ? editableData.categories[0].id : "");
           defaultVals[f.key] = prod?.[f.key] || defaultCategory || f.default || "";
         } else {
           defaultVals[f.key] = prod?.[f.key] || f.default || "";
@@ -255,20 +370,23 @@
       setFormData(defaultVals);
     };
 
-    const saveProduct = () => {
+    var saveProduct = function() {
       if (!formData.categoryId && editableData.categories.length > 0) {
         formData.categoryId = editableData.categories[0].id;
       }
-      const newProd = {
-        id: modal.creating ? Math.max(...editableData.products.map(p => p.id), 0) + 1 : modal.item.id
+      var maxId = 0;
+      editableData.products.forEach(function(p) { if (p.id > maxId) maxId = p.id; });
+      var newProd = {
+        id: modal.creating ? maxId + 1 : modal.item.id
       };
-      schema.products.fields.forEach(f => {
-        const val = formData[f.key] !== undefined ? formData[f.key] : f.default;
+      schema.products.fields.forEach(function(f) {
+        var val = formData[f.key] !== undefined ? formData[f.key] : f.default;
         newProd[f.key] = f.type === "number" ? parseFloat(val) || 0 : val;
       });
-      if (modal.creating) editableData.products.push(newProd);
-      else {
-        const idx = editableData.products.findIndex(p => p.id === modal.item.id);
+      if (modal.creating) {
+        editableData.products.push(newProd);
+      } else {
+        var idx = editableData.products.findIndex(function(p) { return p.id === modal.item.id; });
         if (idx > -1) editableData.products[idx] = newProd;
       }
       setEditableData({ ...editableData });
@@ -276,86 +394,127 @@
       setMsg({ text: "Produit sauvegardé", type: "info" });
     };
 
-    const deleteProduct = (id) => {
+    var deleteProduct = function(id) {
       if (!confirm("Supprimer ce produit ?")) return;
-      setEditableData({ ...editableData, products: editableData.products.filter(p => p.id !== id) });
+      setEditableData({ ...editableData, products: editableData.products.filter(function(p) { return p.id !== id; }) });
       setMsg({ text: "Produit supprimé", type: "info" });
     };
 
     // ---- COMMIT ----
-    const handleCommit = async () => {
+    var handleCommit = async function() {
       setIsCommitting(true);
       try {
         await saveEditableData();
         setMsg({ text: "✅ Données sauvegardées sur GitHub", type: "success" });
       } catch (err) {
-        setMsg({ text: `❌ Échec : ${err.message}`, type: "error" });
+        setMsg({ text: "❌ Échec : " + err.message, type: "error" });
       }
       setIsCommitting(false);
     };
 
     // ---- PANIER ----
-    const addToCart = (product) => {
+    var addToCart = function(product) {
       if (product.stock <= 0) { alert("Rupture de stock"); return; }
-      setCart(prev => {
-        const existing = prev.find(i => i.id === product.id);
+      if (!sogUser) {
+        alert("🔒 Vous devez être connecté à SOG pour ajouter au panier.");
+        return;
+      }
+      setCart(function(prev) {
+        var existing = prev.find(function(i) { return i.id === product.id; });
         if (existing) {
           if (existing.quantity >= product.stock) { alert("Stock insuffisant"); return prev; }
-          return prev.map(i => i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i);
+          return prev.map(function(i) {
+            return i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i;
+          });
         }
         return [...prev, { ...product, quantity: 1 }];
       });
     };
 
-    const updateQty = (id, delta) => {
-      setCart(prev => {
-        const item = prev.find(i => i.id === id);
+    var updateQty = function(id, delta) {
+      setCart(function(prev) {
+        var item = prev.find(function(i) { return i.id === id; });
         if (!item) return prev;
-        const newQty = item.quantity + delta;
-        if (newQty <= 0) return prev.filter(i => i.id !== id);
+        var newQty = item.quantity + delta;
+        if (newQty <= 0) return prev.filter(function(i) { return i.id !== id; });
         if (newQty > item.stock) { alert("Stock insuffisant"); return prev; }
-        return prev.map(i => i.id === id ? { ...i, quantity: newQty } : i);
+        return prev.map(function(i) {
+          return i.id === id ? { ...i, quantity: newQty } : i;
+        });
       });
     };
 
-    const removeFromCart = (id) => setCart(prev => prev.filter(i => i.id !== id));
-    const getTotal = () => cart.reduce((sum, i) => sum + i.price * i.quantity, 0).toFixed(2);
+    var removeFromCart = function(id) {
+      setCart(function(prev) {
+        return prev.filter(function(i) { return i.id !== id; });
+      });
+    };
 
-    // ---- CHECKOUT (modifié pour un message ntfy structuré en Markdown) ----
-    const checkout = async () => {
+    var getTotal = function() {
+      return cart.reduce(function(sum, i) {
+        return sum + i.price * i.quantity;
+      }, 0).toFixed(2);
+    };
+
+    // ---- ENVOI DE LA COMMANDE À SOG ----
+    var sendOrderToSOG = function(orderData) {
+      window.parent.postMessage({
+        type: 'SOG_ORDER',
+        payload: {
+          vendor: vendeur,
+          items: cart.map(function(i) {
+            return { name: i.name, quantity: i.quantity, price: i.price };
+          }),
+          total: parseFloat(getTotal()),
+          currency: editableData?.settings?.currency || "DZD",
+          customerName: orderData.name,
+          customerPhone: orderData.phone,
+          customerAddress: orderData.address,
+          comments: orderData.comments || ""
+        }
+      }, '*');
+      console.log("📤 Commande envoyée à SOG :", orderData);
+    };
+
+    // ---- CHECKOUT ----
+    var checkout = async function() {
       if (cart.length === 0) { alert("Panier vide"); return; }
+      if (!sogUser) {
+        alert("🔒 Vous devez être connecté à SOG pour commander.");
+        return;
+      }
       if (!order.name.trim() || !order.address.trim() || !order.phone.trim()) {
         alert("Veuillez remplir tous les champs obligatoires");
         return;
       }
-      const topic = editableData?.settings?.ntfyTopic;
+      
+      // Envoyer la commande à SOG pour l'historique
+      sendOrderToSOG(order);
+
+      var topic = editableData?.settings?.ntfyTopic;
       if (topic) {
-        const currencySymbol = editableData?.settings?.currency || "€";
-        const itemsList = cart.map(i => 
-          `- **${i.name}** ×${i.quantity} → ${(i.price * i.quantity).toFixed(2)} ${currencySymbol}`
-        ).join("\n");
-        const total = getTotal();
-        const msg = `## 📋 Récapitulatif
+        var currencySymbol = editableData?.settings?.currency || "€";
+        var total = getTotal();
+        var message = "📋 RÉCAPITULATIF\n\n";
+        message += "👤 Client : " + order.name + "\n";
+        message += "📍 Adresse : " + order.address + "\n";
+        message += "📞 Tél : " + order.phone + "\n";
+        message += "💬 Remarque : " + (order.comments || "Aucun") + "\n\n";
+        message += "───────────────────\n\n";
+        message += "🛒 Articles commandés :\n";
+        cart.forEach(function(i) {
+          message += "  • " + i.name + " ×" + i.quantity + " → " + (i.price * i.quantity).toFixed(2) + " " + currencySymbol + "\n";
+        });
+        message += "\n───────────────────\n\n";
+        message += "💰 TOTAL : " + total + " " + currencySymbol;
 
-**👤 Client :** ${order.name}
-**📍 Adresse :** ${order.address}
-**📞 Tél :** ${order.phone}
-**💬 Remarque :** ${order.comments || "Aucun"}
-
----
-
-### 🛒 Articles commandés
-${itemsList}
-
----
-
-### 💰 **TOTAL : ${total} ${currencySymbol}**`;
-        await fetch(`https://ntfy.sh/${topic}`, {
+        await fetch("https://ntfy.sh/" + topic, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ topic, title: "🛍️ NOUVELLE COMMANDE", message: msg, priority: 5 }),
+          body: JSON.stringify({ topic: topic, title: "🛍️ NOUVELLE COMMANDE", message: message, priority: 5 }),
         }).catch(console.error);
       }
+      
       setCart([]);
       setOrder({ name: "", address: "", phone: "", comments: "" });
       setShowCart(false);
@@ -363,295 +522,362 @@ ${itemsList}
     };
 
     // ---- UTILITAIRES ----
-    const getCategoryName = (id) => data?.categories?.find(c => c.id === id)?.name || "Sans catégorie";
-    const getCategoryIcon = (id) => data?.categories?.find(c => c.id === id)?.icon || "📁";
+    var getCategoryName = function(id) {
+      var cat = data?.categories?.find(function(c) { return c.id === id; });
+      return cat ? cat.name : "Sans catégorie";
+    };
 
-    const hasPending = (item, type) => {
+    var getCategoryIcon = function(id) {
+      var cat = data?.categories?.find(function(c) { return c.id === id; });
+      return cat ? cat.icon : "📁";
+    };
+
+    var hasPending = function(item, type) {
       if (!data) return false;
-      const orig = type === "product" ? data.products.find(p => p.id === item.id) : data.categories.find(c => c.id === item.id);
-      const draft = type === "product" ? editableData.products.find(p => p.id === item.id) : editableData.categories.find(c => c.id === item.id);
+      var orig = type === "product" ? data.products.find(function(p) { return p.id === item.id; }) : data.categories.find(function(c) { return c.id === item.id; });
+      var draft = type === "product" ? editableData.products.find(function(p) { return p.id === item.id; }) : editableData.categories.find(function(c) { return c.id === item.id; });
       return JSON.stringify(orig) !== JSON.stringify(draft);
     };
 
-    const getFiltered = () => {
+    var getFiltered = function() {
       if (!editableData) return [];
-      let filtered = editableData.products || [];
-      if (selectedCategoryId) filtered = filtered.filter(p => p.categoryId === selectedCategoryId);
+      var filtered = editableData.products || [];
+      if (selectedCategoryId) {
+        filtered = filtered.filter(function(p) { return p.categoryId === selectedCategoryId; });
+      }
       if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase().trim();
-        filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || p.price.toString().includes(q));
+        var q = searchQuery.toLowerCase().trim();
+        filtered = filtered.filter(function(p) {
+          return p.name.toLowerCase().includes(q) || p.price.toString().includes(q);
+        });
       }
       return filtered;
     };
 
-    const closeModal = () => setModal({ open: false, type: "", item: null, creating: false });
+    var closeModal = function() {
+      setModal({ open: false, type: "", item: null, creating: false });
+    };
 
-    const renderField = (field) => {
-      const val = formData[field.key] || "";
-      const onChange = (e) => setFormData({ ...formData, [field.key]: e.target.value });
+    var renderField = function(field) {
+      var val = formData[field.key] || "";
+      var onChange = function(e) {
+        setFormData({ ...formData, [field.key]: e.target.value });
+      };
 
       if (field.type === "select") {
-        const options = field.options === "categories" ? (editableData?.categories || []) : [];
+        var options = field.options === "categories" ? (editableData?.categories || []) : [];
         return (
-          <select key={field.key} value={val} onChange={onChange} className="select select-bordered w-full">
+          <select key={field.key} value={val} onChange={onChange} className="neu-select">
             <option value="">Choisir...</option>
-            {options.map(opt => <option key={opt.id} value={opt.id}>{opt.icon} {opt.name}</option>)}
+            {options.map(function(opt) {
+              return <option key={opt.id} value={opt.id}>{opt.icon} {opt.name}</option>;
+            })}
           </select>
         );
       }
       if (field.type === "textarea") {
-        return <textarea key={field.key} value={val} onChange={onChange} placeholder={field.label} rows={field.rows || 2} className="textarea textarea-bordered w-full" />;
+        return <textarea key={field.key} value={val} onChange={onChange} placeholder={field.label} rows={field.rows || 2} className="neu-input" style={{ resize: 'vertical' }} />;
       }
       return (
-        <input key={field.key} type={field.type || "text"} step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="input input-bordered w-full" />
+        <input key={field.key} type={field.type || "text"} step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="neu-input" />
       );
     };
 
-    // ---- CHARGEMENT ----
+    // ---- RENDU ----
     if (isLoading) {
       return (
-        <div className="min-h-screen flex items-center justify-center">
-          <span className="loading loading-spinner loading-lg text-primary"></span>
+        <div className="min-h-screen flex items-center justify-center bg-slate-900">
+          <div className="spinner"></div>
         </div>
       );
     }
 
     if (!vendeur || isPlaceholder) {
       return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-          <div className="card bg-base-200 shadow-xl max-w-md w-full">
-            <div className="card-body text-center">
-              <h2 className="card-title text-error justify-center">⚙️ Configuration requise</h2>
-              <p>{isPlaceholder ? "Le template n'a pas été configuré." : "Le vendeur n'a pas été configuré correctement."}</p>
-              <p className="text-sm opacity-70">Utilisez le forkeur pour créer une boutique.</p>
+        <div className="min-h-screen flex items-center justify-center p-4 bg-slate-900">
+          <div className="neu-card max-w-md w-full p-6">
+            <div className="text-center">
+              <h2 className="text-xl font-bold text-red-400">⚙️ Configuration requise</h2>
+              <p className="text-gray-300 mt-2">{isPlaceholder ? "Le template n'a pas été configuré." : "Le vendeur n'a pas été configuré correctement."}</p>
+              <p className="text-sm text-gray-400 mt-2">Utilisez le forkeur pour créer une boutique.</p>
             </div>
           </div>
         </div>
       );
     }
 
-    const settings = editableData?.settings || {};
-    const currency = settings.currency || "€";
+    var settings = editableData?.settings || {};
+    var currency = settings.currency || "€";
+    var cartCount = cart.reduce(function(s, i) { return s + i.quantity; }, 0);
 
     return (
-      <div className="min-h-screen bg-base-200">
+      <div className="min-h-screen bg-slate-900 text-white p-4">
 
-        {/* Header avec boutons admin et panier */}
-        <div className="navbar bg-base-300 shadow-md sticky top-0 z-30">
-          <div className="flex-1">
-            <h1 className="text-xl font-bold text-primary">{settings.title || "⚡ Catalogue"}</h1>
+        {/* Header avec indication SOG */}
+        <header className="neu-card p-4 flex flex-wrap items-center justify-between sticky top-0 z-30">
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className="text-xl font-bold text-white">{settings.title || "⚡ Catalogue"}</h1>
+            {sogUser ? (
+              <span className="text-xs bg-emerald-900/40 text-emerald-200 px-2 py-1 rounded-full">
+                ✅ {sogUser.name}
+              </span>
+            ) : isReady ? (
+              <span className="text-xs bg-yellow-900/40 text-yellow-200 px-2 py-1 rounded-full">
+                🔒 Invité
+              </span>
+            ) : null}
           </div>
-          <div className="flex gap-2">
-            <button onClick={handleAdminClick} className="btn btn-ghost btn-sm">
+          <div className="flex gap-2 items-center">
+            <button onClick={handleAdminClick} className="neu-button text-sm">
               🔑
             </button>
-            <button onClick={() => setShowCart(!showCart)} className="btn btn-ghost btn-sm relative">
+            <button onClick={function() { setShowCart(!showCart); }} className="neu-button text-sm relative">
               🛒
-              {cart.length > 0 && (
-                <span className="badge badge-secondary badge-sm absolute -top-2 -right-2">
-                  {cart.reduce((s, i) => s + i.quantity, 0)}
-                </span>
+              {cartCount > 0 && (
+                <span className="cart-badge">{cartCount}</span>
               )}
             </button>
           </div>
-        </div>
+        </header>
+
+        {/* Message si non connecté */}
+        {!sogUser && isReady && (
+          <div className="mt-4 p-3 rounded-xl bg-yellow-900/40 text-yellow-200 border border-yellow-800 text-center">
+            🔒 Vous êtes en mode invité. <a href="#" onClick={function(e) { e.preventDefault(); window.parent.postMessage({ type: 'SOG_LOGIN_REQUEST' }, '*'); }} className="underline hover:text-yellow-100">Connectez-vous</a> pour passer une commande.
+          </div>
+        )}
+
+        {/* Messages d'erreur/succès */}
+        {msg.text && (
+          <div className={'mt-4 p-3 rounded-xl ' + (msg.type === 'success' ? 'bg-emerald-900/40 text-emerald-200' : msg.type === 'error' ? 'bg-red-900/40 text-red-200' : 'bg-blue-900/40 text-blue-200') + ' border border-slate-700'}>
+            {msg.text}
+          </div>
+        )}
 
         {/* Contenu principal */}
-        <div className="container mx-auto px-4 pb-32 pt-4">
+        <div className="max-w-7xl mx-auto mt-6">
 
           {isAdmin && isAdminAuthenticated ? (
             // ---- ADMIN ----
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-primary">🛠️ PANEL ADMIN</h2>
+              <h2 className="text-2xl font-bold text-white">🛠️ PANEL ADMIN</h2>
 
               {/* Settings */}
-              <div className="card bg-base-100 shadow-md">
-                <div className="card-body">
-                  <h3 className="font-semibold">⚙️ Configuration</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <input type="text" value={editableData?.settings?.title || ""} onChange={e => setEditableData({ ...editableData, settings: { ...editableData.settings, title: e.target.value } })} placeholder="Titre" className="input input-bordered input-sm w-full" />
-                    <input type="text" value={editableData?.settings?.currency || ""} onChange={e => setEditableData({ ...editableData, settings: { ...editableData.settings, currency: e.target.value } })} placeholder="Devise" className="input input-bordered input-sm w-full" />
-                    <input type="text" value={editableData?.settings?.ntfyTopic || ""} onChange={e => setEditableData({ ...editableData, settings: { ...editableData.settings, ntfyTopic: e.target.value } })} placeholder="Topic ntfy" className="input input-bordered input-sm w-full" />
-                  </div>
+              <div className="neu-card p-6">
+                <h3 className="font-semibold text-white mb-3">⚙️ Configuration</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <input type="text" value={editableData?.settings?.title || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, title: e.target.value } }); }} placeholder="Titre" className="neu-input" />
+                  <input type="text" value={editableData?.settings?.currency || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, currency: e.target.value } }); }} placeholder="Devise" className="neu-input" />
+                  <input type="text" value={editableData?.settings?.ntfyTopic || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, ntfyTopic: e.target.value } }); }} placeholder="Topic ntfy" className="neu-input" />
                 </div>
               </div>
 
               {/* Catégories */}
-              <div className="card bg-base-100 shadow-md">
-                <div className="card-body">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="font-semibold">{schema.categories.icon} {schema.categories.label}</h3>
-                    <button onClick={() => openCatModal(null)} className="btn btn-success btn-sm">＋ Ajouter</button>
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    {(editableData?.categories || []).map(c => (
-                      <div key={c.id} className={`flex items-center gap-2 p-2 rounded-lg border ${hasPending(c, "category") ? 'border-warning bg-warning/10' : 'border-base-300'}`}>
+              <div className="neu-card p-6">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="font-semibold text-white">{schema.categories.icon} {schema.categories.label}</h3>
+                  <button onClick={function() { openCatModal(null); }} className="neu-button text-sm">＋ Ajouter</button>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {(editableData?.categories || []).map(function(c) {
+                    return (
+                      <div key={c.id} className={'flex items-center gap-2 p-2 rounded-lg ' + (hasPending(c, "category") ? 'bg-yellow-900/40 border border-yellow-700' : 'bg-slate-800/40')}>
                         <span className="text-xl">{c.icon}</span>
-                        <span className="flex-1 text-sm truncate">{c.name}</span>
-                        <button onClick={() => openCatModal(c)} className="btn btn-ghost btn-xs">✎</button>
-                        <button onClick={() => deleteCategory(c.id)} className="btn btn-ghost btn-xs text-error">✕</button>
+                        <span className="flex-1 text-sm truncate text-white">{c.name}</span>
+                        <button onClick={function() { openCatModal(c); }} className="text-gray-400 hover:text-white text-sm">✎</button>
+                        <button onClick={function() { deleteCategory(c.id); }} className="text-red-400 hover:text-red-300 text-sm">✕</button>
                       </div>
-                    ))}
-                  </div>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* Produits */}
-              <div className="card bg-base-100 shadow-md">
-                <div className="card-body">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="font-semibold">{schema.products.icon} {schema.products.label}</h3>
-                    <button onClick={() => openProdModal(null)} className="btn btn-success btn-sm">＋ Ajouter</button>
-                  </div>
-                  <div className="space-y-2">
-                    {(editableData?.products || []).map(p => (
-                      <div key={p.id} className={`flex items-center gap-3 p-2 rounded-lg border ${hasPending(p, "product") ? 'border-warning bg-warning/10' : 'border-base-300'}`}>
-                        <img src={p.image} alt={p.name} className="w-10 h-10 object-cover rounded-full" onError={e => e.target.src = "https://via.placeholder.com/50"} />
+              <div className="neu-card p-6">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="font-semibold text-white">{schema.products.icon} {schema.products.label}</h3>
+                  <button onClick={function() { openProdModal(null); }} className="neu-button text-sm">＋ Ajouter</button>
+                </div>
+                <div className="space-y-2">
+                  {(editableData?.products || []).map(function(p) {
+                    return (
+                      <div key={p.id} className={'flex items-center gap-3 p-2 rounded-lg ' + (hasPending(p, "product") ? 'bg-yellow-900/40 border border-yellow-700' : 'bg-slate-800/40')}>
+                        <img src={p.image} alt={p.name} className="w-10 h-10 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
                         <div className="flex-1">
-                          <p className="text-sm font-medium">{p.name}</p>
-                          <p className="text-xs opacity-70">{p.price}{currency} · {getCategoryName(p.categoryId)} · stock:{p.stock}</p>
+                          <p className="text-sm font-medium text-white">{p.name}</p>
+                          <p className="text-xs text-gray-400">{p.price}{currency} · {getCategoryName(p.categoryId)} · stock:{p.stock}</p>
                         </div>
-                        <button onClick={() => openProdModal(p)} className="btn btn-ghost btn-xs">✎</button>
-                        <button onClick={() => deleteProduct(p.id)} className="btn btn-ghost btn-xs text-error">✕</button>
+                        <button onClick={function() { openProdModal(p); }} className="text-gray-400 hover:text-white text-sm">✎</button>
+                        <button onClick={function() { deleteProduct(p.id); }} className="text-red-400 hover:text-red-300 text-sm">✕</button>
                       </div>
-                    ))}
-                  </div>
+                    );
+                  })}
                 </div>
               </div>
 
               {/* Commit */}
-              <div className="card bg-base-100 shadow-md">
-                <div className="card-body">
-                  <button onClick={handleCommit} disabled={isCommitting} className={`btn btn-primary w-full ${isCommitting ? 'loading' : ''}`}>
-                    {isCommitting ? '⏳ Sauvegarde...' : '💾 Sauvegarder (Commit)'}
-                  </button>
-                  {msg.text && <p className={`text-sm mt-2 ${msg.type === 'success' ? 'text-success' : msg.type === 'error' ? 'text-error' : 'text-warning'}`}>{msg.text}</p>}
-                </div>
+              <div className="neu-card p-6">
+                <button onClick={handleCommit} disabled={isCommitting} className={'neu-button w-full ' + (isCommitting ? 'opacity-50' : '')}>
+                  {isCommitting ? '⏳ Sauvegarde...' : '💾 Sauvegarder (Commit)'}
+                </button>
               </div>
             </div>
           ) : (
             // ---- CATALOGUE ----
-            <>
+            <div>
               {/* Recherche */}
               <div className="mb-4">
-                <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="🔍 Rechercher..." className="input input-bordered w-full" />
+                <input type="text" value={searchQuery} onChange={function(e) { setSearchQuery(e.target.value); }} placeholder="🔍 Rechercher..." className="neu-input" />
               </div>
 
               {/* Catégories (filtres) */}
-              <div className="flex flex-wrap gap-2 mb-4 overflow-x-auto pb-2 no-scrollbar">
-                <button onClick={() => setSelectedCategoryId(null)} className={`btn btn-sm ${!selectedCategoryId ? 'btn-primary' : 'btn-ghost'}`}>🏠 Tous</button>
-                {(editableData?.categories || []).map(c => (
-                  <button key={c.id} onClick={() => setSelectedCategoryId(c.id)} className={`btn btn-sm ${selectedCategoryId === c.id ? 'btn-primary' : 'btn-ghost'}`}>
-                    {c.icon} {c.name}
-                  </button>
-                ))}
+              <div className="flex flex-wrap gap-2 mb-4 overflow-x-auto pb-2">
+                <button onClick={function() { setSelectedCategoryId(null); }} className={'neu-button text-sm ' + (!selectedCategoryId ? 'bg-blue-600' : '')}>
+                  🏠 Tous
+                </button>
+                {(editableData?.categories || []).map(function(c) {
+                  return (
+                    <button key={c.id} onClick={function() { setSelectedCategoryId(c.id); }} className={'neu-button text-sm ' + (selectedCategoryId === c.id ? 'bg-blue-600' : '')}>
+                      {c.icon} {c.name}
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Grille produits */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                {getFiltered().map(p => (
-                  <div key={p.id} className="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
-                    <figure className="px-2 pt-2">
-                      <img src={p.image} alt={p.name} onClick={() => setExpandedImage(p.image)} className="w-full h-32 object-cover rounded-xl cursor-pointer" onError={e => e.target.src = "https://via.placeholder.com/200"} />
-                    </figure>
-                    <div className="card-body p-3">
-                      <span className="text-xs opacity-70">{getCategoryIcon(p.categoryId)} {getCategoryName(p.categoryId)}</span>
-                      <h3 className="text-sm font-semibold truncate">{p.name}</h3>
-                      <p className="text-base font-bold text-primary">{p.price}{currency}</p>
-                      {settings.showStock && <p className="text-xs opacity-70">Stock: {p.stock > 0 ? p.stock : '⚠️ Rupture'}</p>}
-                      <button onClick={() => addToCart(p)} disabled={p.stock <= 0} className={`btn btn-primary btn-sm w-full ${p.stock <= 0 ? 'btn-disabled' : ''}`}>
-                        🛒 Ajouter
-                      </button>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                {getFiltered().map(function(p) {
+                  var isOutOfStock = p.stock <= 0;
+                  return (
+                    <div key={p.id} className="neu-card p-4 hover:scale-[1.02] transition-transform duration-200">
+                      <div className="aspect-square w-full mb-2 overflow-hidden rounded-xl bg-slate-800">
+                        <img
+                          src={p.image}
+                          alt={p.name}
+                          onClick={function() { setExpandedImage(p.image); }}
+                          className="w-full h-full object-cover cursor-pointer"
+                          onError={function(e) { e.target.src = "https://via.placeholder.com/200"; }}
+                        />
+                      </div>
+                      <span className="text-xs text-gray-400">{getCategoryIcon(p.categoryId)} {getCategoryName(p.categoryId)}</span>
+                      <h3 className="text-sm font-semibold text-white truncate mt-1">{p.name}</h3>
+                      <p className="text-base font-bold text-blue-400">{p.price}{currency}</p>
+                      {settings.showStock && (
+                        <p className={'text-xs ' + (isOutOfStock ? 'text-red-400' : 'text-gray-400')}>
+                          {isOutOfStock ? '⚠️ Rupture' : 'Stock: ' + p.stock}
+                        </p>
+                      )}
+                      {sogUser ? (
+                        <button onClick={function() { addToCart(p); }} disabled={isOutOfStock} className={'neu-button w-full mt-2 text-sm ' + (isOutOfStock ? 'opacity-50' : '')}>
+                          🛒 Ajouter
+                        </button>
+                      ) : (
+                        <button disabled className="neu-button w-full mt-2 text-sm opacity-50 cursor-not-allowed">
+                          🔒 Connexion requise
+                        </button>
+                      )}
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {getFiltered().length === 0 && (
-                <div className="text-center py-10 opacity-70">
+                <div className="text-center py-10 text-gray-400">
                   {searchQuery ? "Aucun produit ne correspond." : "Aucun produit dans cette catégorie."}
                 </div>
               )}
 
               {/* Footer */}
-              <div className="mt-8 text-center text-xs opacity-50 border-t border-base-300 pt-4">
+              <div className="mt-8 text-center text-xs text-gray-500 border-t border-slate-800 pt-4">
                 {(data?.products || []).length} PRODUITS · {(data?.categories || []).length} CATÉGORIES
                 {settings.ntfyTopic && <span className="ml-4">🔔 {settings.ntfyTopic}</span>}
+                {sogUser && <span className="ml-4">👤 Connecté</span>}
               </div>
-            </>
+            </div>
           )}
         </div>
 
         {/* ---- MODALS ---- */}
-        {/* Modal mot de passe */}
+
+        {/* Modal mot de passe admin */}
         {showPasswordModal && (
-          <div className="modal modal-open" onClick={() => setShowPasswordModal(false)}>
-            <div className="modal-box" onClick={e => e.stopPropagation()}>
-              <h3 className="font-bold text-lg">🔐 Accès admin</h3>
-              <p className="text-sm opacity-70 mb-4">Entrez votre mot de passe.</p>
-              <input type="password" value={adminPassword} onChange={e => setAdminPassword(e.target.value)} placeholder="Mot de passe" className="input input-bordered w-full" onKeyDown={e => e.key === "Enter" && handleAdminLogin()} />
-              <div className="modal-action">
-                <button onClick={handleAdminLogin} className="btn btn-primary">✅ Valider</button>
-                <button onClick={() => setShowPasswordModal(false)} className="btn btn-ghost">Annuler</button>
+          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setShowPasswordModal(false); }}>
+            <div className="neu-card max-w-md w-full p-6" onClick={function(e) { e.stopPropagation(); }}>
+              <h3 className="text-xl font-bold text-white mb-4">🔐 Accès admin</h3>
+              <p className="text-gray-300 text-sm mb-4">Entrez votre mot de passe.</p>
+              <input type="password" value={adminPassword} onChange={function(e) { setAdminPassword(e.target.value); }} placeholder="Mot de passe" className="neu-input" onKeyDown={function(e) { if (e.key === "Enter") handleAdminLogin(); }} />
+              <div className="flex gap-2 mt-4">
+                <button onClick={handleAdminLogin} className="neu-button flex-1">✅ Valider</button>
+                <button onClick={function() { setShowPasswordModal(false); }} className="neu-button">Annuler</button>
               </div>
-              {msg.text && msg.type === "error" && <p className="text-error text-sm mt-2">{msg.text}</p>}
+              {msg.text && msg.type === "error" && <p className="text-red-400 text-sm mt-2">{msg.text}</p>}
             </div>
           </div>
         )}
 
         {/* Modal image agrandie */}
         {expandedImage && (
-          <div className="modal modal-open" onClick={() => setExpandedImage(null)}>
-            <div className="modal-box max-w-3xl p-0 bg-transparent shadow-none" onClick={e => e.stopPropagation()}>
-              <img src={expandedImage} alt="Agrandissement" className="w-full rounded-xl" onError={e => e.target.src = "https://via.placeholder.com/800"} />
-              <button onClick={() => setExpandedImage(null)} className="btn btn-ghost btn-sm absolute top-2 right-2 text-white">✕</button>
+          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setExpandedImage(null); }}>
+            <div className="max-w-3xl w-full" onClick={function(e) { e.stopPropagation(); }}>
+              <img src={expandedImage} alt="Agrandissement" className="w-full rounded-xl" onError={function(e) { e.target.src = "https://via.placeholder.com/800"; }} />
+              <button onClick={function() { setExpandedImage(null); }} className="absolute top-4 right-4 text-white text-2xl">✕</button>
             </div>
           </div>
         )}
 
         {/* Modal Panier */}
         {showCart && (
-          <div className="modal modal-open" onClick={() => setShowCart(false)}>
-            <div className="modal-box max-w-md" onClick={e => e.stopPropagation()}>
-              <h3 className="font-bold text-lg">🛒 Mon Panier</h3>
+          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setShowCart(false); }}>
+            <div className="neu-card max-w-md w-full p-6 max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
+              <h3 className="text-xl font-bold text-white mb-4">🛒 Mon Panier</h3>
               {cart.length === 0 ? (
-                <p className="py-4 text-center opacity-70">Panier vide</p>
+                <p className="py-4 text-center text-gray-400">Panier vide</p>
               ) : (
-                <>
-                  <div className="space-y-2 max-h-60 overflow-y-auto my-4">
-                    {cart.map(i => (
-                      <div key={i.id} className="flex items-center gap-3 bg-base-200 p-2 rounded-lg">
-                        <img src={i.image} alt={i.name} className="w-12 h-12 object-cover rounded-full" onError={e => e.target.src = "https://via.placeholder.com/50"} />
-                        <div className="flex-1">
-                          <p className="text-sm font-medium">{i.name}</p>
-                          <p className="text-xs opacity-70">{i.price}{currency}</p>
+                <div>
+                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                    {cart.map(function(i) {
+                      return (
+                        <div key={i.id} className="flex items-center gap-3 bg-slate-800/40 p-2 rounded-lg">
+                          <img src={i.image} alt={i.name} className="w-12 h-12 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-white">{i.name}</p>
+                            <p className="text-xs text-gray-400">{i.price}{currency}</p>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <button onClick={function() { updateQty(i.id, -1); }} className="neu-button text-xs px-2 py-1">-</button>
+                            <span className="w-6 text-center text-white">{i.quantity}</span>
+                            <button onClick={function() { updateQty(i.id, 1); }} className="neu-button text-xs px-2 py-1">+</button>
+                            <button onClick={function() { removeFromCart(i.id); }} className="text-red-400 hover:text-red-300 text-sm ml-1">✕</button>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <button onClick={() => updateQty(i.id, -1)} className="btn btn-ghost btn-xs">-</button>
-                          <span className="w-6 text-center">{i.quantity}</span>
-                          <button onClick={() => updateQty(i.id, 1)} className="btn btn-ghost btn-xs">+</button>
-                          <button onClick={() => removeFromCart(i.id)} className="btn btn-ghost btn-xs text-error">✕</button>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
-                  <div className="flex justify-between font-bold border-t border-base-300 pt-2">
-                    <span>Total</span>
-                    <span className="text-primary">{getTotal()}{currency}</span>
+                  <div className="flex justify-between font-bold border-t border-slate-700 pt-2 mt-2">
+                    <span className="text-white">Total</span>
+                    <span className="text-blue-400">{getTotal()}{currency}</span>
                   </div>
 
                   {/* Champs commande */}
-                  <div className="space-y-2 mt-4">
-                    <input type="text" value={order.name} onChange={e => setOrder({ ...order, name: e.target.value })} placeholder="Nom complet *" className="input input-bordered input-sm w-full" />
-                    <input type="text" value={order.address} onChange={e => setOrder({ ...order, address: e.target.value })} placeholder="Adresse *" className="input input-bordered input-sm w-full" />
-                    <input type="tel" value={order.phone} onChange={e => setOrder({ ...order, phone: e.target.value })} placeholder="Téléphone *" className="input input-bordered input-sm w-full" />
-                    <textarea value={order.comments} onChange={e => setOrder({ ...order, comments: e.target.value })} placeholder="Commentaires (facultatif)" rows="2" className="textarea textarea-bordered w-full textarea-sm"></textarea>
+                  <div className={'space-y-2 mt-4 ' + (!sogUser ? 'opacity-50 pointer-events-none' : '')}>
+                    <input type="text" value={order.name} onChange={function(e) { setOrder({ ...order, name: e.target.value }); }} placeholder="Nom complet *" className="neu-input" />
+                    <input type="text" value={order.address} onChange={function(e) { setOrder({ ...order, address: e.target.value }); }} placeholder="Adresse *" className="neu-input" />
+                    <input type="tel" value={order.phone} onChange={function(e) { setOrder({ ...order, phone: e.target.value }); }} placeholder="Téléphone *" className="neu-input" />
+                    <textarea value={order.comments} onChange={function(e) { setOrder({ ...order, comments: e.target.value }); }} placeholder="Commentaires (facultatif)" rows="2" className="neu-input" style={{ resize: 'vertical' }} />
                   </div>
 
-                  <div className="modal-action">
-                    <button onClick={checkout} className="btn btn-primary w-full">✅ Valider la commande</button>
+                  {!sogUser && (
+                    <div className="mt-2 text-yellow-400 text-sm text-center">
+                      🔒 Connectez-vous à SOG pour valider la commande
+                    </div>
+                  )}
+
+                  <div className="modal-action mt-4">
+                    <button onClick={checkout} disabled={!sogUser || cart.length === 0} className={'neu-button w-full ' + (!sogUser || cart.length === 0 ? 'opacity-50' : '')}>
+                      ✅ Valider la commande
+                    </button>
                   </div>
-                </>
+                </div>
               )}
             </div>
           </div>
@@ -659,25 +885,25 @@ ${itemsList}
 
         {/* Modal générique (création/édition) */}
         {modal.open && (
-          <div className="modal modal-open" onClick={closeModal}>
-            <div className="modal-box" onClick={e => e.stopPropagation()}>
-              <h3 className="font-bold text-lg">
-                {modal.creating ? `✦ Nouveau ${modal.type === "category" ? "catégorie" : "produit"}` : `✦ Modifier ${modal.type === "category" ? "la catégorie" : "le produit"}`}
+          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={closeModal}>
+            <div className="neu-card max-w-md w-full p-6 max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
+              <h3 className="text-xl font-bold text-white mb-4">
+                {modal.creating ? "✦ Nouveau " + (modal.type === "category" ? "catégorie" : "produit") : "✦ Modifier " + (modal.type === "category" ? "la catégorie" : "le produit")}
               </h3>
-              <div className="space-y-3 mt-4">
+              <div className="space-y-3">
                 {modal.type === "category"
-                  ? schema.categories.fields.map(renderField)
-                  : schema.products.fields.map(f => {
+                  ? schema.categories.fields.map(function(f) { return renderField(f); })
+                  : schema.products.fields.map(function(f) {
                       if (f.key === "categoryId") return renderField({ ...f, options: "categories" });
                       return renderField(f);
                     })
                 }
               </div>
-              <div className="modal-action">
-                <button onClick={modal.type === "category" ? saveCategory : saveProduct} className="btn btn-primary">
+              <div className="flex gap-2 mt-4">
+                <button onClick={modal.type === "category" ? saveCategory : saveProduct} className="neu-button flex-1">
                   {modal.creating ? '✅ Créer' : '💾 Sauvegarder'}
                 </button>
-                <button onClick={closeModal} className="btn btn-ghost">Annuler</button>
+                <button onClick={closeModal} className="neu-button">Annuler</button>
               </div>
             </div>
           </div>
@@ -687,11 +913,18 @@ ${itemsList}
     );
   }
 
-  const container = document.getElementById('root');
-  const root = ReactDOM.createRoot(container);
-  root.render(<App />);
+  // ---- RENDU DANS LE DOM ----
+  var container = document.getElementById('root');
+  var root = ReactDOM.createRoot(container);
+  root.render(React.createElement(App, null));
 </script>
 
-<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('./sw.js');
+    });
+  }
+</script>
 </body>
 </html>
