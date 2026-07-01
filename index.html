@@ -137,6 +137,10 @@
     var [sogUser, setSogUser] = useState(null);
     var [isReady, setIsReady] = useState(false);
 
+    // ---- ETAT POUR LE TOKEN FGT ----
+    var [fgtToken, setFgtToken] = useState('');
+    var [isTokenSaved, setIsTokenSaved] = useState(false);
+
     // ---- ECOUTE DES MESSAGES DE SOG ----
     useEffect(function() {
       var handleMessage = function(event) {
@@ -154,7 +158,16 @@
       };
     }, []);
 
-    // ---- TOKEN ----
+    // ---- CHARGEMENT DU TOKEN FGT DEPUIS LOCALSTORAGE ----
+    useEffect(function() {
+      var storedToken = localStorage.getItem('fgt_token_' + repoName);
+      if (storedToken) {
+        setFgtToken(storedToken);
+        setIsTokenSaved(true);
+      }
+    }, []);
+
+    // ---- TOKEN FGT ----
     var MASTER_TOKEN = null;
     function getToken() {
       if (MASTER_TOKEN) return MASTER_TOKEN;
@@ -162,8 +175,11 @@
       var token = localStorage.getItem(tokenKey);
       if (!token) {
         token = prompt("Entrez le token pour " + repoName + " :");
-        if (token) localStorage.setItem(tokenKey, token);
-        else {
+        if (token) {
+          localStorage.setItem(tokenKey, token);
+          setFgtToken(token);
+          setIsTokenSaved(true);
+        } else {
           alert("Token requis pour cette action.");
           return null;
         }
@@ -171,6 +187,18 @@
       MASTER_TOKEN = token;
       return token;
     }
+
+    // ---- SAUVEGARDE DU TOKEN FGT ----
+    var saveFgtToken = function() {
+      if (fgtToken.trim()) {
+        localStorage.setItem('fgt_token_' + repoName, fgtToken.trim());
+        setIsTokenSaved(true);
+        setMsg({ text: "Token FGT sauvegarde avec succes !", type: "success" });
+        MASTER_TOKEN = fgtToken.trim();
+      } else {
+        setMsg({ text: "Veuillez entrer un token valide.", type: "error" });
+      }
+    };
 
     // ---- ETATS ----
     var [isLoading, setIsLoading] = useState(true);
@@ -256,7 +284,7 @@
           folder: 'hanout_products',
           resourceType: 'image',
           clientAllowedFormats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
-          maxImageFileSize: 5000000, // 5MB
+          maxImageFileSize: 5000000,
           styles: {
             palette: {
               window: '#1e293b',
@@ -762,6 +790,7 @@
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-white">PANEL ADMIN</h2>
 
+              {/* ---- Configuration ---- */}
               <div className="neu-card p-6">
                 <h3 className="font-semibold text-white mb-3">Configuration</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -771,6 +800,28 @@
                 </div>
               </div>
 
+              {/* ---- Token FGT ---- */}
+              <div className="neu-card p-6">
+                <h3 className="font-semibold text-white mb-3">Token FGT (pour le commit)</h3>
+                <div className="flex gap-3 items-center">
+                  <input
+                    type="password"
+                    value={fgtToken}
+                    onChange={function(e) { setFgtToken(e.target.value); setIsTokenSaved(false); }}
+                    placeholder="Entrez votre token fine-grained"
+                    className="neu-input flex-1"
+                  />
+                  <button onClick={saveFgtToken} className="neu-button">
+                    {isTokenSaved ? '✅ Sauvegarde' : '💾 Sauvegarder'}
+                  </button>
+                </div>
+                {isTokenSaved && (
+                  <p className="text-xs text-emerald-400 mt-2">✅ Token sauvegarde dans votre navigateur.</p>
+                )}
+                <p className="text-xs text-gray-400 mt-1">Le token est stocke localement dans votre navigateur.</p>
+              </div>
+
+              {/* ---- Categories ---- */}
               <div className="neu-card p-6">
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="font-semibold text-white">{schema.categories.icon} {schema.categories.label}</h3>
@@ -790,6 +841,7 @@
                 </div>
               </div>
 
+              {/* ---- Produits ---- */}
               <div className="neu-card p-6">
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="font-semibold text-white">{schema.products.icon} {schema.products.label}</h3>
@@ -812,6 +864,7 @@
                 </div>
               </div>
 
+              {/* ---- Commit ---- */}
               <div className="neu-card p-6">
                 <button onClick={handleCommit} disabled={isCommitting} className={'neu-button w-full ' + (isCommitting ? 'opacity-50' : '')}>
                   {isCommitting ? 'Sauvegarde...' : 'Sauvegarder (Commit)'}
