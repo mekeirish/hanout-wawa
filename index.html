@@ -4,38 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   <title>Hanout - Catalogue</title>
-  <!-- Tailwind CSS (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- React + ReactDOM (UMD) -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <!-- Babel Standalone -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
-    /* Styles nÃ©umorphiques */
     .neu-card {
       background: #1e293b;
       border-radius: 1.5rem;
-      box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.05),
-                  inset -2px -2px 4px rgba(0, 0, 0, 0.8),
-                  6px 6px 12px rgba(0, 0, 0, 0.6);
+      box-shadow: inset 2px 2px 4px rgba(255,255,255,0.05),
+                  inset -2px -2px 4px rgba(0,0,0,0.8),
+                  6px 6px 12px rgba(0,0,0,0.6);
     }
     .neu-button {
       background: #1e293b;
       color: white;
       border-radius: 0.75rem;
       padding: 0.5rem 1rem;
-      box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.1),
-                  inset -2px -2px 4px rgba(0, 0, 0, 0.9),
-                  4px 4px 8px rgba(0, 0, 0, 0.6);
+      box-shadow: inset 2px 2px 4px rgba(255,255,255,0.1),
+                  inset -2px -2px 4px rgba(0,0,0,0.9),
+                  4px 4px 8px rgba(0,0,0,0.6);
       transition: all 0.2s ease;
       cursor: pointer;
       border: none;
       font-weight: 500;
     }
     .neu-button:hover {
-      box-shadow: inset -2px -2px 4px rgba(255, 255, 255, 0.05),
-                  inset 2px 2px 4px rgba(0, 0, 0, 0.9);
+      box-shadow: inset -2px -2px 4px rgba(255,255,255,0.05),
+                  inset 2px 2px 4px rgba(0,0,0,0.9);
       transform: scale(0.98);
     }
     .neu-button:disabled {
@@ -48,16 +44,16 @@
       color: white;
       border-radius: 0.75rem;
       padding: 0.5rem 1rem;
-      box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.8),
-                  inset -2px -2px 4px rgba(255, 255, 255, 0.05);
+      box-shadow: inset 4px 4px 8px rgba(0,0,0,0.8),
+                  inset -2px -2px 4px rgba(255,255,255,0.05);
       border: none;
       outline: none;
       width: 100%;
       transition: box-shadow 0.2s;
     }
     .neu-input:focus {
-      box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.9),
-                  inset -2px -2px 4px rgba(255, 255, 255, 0.1),
+      box-shadow: inset 4px 4px 8px rgba(0,0,0,0.9),
+                  inset -2px -2px 4px rgba(255,255,255,0.1),
                   0 0 0 2px #3b82f6;
     }
     .neu-input::placeholder {
@@ -68,20 +64,20 @@
       color: white;
       border-radius: 0.75rem;
       padding: 0.5rem 1rem;
-      box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.8),
-                  inset -2px -2px 4px rgba(255, 255, 255, 0.05);
+      box-shadow: inset 4px 4px 8px rgba(0,0,0,0.8),
+                  inset -2px -2px 4px rgba(255,255,255,0.05);
       border: none;
       outline: none;
       width: 100%;
       appearance: none;
     }
     .neu-select:focus {
-      box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.9),
-                  inset -2px -2px 4px rgba(255, 255, 255, 0.1),
+      box-shadow: inset 4px 4px 8px rgba(0,0,0,0.9),
+                  inset -2px -2px 4px rgba(255,255,255,0.1),
                   0 0 0 2px #3b82f6;
     }
     .modal-overlay {
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0,0,0,0.7);
       backdrop-filter: blur(4px);
     }
     .cart-badge {
@@ -96,16 +92,9 @@
       min-width: 1.2rem;
       text-align: center;
     }
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0f172a;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 8px;
-    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; }
     .spinner {
       border: 3px solid #1e293b;
       border-top: 3px solid #3b82f6;
@@ -127,57 +116,50 @@
 <div id="root"></div>
 
 <script type="text/babel">
-  // ---- PROTOCOLE LB REAACTOR ----
-  const { useState, useEffect, useRef, useMemo } = React;
+  const { useState, useEffect, useRef } = React;
 
   function App() {
 
-    // ---- CONSTANTES INJECTÃES PAR LE FORKEUR ----
+    // ---- CONSTANTES INJECTEES PAR LE FORKEUR ----
     var VENDOR = "wawa";
     var PASSWORD_HASH = "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e";
     var isPlaceholder = VENDOR.startsWith("{{");
 
-    // ---- DÃDUCTION AUTOMATIQUE ----
+    // ---- DEDUCTION AUTOMATIQUE ----
     var params = new URLSearchParams(window.location.search);
     var repoName = window.location.pathname.split('/')[1] || '';
     var deducedVendor = repoName.startsWith('hanout-') ? repoName.replace('hanout-', '') : null;
     var vendeur = params.get("vendeur") || deducedVendor || localStorage.getItem("vendeur_name") || VENDOR;
 
-    // ---- ÃTAT POUR L'UTILISATEUR SOG ----
+    // ---- ETAT POUR L'UTILISATEUR SOG ----
     var [sogUser, setSogUser] = useState(null);
     var [isReady, setIsReady] = useState(false);
 
-    // ---- ÃCOUTE DES MESSAGES DE SOG ----
+    // ---- ECOUTE DES MESSAGES DE SOG ----
     useEffect(function() {
       var handleMessage = function(event) {
-        console.log("ð© Message reÃ§u dans l'iframe :", event.data);
-        
         if (event.data.type === 'SOG_AUTH') {
           setSogUser(event.data.payload.user);
-          console.log("â Utilisateur SOG reÃ§u :", event.data.payload.user);
         }
       };
       
       window.addEventListener('message', handleMessage);
-
-      // Envoyer un message pour dire que l'iframe est prÃªte
       window.parent.postMessage({ type: 'SOG_READY' }, '*');
       setIsReady(true);
-      console.log("ð Iframe SOG prÃªte !");
 
       return function() {
         window.removeEventListener('message', handleMessage);
       };
     }, []);
 
-    // ---- TOKEN (demandÃ© uniquement au commit) ----
+    // ---- TOKEN ----
     var MASTER_TOKEN = null;
     function getToken() {
       if (MASTER_TOKEN) return MASTER_TOKEN;
       var tokenKey = "fgt_token_" + repoName;
       var token = localStorage.getItem(tokenKey);
       if (!token) {
-        token = prompt("ð Entrez le token pour " + repoName + " :");
+        token = prompt("Entrez le token pour " + repoName + " :");
         if (token) localStorage.setItem(tokenKey, token);
         else {
           alert("Token requis pour cette action.");
@@ -188,7 +170,7 @@
       return token;
     }
 
-    // ---- ÃTATS ----
+    // ---- ETATS ----
     var [isLoading, setIsLoading] = useState(true);
     var [data, setData] = useState(null);
     var [editableData, setEditableData] = useState(null);
@@ -207,30 +189,55 @@
     var [searchQuery, setSearchQuery] = useState("");
     var [order, setOrder] = useState({ name: "", address: "", phone: "", comments: "" });
 
-    // ---- SCHÃMA ----
+    // ---- SCHEMA ----
     var schema = {
       categories: {
-        label: "CatÃ©gories",
-        icon: "ð",
+        label: "Categories",
+        icon: "📂",
         fields: [
-          { key: "icon", label: "IcÃ´ne", type: "text", maxLength: 2, default: "ð" },
+          { key: "icon", label: "Icône", type: "text", maxLength: 2, default: "📁" },
           { key: "name", label: "Nom", type: "text", required: true },
         ]
       },
       products: {
         label: "Produits",
-        icon: "ð¦",
+        icon: "📦",
         fields: [
           { key: "name", label: "Nom", type: "text", required: true },
           { key: "price", label: "Prix", type: "number", step: "0.01", required: true },
           { key: "image", label: "URL image", type: "text" },
-          { key: "categoryId", label: "CatÃ©gorie", type: "select", options: "categories" },
+          { key: "categoryId", label: "Categorie", type: "select", options: "categories" },
           { key: "stock", label: "Stock", type: "number" },
         ]
       }
     };
 
-    // ---- CHARGEMENT (sans token) ----
+    // ---- ENCODAGE UTF-8 POUR btoa ----
+    var utf8ToBase64 = function(str) {
+      try {
+        var utf8Bytes = new TextEncoder().encode(str);
+        var binaryString = String.fromCharCode.apply(null, utf8Bytes);
+        return btoa(binaryString);
+      } catch (e) {
+        return btoa(unescape(encodeURIComponent(str)));
+      }
+    };
+
+    // ---- DECODAGE UTF-8 POUR atob ----
+    var base64ToUtf8 = function(str) {
+      try {
+        var binaryString = atob(str);
+        var bytes = new Uint8Array(binaryString.length);
+        for (var i = 0; i < binaryString.length; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+        return new TextDecoder('utf-8').decode(bytes);
+      } catch (e) {
+        return decodeURIComponent(escape(atob(str)));
+      }
+    };
+
+    // ---- CHARGEMENT ----
     useEffect(function() {
       var load = async function() {
         if (!vendeur || isPlaceholder) { setIsLoading(false); return; }
@@ -239,7 +246,12 @@
           var res = await fetch(url);
           if (res.status === 404) {
             var defaultData = {
-              settings: { title: "Boutique de " + vendeur, currency: "DZD", showStock: true, ntfyTopic: vendeur + "_commandes" },
+              settings: { 
+                title: "Boutique de " + vendeur, 
+                currency: "DZD", 
+                showStock: true, 
+                ntfyTopic: vendeur + "_commandes" 
+              },
               categories: [],
               products: [],
             };
@@ -247,29 +259,30 @@
             setEditableData(defaultData);
           } else if (res.ok) {
             var d = await res.json();
-            setData(JSON.parse(atob(d.content)));
-            setEditableData(JSON.parse(atob(d.content)));
+            var decoded = base64ToUtf8(d.content);
+            setData(JSON.parse(decoded));
+            setEditableData(JSON.parse(decoded));
           }
         } catch (err) {
-          setMsg({ text: "â Erreur: " + err.message, type: "error" });
+          setMsg({ text: "Erreur: " + err.message, type: "error" });
         }
         setIsLoading(false);
       };
       load();
     }, []);
 
-    // ---- SAUVEGARDE (avec token) ----
+    // ---- SAUVEGARDE ----
     var saveFile = async function(content) {
       var token = getToken();
       if (!token) throw new Error("Token requis.");
       var url = "https://api.github.com/repos/mekeirish/" + repoName + "/contents/don.json";
-      var encoded = btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2))));
+      var encoded = utf8ToBase64(JSON.stringify(content, null, 2));
       var sha = null;
       try {
         var getRes = await fetch(url, { headers: { Authorization: "token " + token } });
         if (getRes.ok) { var d = await getRes.json(); sha = d.sha; }
       } catch (e) {}
-      var payload = { message: "Mise Ã  jour", content: encoded, branch: "main" };
+      var payload = { message: "Mise a jour", content: encoded, branch: "main" };
       if (sha) payload.sha = sha;
       var putRes = await fetch(url, {
         method: "PUT",
@@ -298,10 +311,10 @@
         setIsAdminAuthenticated(true);
         setShowPasswordModal(false);
         setAdminPassword("");
-        setMsg({ text: "â AccÃ¨s admin autorisÃ©", type: "success" });
+        setMsg({ text: "Acces admin autorise", type: "success" });
         setIsAdmin(true);
       } else {
-        setMsg({ text: "â Mot de passe incorrect", type: "error" });
+        setMsg({ text: "Mot de passe incorrect", type: "error" });
       }
     };
 
@@ -313,7 +326,7 @@
       }
     };
 
-    // ---- CRUD CATÃGORIES ----
+    // ---- CRUD CATEGORIES ----
     var openCatModal = function(cat) {
       if (cat === undefined) cat = null;
       setModal({ open: true, type: "category", item: cat, creating: !cat });
@@ -341,17 +354,17 @@
       }
       setEditableData({ ...editableData });
       closeModal();
-      setMsg({ text: "CatÃ©gorie sauvegardÃ©e", type: "info" });
+      setMsg({ text: "Categorie sauvegardee", type: "info" });
     };
 
     var deleteCategory = function(id) {
-      if (!confirm("Supprimer cette catÃ©gorie ?")) return;
+      if (!confirm("Supprimer cette categorie ?")) return;
       setEditableData({
         ...editableData,
         categories: editableData.categories.filter(function(c) { return c.id !== id; }),
         products: editableData.products.filter(function(p) { return p.categoryId !== id; }),
       });
-      setMsg({ text: "CatÃ©gorie supprimÃ©e", type: "info" });
+      setMsg({ text: "Categorie supprimee", type: "info" });
     };
 
     // ---- CRUD PRODUITS ----
@@ -391,13 +404,13 @@
       }
       setEditableData({ ...editableData });
       closeModal();
-      setMsg({ text: "Produit sauvegardÃ©", type: "info" });
+      setMsg({ text: "Produit sauvegarde", type: "info" });
     };
 
     var deleteProduct = function(id) {
       if (!confirm("Supprimer ce produit ?")) return;
       setEditableData({ ...editableData, products: editableData.products.filter(function(p) { return p.id !== id; }) });
-      setMsg({ text: "Produit supprimÃ©", type: "info" });
+      setMsg({ text: "Produit supprime", type: "info" });
     };
 
     // ---- COMMIT ----
@@ -405,9 +418,9 @@
       setIsCommitting(true);
       try {
         await saveEditableData();
-        setMsg({ text: "â DonnÃ©es sauvegardÃ©es sur GitHub", type: "success" });
+        setMsg({ text: "Donnees sauvegardees sur GitHub", type: "success" });
       } catch (err) {
-        setMsg({ text: "â Ãchec : " + err.message, type: "error" });
+        setMsg({ text: "Echec : " + err.message, type: "error" });
       }
       setIsCommitting(false);
     };
@@ -416,7 +429,7 @@
     var addToCart = function(product) {
       if (product.stock <= 0) { alert("Rupture de stock"); return; }
       if (!sogUser) {
-        alert("ð Vous devez Ãªtre connectÃ© Ã  SOG pour ajouter au panier.");
+        alert("Vous devez etre connecte a SOG pour ajouter au panier.");
         return;
       }
       setCart(function(prev) {
@@ -456,7 +469,7 @@
       }, 0).toFixed(2);
     };
 
-    // ---- ENVOI DE LA COMMANDE Ã SOG ----
+    // ---- ENVOI DE LA COMMANDE A SOG ----
     var sendOrderToSOG = function(orderData) {
       window.parent.postMessage({
         type: 'SOG_ORDER',
@@ -473,14 +486,13 @@
           comments: orderData.comments || ""
         }
       }, '*');
-      console.log("ð¤ Commande envoyÃ©e Ã  SOG :", orderData);
     };
 
     // ---- CHECKOUT ----
     var checkout = async function() {
       if (cart.length === 0) { alert("Panier vide"); return; }
       if (!sogUser) {
-        alert("ð Vous devez Ãªtre connectÃ© Ã  SOG pour commander.");
+        alert("Vous devez etre connecte a SOG pour commander.");
         return;
       }
       if (!order.name.trim() || !order.address.trim() || !order.phone.trim()) {
@@ -488,48 +500,47 @@
         return;
       }
       
-      // Envoyer la commande Ã  SOG pour l'historique
       sendOrderToSOG(order);
 
       var topic = editableData?.settings?.ntfyTopic;
       if (topic) {
-        var currencySymbol = editableData?.settings?.currency || "â¬";
+        var currencySymbol = editableData?.settings?.currency || "€";
         var total = getTotal();
-        var message = "ð RÃCAPITULATIF\n\n";
-        message += "ð¤ Client : " + order.name + "\n";
-        message += "ð Adresse : " + order.address + "\n";
-        message += "ð TÃ©l : " + order.phone + "\n";
-        message += "ð¬ Remarque : " + (order.comments || "Aucun") + "\n\n";
-        message += "âââââââââââââââââââ\n\n";
-        message += "ð Articles commandÃ©s :\n";
+        var message = "RECAPITULATIF\n\n";
+        message += "Client : " + order.name + "\n";
+        message += "Adresse : " + order.address + "\n";
+        message += "Tel : " + order.phone + "\n";
+        message += "Remarque : " + (order.comments || "Aucun") + "\n\n";
+        message += "----------------------------------------\n\n";
+        message += "Articles commandes :\n";
         cart.forEach(function(i) {
-          message += "  â¢ " + i.name + " Ã" + i.quantity + " â " + (i.price * i.quantity).toFixed(2) + " " + currencySymbol + "\n";
+          message += "  " + i.name + " x" + i.quantity + " = " + (i.price * i.quantity).toFixed(2) + " " + currencySymbol + "\n";
         });
-        message += "\nâââââââââââââââââââ\n\n";
-        message += "ð° TOTAL : " + total + " " + currencySymbol;
+        message += "\n----------------------------------------\n\n";
+        message += "TOTAL : " + total + " " + currencySymbol;
 
         await fetch("https://ntfy.sh/" + topic, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ topic: topic, title: "ðï¸ NOUVELLE COMMANDE", message: message, priority: 5 }),
+          body: JSON.stringify({ topic: topic, title: "NOUVELLE COMMANDE", message: message, priority: 5 }),
         }).catch(console.error);
       }
       
       setCart([]);
       setOrder({ name: "", address: "", phone: "", comments: "" });
       setShowCart(false);
-      alert("â Commande validÃ©e !");
+      alert("Commande validee !");
     };
 
     // ---- UTILITAIRES ----
     var getCategoryName = function(id) {
       var cat = data?.categories?.find(function(c) { return c.id === id; });
-      return cat ? cat.name : "Sans catÃ©gorie";
+      return cat ? cat.name : "Sans categorie";
     };
 
     var getCategoryIcon = function(id) {
       var cat = data?.categories?.find(function(c) { return c.id === id; });
-      return cat ? cat.icon : "ð";
+      return cat ? cat.icon : "📁";
     };
 
     var hasPending = function(item, type) {
@@ -597,9 +608,9 @@
         <div className="min-h-screen flex items-center justify-center p-4 bg-slate-900">
           <div className="neu-card max-w-md w-full p-6">
             <div className="text-center">
-              <h2 className="text-xl font-bold text-red-400">âï¸ Configuration requise</h2>
-              <p className="text-gray-300 mt-2">{isPlaceholder ? "Le template n'a pas Ã©tÃ© configurÃ©." : "Le vendeur n'a pas Ã©tÃ© configurÃ© correctement."}</p>
-              <p className="text-sm text-gray-400 mt-2">Utilisez le forkeur pour crÃ©er une boutique.</p>
+              <h2 className="text-xl font-bold text-red-400">Configuration requise</h2>
+              <p className="text-gray-300 mt-2">{isPlaceholder ? "Le template n'a pas ete configure." : "Le vendeur n'a pas ete configure correctement."}</p>
+              <p className="text-sm text-gray-400 mt-2">Utilisez le forkeur pour creer une boutique.</p>
             </div>
           </div>
         </div>
@@ -607,32 +618,31 @@
     }
 
     var settings = editableData?.settings || {};
-    var currency = settings.currency || "â¬";
+    var currency = settings.currency || "€";
     var cartCount = cart.reduce(function(s, i) { return s + i.quantity; }, 0);
 
     return (
       <div className="min-h-screen bg-slate-900 text-white p-4">
 
-        {/* Header avec indication SOG */}
         <header className="neu-card p-4 flex flex-wrap items-center justify-between sticky top-0 z-30">
           <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-xl font-bold text-white">{settings.title || "â¡ Catalogue"}</h1>
+            <h1 className="text-xl font-bold text-white">{settings.title || "Catalogue"}</h1>
             {sogUser ? (
               <span className="text-xs bg-emerald-900/40 text-emerald-200 px-2 py-1 rounded-full">
-                â {sogUser.name}
+                Connecte en tant que {sogUser.name}
               </span>
             ) : isReady ? (
               <span className="text-xs bg-yellow-900/40 text-yellow-200 px-2 py-1 rounded-full">
-                ð InvitÃ©
+                Invite
               </span>
             ) : null}
           </div>
           <div className="flex gap-2 items-center">
             <button onClick={handleAdminClick} className="neu-button text-sm">
-              ð
+              Admin
             </button>
             <button onClick={function() { setShowCart(!showCart); }} className="neu-button text-sm relative">
-              ð
+              Panier
               {cartCount > 0 && (
                 <span className="cart-badge">{cartCount}</span>
               )}
@@ -640,31 +650,26 @@
           </div>
         </header>
 
-        {/* Message si non connectÃ© */}
         {!sogUser && isReady && (
           <div className="mt-4 p-3 rounded-xl bg-yellow-900/40 text-yellow-200 border border-yellow-800 text-center">
-            ð Vous Ãªtes en mode invitÃ©. <a href="#" onClick={function(e) { e.preventDefault(); window.parent.postMessage({ type: 'SOG_LOGIN_REQUEST' }, '*'); }} className="underline hover:text-yellow-100">Connectez-vous</a> pour passer une commande.
+            Vous etes en mode invite. <a href="#" onClick={function(e) { e.preventDefault(); window.parent.postMessage({ type: 'SOG_LOGIN_REQUEST' }, '*'); }} className="underline hover:text-yellow-100">Connectez-vous</a> pour passer une commande.
           </div>
         )}
 
-        {/* Messages d'erreur/succÃ¨s */}
         {msg.text && (
           <div className={'mt-4 p-3 rounded-xl ' + (msg.type === 'success' ? 'bg-emerald-900/40 text-emerald-200' : msg.type === 'error' ? 'bg-red-900/40 text-red-200' : 'bg-blue-900/40 text-blue-200') + ' border border-slate-700'}>
             {msg.text}
           </div>
         )}
 
-        {/* Contenu principal */}
         <div className="max-w-7xl mx-auto mt-6">
 
           {isAdmin && isAdminAuthenticated ? (
-            // ---- ADMIN ----
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-white">ð ï¸ PANEL ADMIN</h2>
+              <h2 className="text-2xl font-bold text-white">PANEL ADMIN</h2>
 
-              {/* Settings */}
               <div className="neu-card p-6">
-                <h3 className="font-semibold text-white mb-3">âï¸ Configuration</h3>
+                <h3 className="font-semibold text-white mb-3">Configuration</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <input type="text" value={editableData?.settings?.title || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, title: e.target.value } }); }} placeholder="Titre" className="neu-input" />
                   <input type="text" value={editableData?.settings?.currency || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, currency: e.target.value } }); }} placeholder="Devise" className="neu-input" />
@@ -672,11 +677,10 @@
                 </div>
               </div>
 
-              {/* CatÃ©gories */}
               <div className="neu-card p-6">
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="font-semibold text-white">{schema.categories.icon} {schema.categories.label}</h3>
-                  <button onClick={function() { openCatModal(null); }} className="neu-button text-sm">ï¼ Ajouter</button>
+                  <button onClick={function() { openCatModal(null); }} className="neu-button text-sm">Ajouter</button>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {(editableData?.categories || []).map(function(c) {
@@ -684,19 +688,18 @@
                       <div key={c.id} className={'flex items-center gap-2 p-2 rounded-lg ' + (hasPending(c, "category") ? 'bg-yellow-900/40 border border-yellow-700' : 'bg-slate-800/40')}>
                         <span className="text-xl">{c.icon}</span>
                         <span className="flex-1 text-sm truncate text-white">{c.name}</span>
-                        <button onClick={function() { openCatModal(c); }} className="text-gray-400 hover:text-white text-sm">â</button>
-                        <button onClick={function() { deleteCategory(c.id); }} className="text-red-400 hover:text-red-300 text-sm">â</button>
+                        <button onClick={function() { openCatModal(c); }} className="text-gray-400 hover:text-white text-sm">Modifier</button>
+                        <button onClick={function() { deleteCategory(c.id); }} className="text-red-400 hover:text-red-300 text-sm">Supprimer</button>
                       </div>
                     );
                   })}
                 </div>
               </div>
 
-              {/* Produits */}
               <div className="neu-card p-6">
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="font-semibold text-white">{schema.products.icon} {schema.products.label}</h3>
-                  <button onClick={function() { openProdModal(null); }} className="neu-button text-sm">ï¼ Ajouter</button>
+                  <button onClick={function() { openProdModal(null); }} className="neu-button text-sm">Ajouter</button>
                 </div>
                 <div className="space-y-2">
                   {(editableData?.products || []).map(function(p) {
@@ -705,35 +708,31 @@
                         <img src={p.image} alt={p.name} className="w-10 h-10 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
                         <div className="flex-1">
                           <p className="text-sm font-medium text-white">{p.name}</p>
-                          <p className="text-xs text-gray-400">{p.price}{currency} Â· {getCategoryName(p.categoryId)} Â· stock:{p.stock}</p>
+                          <p className="text-xs text-gray-400">{p.price}{currency} · {getCategoryName(p.categoryId)} · stock:{p.stock}</p>
                         </div>
-                        <button onClick={function() { openProdModal(p); }} className="text-gray-400 hover:text-white text-sm">â</button>
-                        <button onClick={function() { deleteProduct(p.id); }} className="text-red-400 hover:text-red-300 text-sm">â</button>
+                        <button onClick={function() { openProdModal(p); }} className="text-gray-400 hover:text-white text-sm">Modifier</button>
+                        <button onClick={function() { deleteProduct(p.id); }} className="text-red-400 hover:text-red-300 text-sm">Supprimer</button>
                       </div>
                     );
                   })}
                 </div>
               </div>
 
-              {/* Commit */}
               <div className="neu-card p-6">
                 <button onClick={handleCommit} disabled={isCommitting} className={'neu-button w-full ' + (isCommitting ? 'opacity-50' : '')}>
-                  {isCommitting ? 'â³ Sauvegarde...' : 'ð¾ Sauvegarder (Commit)'}
+                  {isCommitting ? 'Sauvegarde...' : 'Sauvegarder (Commit)'}
                 </button>
               </div>
             </div>
           ) : (
-            // ---- CATALOGUE ----
             <div>
-              {/* Recherche */}
               <div className="mb-4">
-                <input type="text" value={searchQuery} onChange={function(e) { setSearchQuery(e.target.value); }} placeholder="ð Rechercher..." className="neu-input" />
+                <input type="text" value={searchQuery} onChange={function(e) { setSearchQuery(e.target.value); }} placeholder="Rechercher..." className="neu-input" />
               </div>
 
-              {/* CatÃ©gories (filtres) */}
               <div className="flex flex-wrap gap-2 mb-4 overflow-x-auto pb-2">
                 <button onClick={function() { setSelectedCategoryId(null); }} className={'neu-button text-sm ' + (!selectedCategoryId ? 'bg-blue-600' : '')}>
-                  ð  Tous
+                  Tous
                 </button>
                 {(editableData?.categories || []).map(function(c) {
                   return (
@@ -744,7 +743,6 @@
                 })}
               </div>
 
-              {/* Grille produits */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                 {getFiltered().map(function(p) {
                   var isOutOfStock = p.stock <= 0;
@@ -764,16 +762,16 @@
                       <p className="text-base font-bold text-blue-400">{p.price}{currency}</p>
                       {settings.showStock && (
                         <p className={'text-xs ' + (isOutOfStock ? 'text-red-400' : 'text-gray-400')}>
-                          {isOutOfStock ? 'â ï¸ Rupture' : 'Stock: ' + p.stock}
+                          {isOutOfStock ? 'Rupture' : 'Stock: ' + p.stock}
                         </p>
                       )}
                       {sogUser ? (
                         <button onClick={function() { addToCart(p); }} disabled={isOutOfStock} className={'neu-button w-full mt-2 text-sm ' + (isOutOfStock ? 'opacity-50' : '')}>
-                          ð Ajouter
+                          Ajouter au panier
                         </button>
                       ) : (
                         <button disabled className="neu-button w-full mt-2 text-sm opacity-50 cursor-not-allowed">
-                          ð Connexion requise
+                          Connexion requise
                         </button>
                       )}
                     </div>
@@ -783,15 +781,14 @@
 
               {getFiltered().length === 0 && (
                 <div className="text-center py-10 text-gray-400">
-                  {searchQuery ? "Aucun produit ne correspond." : "Aucun produit dans cette catÃ©gorie."}
+                  {searchQuery ? "Aucun produit ne correspond." : "Aucun produit dans cette categorie."}
                 </div>
               )}
 
-              {/* Footer */}
               <div className="mt-8 text-center text-xs text-gray-500 border-t border-slate-800 pt-4">
-                {(data?.products || []).length} PRODUITS Â· {(data?.categories || []).length} CATÃGORIES
-                {settings.ntfyTopic && <span className="ml-4">ð {settings.ntfyTopic}</span>}
-                {sogUser && <span className="ml-4">ð¤ ConnectÃ©</span>}
+                {(data?.products || []).length} PRODUITS · {(data?.categories || []).length} CATEGORIES
+                {settings.ntfyTopic && <span className="ml-4">🔔 {settings.ntfyTopic}</span>}
+                {sogUser && <span className="ml-4">Connecte</span>}
               </div>
             </div>
           )}
@@ -799,15 +796,14 @@
 
         {/* ---- MODALS ---- */}
 
-        {/* Modal mot de passe admin */}
         {showPasswordModal && (
           <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setShowPasswordModal(false); }}>
             <div className="neu-card max-w-md w-full p-6" onClick={function(e) { e.stopPropagation(); }}>
-              <h3 className="text-xl font-bold text-white mb-4">ð AccÃ¨s admin</h3>
+              <h3 className="text-xl font-bold text-white mb-4">Acces admin</h3>
               <p className="text-gray-300 text-sm mb-4">Entrez votre mot de passe.</p>
               <input type="password" value={adminPassword} onChange={function(e) { setAdminPassword(e.target.value); }} placeholder="Mot de passe" className="neu-input" onKeyDown={function(e) { if (e.key === "Enter") handleAdminLogin(); }} />
               <div className="flex gap-2 mt-4">
-                <button onClick={handleAdminLogin} className="neu-button flex-1">â Valider</button>
+                <button onClick={handleAdminLogin} className="neu-button flex-1">Valider</button>
                 <button onClick={function() { setShowPasswordModal(false); }} className="neu-button">Annuler</button>
               </div>
               {msg.text && msg.type === "error" && <p className="text-red-400 text-sm mt-2">{msg.text}</p>}
@@ -815,21 +811,19 @@
           </div>
         )}
 
-        {/* Modal image agrandie */}
         {expandedImage && (
           <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setExpandedImage(null); }}>
             <div className="max-w-3xl w-full" onClick={function(e) { e.stopPropagation(); }}>
               <img src={expandedImage} alt="Agrandissement" className="w-full rounded-xl" onError={function(e) { e.target.src = "https://via.placeholder.com/800"; }} />
-              <button onClick={function() { setExpandedImage(null); }} className="absolute top-4 right-4 text-white text-2xl">â</button>
+              <button onClick={function() { setExpandedImage(null); }} className="absolute top-4 right-4 text-white text-2xl">×</button>
             </div>
           </div>
         )}
 
-        {/* Modal Panier */}
         {showCart && (
           <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setShowCart(false); }}>
             <div className="neu-card max-w-md w-full p-6 max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
-              <h3 className="text-xl font-bold text-white mb-4">ð Mon Panier</h3>
+              <h3 className="text-xl font-bold text-white mb-4">Mon Panier</h3>
               {cart.length === 0 ? (
                 <p className="py-4 text-center text-gray-400">Panier vide</p>
               ) : (
@@ -847,7 +841,7 @@
                             <button onClick={function() { updateQty(i.id, -1); }} className="neu-button text-xs px-2 py-1">-</button>
                             <span className="w-6 text-center text-white">{i.quantity}</span>
                             <button onClick={function() { updateQty(i.id, 1); }} className="neu-button text-xs px-2 py-1">+</button>
-                            <button onClick={function() { removeFromCart(i.id); }} className="text-red-400 hover:text-red-300 text-sm ml-1">â</button>
+                            <button onClick={function() { removeFromCart(i.id); }} className="text-red-400 hover:text-red-300 text-sm ml-1">×</button>
                           </div>
                         </div>
                       );
@@ -858,23 +852,22 @@
                     <span className="text-blue-400">{getTotal()}{currency}</span>
                   </div>
 
-                  {/* Champs commande */}
                   <div className={'space-y-2 mt-4 ' + (!sogUser ? 'opacity-50 pointer-events-none' : '')}>
                     <input type="text" value={order.name} onChange={function(e) { setOrder({ ...order, name: e.target.value }); }} placeholder="Nom complet *" className="neu-input" />
                     <input type="text" value={order.address} onChange={function(e) { setOrder({ ...order, address: e.target.value }); }} placeholder="Adresse *" className="neu-input" />
-                    <input type="tel" value={order.phone} onChange={function(e) { setOrder({ ...order, phone: e.target.value }); }} placeholder="TÃ©lÃ©phone *" className="neu-input" />
+                    <input type="tel" value={order.phone} onChange={function(e) { setOrder({ ...order, phone: e.target.value }); }} placeholder="Telephone *" className="neu-input" />
                     <textarea value={order.comments} onChange={function(e) { setOrder({ ...order, comments: e.target.value }); }} placeholder="Commentaires (facultatif)" rows="2" className="neu-input" style={{ resize: 'vertical' }} />
                   </div>
 
                   {!sogUser && (
                     <div className="mt-2 text-yellow-400 text-sm text-center">
-                      ð Connectez-vous Ã  SOG pour valider la commande
+                      Connectez-vous a SOG pour valider la commande
                     </div>
                   )}
 
                   <div className="modal-action mt-4">
                     <button onClick={checkout} disabled={!sogUser || cart.length === 0} className={'neu-button w-full ' + (!sogUser || cart.length === 0 ? 'opacity-50' : '')}>
-                      â Valider la commande
+                      Valider la commande
                     </button>
                   </div>
                 </div>
@@ -883,12 +876,11 @@
           </div>
         )}
 
-        {/* Modal gÃ©nÃ©rique (crÃ©ation/Ã©dition) */}
         {modal.open && (
           <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={closeModal}>
             <div className="neu-card max-w-md w-full p-6 max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
               <h3 className="text-xl font-bold text-white mb-4">
-                {modal.creating ? "â¦ Nouveau " + (modal.type === "category" ? "catÃ©gorie" : "produit") : "â¦ Modifier " + (modal.type === "category" ? "la catÃ©gorie" : "le produit")}
+                {modal.creating ? "Nouveau " + (modal.type === "category" ? "categorie" : "produit") : "Modifier " + (modal.type === "category" ? "la categorie" : "le produit")}
               </h3>
               <div className="space-y-3">
                 {modal.type === "category"
@@ -901,7 +893,7 @@
               </div>
               <div className="flex gap-2 mt-4">
                 <button onClick={modal.type === "category" ? saveCategory : saveProduct} className="neu-button flex-1">
-                  {modal.creating ? 'â CrÃ©er' : 'ð¾ Sauvegarder'}
+                  {modal.creating ? 'Creer' : 'Sauvegarder'}
                 </button>
                 <button onClick={closeModal} className="neu-button">Annuler</button>
               </div>
@@ -913,7 +905,6 @@
     );
   }
 
-  // ---- RENDU DANS LE DOM ----
   var container = document.getElementById('root');
   var root = ReactDOM.createRoot(container);
   root.render(React.createElement(App, null));
