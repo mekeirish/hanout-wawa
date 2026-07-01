@@ -8,6 +8,8 @@
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Cloudinary Widget -->
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
   <style>
     .neu-card {
       background: #1e293b;
@@ -235,6 +237,61 @@
       } catch (e) {
         return decodeURIComponent(escape(atob(str)));
       }
+    };
+
+    // ---- CLOUDINARY WIDGET ----
+    var openCloudinaryWidget = function(fieldKey) {
+      if (!window.cloudinary) {
+        alert("Le widget Cloudinary n'est pas charge.");
+        return;
+      }
+
+      var widget = window.cloudinary.createUploadWidget(
+        {
+          cloudName: 'h91be5lz',
+          uploadPreset: 'hanout_upload',
+          sources: ['local', 'url', 'camera'],
+          multiple: false,
+          maxFiles: 1,
+          folder: 'hanout_products',
+          resourceType: 'image',
+          clientAllowedFormats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+          maxImageFileSize: 5000000, // 5MB
+          styles: {
+            palette: {
+              window: '#1e293b',
+              sourceBg: '#0f172a',
+              windowBorder: '#334155',
+              tabIcon: '#3b82f6',
+              inactiveTabIcon: '#94a3b8',
+              menuIcons: '#3b82f6',
+              link: '#3b82f6',
+              action: '#3b82f6',
+              inProgress: '#3b82f6',
+              complete: '#34d399',
+              error: '#f87171',
+              textDark: '#f1f5f9',
+              textLight: '#94a3b8'
+            }
+          }
+        },
+        function(error, result) {
+          if (error) {
+            console.error("Erreur Cloudinary:", error);
+            alert("Erreur lors de l'upload de l'image.");
+            return;
+          }
+          
+          if (result.event === 'success') {
+            var secureUrl = result.info.secure_url;
+            setFormData(function(prev) {
+              return { ...prev, [fieldKey]: secureUrl };
+            });
+            setMsg({ text: "Image telechargee avec succes !", type: "success" });
+          }
+        }
+      );
+      widget.open();
     };
 
     // ---- CHARGEMENT ----
@@ -569,6 +626,7 @@
       setModal({ open: false, type: "", item: null, creating: false });
     };
 
+    // ---- RENDER FIELD AVEC CLOUDINARY ----
     var renderField = function(field) {
       var val = formData[field.key] || "";
       var onChange = function(e) {
@@ -589,6 +647,42 @@
       if (field.type === "textarea") {
         return <textarea key={field.key} value={val} onChange={onChange} placeholder={field.label} rows={field.rows || 2} className="neu-input" style={{ resize: 'vertical' }} />;
       }
+      
+      // ---- AJOUT : Bouton Cloudinary pour les champs image ----
+      if (field.key === 'image') {
+        return (
+          <div key={field.key} className="flex gap-2 items-center">
+            <input
+              type="text"
+              step={field.step}
+              maxLength={field.maxLength}
+              value={val}
+              onChange={onChange}
+              placeholder={field.label}
+              className="neu-input flex-1"
+            />
+            <button
+              onClick={function() { openCloudinaryWidget(field.key); }}
+              className="neu-button"
+              type="button"
+              title="Telecharger une image"
+            >
+              📷
+            </button>
+            {val && (
+              <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-slate-800">
+                <img
+                  src={val}
+                  alt="Apercu"
+                  className="w-full h-full object-cover"
+                  onError={function(e) { e.target.style.display = 'none'; }}
+                />
+              </div>
+            )}
+          </div>
+        );
+      }
+      
       return (
         <input key={field.key} type={field.type || "text"} step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="neu-input" />
       );
