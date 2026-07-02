@@ -4,58 +4,58 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   <title>Hanout - Catalogue</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
+  <!-- React + ReactDOM (UMD) -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel Standalone -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- Cloudinary Widget -->
   <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
 
   <style>
-    /* ===== POLICE SYSTÈME ROBUSTE ===== */
+    /* ==========================================
+       MATTE MINIMALIST — CSS pur, zéro dépendance
+       ========================================== */
+
+    /* ----- RESET & BASE ----- */
     * {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-
-    /* ===== ICÔNES STABILISÉES ===== */
-    .icon {
-      display: inline-block;
-      font-size: 1.1rem;
-      width: 1.6rem;
-      text-align: center;
-      flex-shrink: 0;
-      vertical-align: middle;
+    html {
+      -webkit-text-size-adjust: 100%;
     }
-    .icon-sm {
-      font-size: 0.9rem;
-      width: 1.4rem;
-    }
-
-    /* ===== BASE ===== */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { -webkit-text-size-adjust: 100%; }
-
     body {
       background: #0f172a;
       color: #f1f5f9;
-      padding: 0 1rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      padding: 0 0.75rem;
       min-height: 100vh;
-      font-family: inherit;
+      line-height: 1.4;
+    }
+    a {
+      color: #60a5fa;
+      text-decoration: underline;
+    }
+    a:hover {
+      color: #93bbfc;
     }
 
-    .app-container {
+    /* ----- CONTENEUR PRINCIPAL ----- */
+    .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0.5rem 0 1.5rem;
     }
 
-    /* ===== HEADER ===== */
+    /* ----- HEADER ----- */
     .header {
-      background: rgba(15, 23, 42, 0.92);
-      backdrop-filter: blur(14px);
+      background: #0f172a;
       border-bottom: 1px solid #334155;
-      padding: 0.75rem 0;
-      margin: 0 -1rem 0.75rem;
-      padding: 0.75rem 1rem;
+      padding: 0.6rem 0;
+      margin: 0 -0.75rem 0.75rem;
+      padding: 0.6rem 0.75rem;
       position: sticky;
       top: 0;
       z-index: 30;
@@ -68,9 +68,9 @@
       margin: 0 auto;
     }
     .header-title {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 700;
-      color: white;
+      color: #f1f5f9;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -78,162 +78,231 @@
     }
     .header-actions {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.4rem;
       align-items: center;
     }
 
-    /* ===== BOUTONS ===== */
-    .btn-sm {
-      padding: 0.5rem 0.8rem;
-      font-size: 0.75rem;
-      border-radius: 0.6rem;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      min-height: 2.5rem;
+    /* ----- BOUTONS ----- */
+    .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.3rem;
+      padding: 0.4rem 0.7rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s;
+      min-height: 2.3rem;
+      min-width: 2.3rem;
+      line-height: 1;
     }
-    .btn-sm:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-sm:active:not(:disabled) { transform: scale(0.96); }
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .btn:active:not(:disabled) {
+      transform: scale(0.96);
+    }
 
-    .btn-primary-sm {
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      color: white;
-      box-shadow: 0 2px 6px rgba(59,130,246,0.25);
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
     }
-    .btn-secondary-sm {
+    .btn-primary:hover:not(:disabled) {
+      background: #1d4ed8;
+    }
+
+    .btn-secondary {
       background: #334155;
       color: #f1f5f9;
       border: 1px solid #475569;
     }
-    .btn-secondary-sm:active { background: #475569; }
+    .btn-secondary:hover:not(:disabled) {
+      background: #475569;
+    }
 
-    .btn-close-modal {
+    .btn-danger {
+      background: transparent;
+      color: #f87171;
+      border: 1px solid #f87171;
+    }
+    .btn-danger:hover:not(:disabled) {
+      background: #f87171;
+      color: #fff;
+    }
+
+    .btn-close {
       background: transparent;
       border: none;
       color: #94a3b8;
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       line-height: 1;
       cursor: pointer;
-      padding: 0.2rem 0.5rem;
-      border-radius: 0.5rem;
-      transition: background 0.2s, color 0.2s;
-      min-height: 2.8rem;
-      min-width: 2.8rem;
+      padding: 0 0.4rem;
+      min-height: 2.6rem;
+      min-width: 2.6rem;
       display: flex;
       align-items: center;
       justify-content: center;
+      border-radius: 8px;
     }
-    .btn-close-modal:hover {
-      background: rgba(255,255,255,0.08);
+    .btn-close:hover {
+      background: rgba(255,255,255,0.06);
       color: #f1f5f9;
     }
 
-    /* ===== BADGES ===== */
+    /* ----- BADGES ----- */
     .badge {
       display: inline-block;
-      padding: 0.2rem 0.6rem;
-      border-radius: 9999px;
-      font-size: 0.65rem;
-      font-weight: 500;
-    }
-    .badge-success {
-      background: rgba(34,197,94,0.18);
-      color: #4ade80;
-    }
-    .badge-warning {
-      background: rgba(234,179,8,0.18);
-      color: #facc15;
-    }
-
-    /* ===== CART BADGE ===== */
-    .cart-badge {
-      position: absolute;
-      top: -4px;
-      right: -4px;
-      background: #ef4444;
-      color: white;
+      padding: 0.1rem 0.5rem;
       border-radius: 9999px;
       font-size: 0.6rem;
-      padding: 0.05rem 0.4rem;
-      min-width: 1.2rem;
-      text-align: center;
-      line-height: 1.3;
+      font-weight: 500;
+      border: 1px solid transparent;
     }
+    .badge-success {
+      background: rgba(34,197,94,0.15);
+      color: #4ade80;
+      border-color: rgba(34,197,94,0.3);
+    }
+    .badge-warning {
+      background: rgba(234,179,8,0.15);
+      color: #facc15;
+      border-color: rgba(234,179,8,0.3);
+    }
+
+    /* ----- CART BADGE ----- */
     .cart-btn-wrapper {
       position: relative;
       display: inline-flex;
       align-items: center;
     }
+    .cart-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #ef4444;
+      color: #fff;
+      border-radius: 9999px;
+      font-size: 0.55rem;
+      padding: 0.05rem 0.35rem;
+      min-width: 1.1rem;
+      text-align: center;
+      line-height: 1.2;
+    }
 
-    /* ===== ALERTES ===== */
+    /* ----- ALERTES ----- */
     .alert {
-      padding: 0.65rem 0.85rem;
-      border-radius: 0.65rem;
+      padding: 0.5rem 0.7rem;
+      border-radius: 8px;
       border: 1px solid;
       font-size: 0.8rem;
       margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
     }
     .alert-warning {
-      background: rgba(234,179,8,0.08);
+      background: rgba(234,179,8,0.06);
       border-color: #eab308;
       color: #facc15;
     }
     .alert-success {
-      background: rgba(34,197,94,0.08);
+      background: rgba(34,197,94,0.06);
       border-color: #22c55e;
       color: #4ade80;
     }
     .alert-error {
-      background: rgba(239,68,68,0.08);
+      background: rgba(239,68,68,0.06);
       border-color: #ef4444;
       color: #f87171;
     }
     .alert-info {
-      background: rgba(59,130,246,0.08);
+      background: rgba(59,130,246,0.06);
       border-color: #3b82f6;
       color: #60a5fa;
     }
-    .alert a {
-      text-decoration: underline;
-      font-weight: 500;
+
+    /* ----- CARTE (card) ----- */
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 0.9rem;
+      overflow: hidden;
     }
 
-    /* ===== RECHERCHE ===== */
+    /* ----- INPUTS ----- */
+    .input {
+      background: #0f172a;
+      color: #f1f5f9;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.15s;
+      min-height: 2.6rem;
+    }
+    .input:focus {
+      border-color: #3b82f6;
+    }
+    .input::placeholder {
+      color: #64748b;
+    }
+
+    .select {
+      background: #0f172a;
+      color: #f1f5f9;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
+      width: 100%;
+      appearance: none;
+      outline: none;
+      min-height: 2.6rem;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.8rem center;
+    }
+    .select:focus {
+      border-color: #3b82f6;
+    }
+
+    /* ----- RECHERCHE ----- */
     .search-input {
       background: #0f172a;
       color: #f1f5f9;
       border: 1px solid #334155;
-      border-radius: 0.75rem;
-      padding: 0.7rem 1rem;
-      font-size: 0.9rem;
+      border-radius: 8px;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
       width: 100%;
       outline: none;
-      transition: border-color 0.2s;
-      min-height: 2.8rem;
+      transition: border-color 0.15s;
+      min-height: 2.6rem;
     }
     .search-input:focus {
       border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
     }
     .search-input::placeholder {
       color: #64748b;
     }
 
-    /* ===== CATEGORIES ===== */
+    /* ----- CATEGORIES (scroll horizontal) ----- */
     .categories-scroll {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.4rem;
       overflow-x: auto;
-      padding: 0.4rem 0 0.6rem;
+      padding: 0.3rem 0 0.5rem;
       scrollbar-width: thin;
       -webkit-overflow-scrolling: touch;
       white-space: nowrap;
-      margin-bottom: 0.25rem;
     }
     .categories-scroll::-webkit-scrollbar {
       height: 3px;
@@ -247,36 +316,46 @@
     }
     .category-btn {
       flex-shrink: 0;
-      padding: 0.35rem 0.8rem;
+      padding: 0.25rem 0.7rem;
       border-radius: 9999px;
       border: 1px solid #475569;
       background: transparent;
       color: #94a3b8;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 500;
-      transition: all 0.15s ease;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
       cursor: pointer;
-      min-height: 2.2rem;
+      min-height: 2rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
     }
     .category-btn.active {
-      background: #3b82f6;
-      border-color: #3b82f6;
-      color: white;
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #fff;
     }
     .category-btn:active {
       transform: scale(0.95);
     }
 
-    /* ===== CARTE PRODUIT ===== */
+    /* ----- GRILLE PRODUITS ----- */
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.7rem;
+      margin-top: 0.5rem;
+    }
+
+    /* ----- CARTE PRODUIT ----- */
     .product-card {
       background: #1e293b;
-      border-radius: 1rem;
       border: 1px solid #334155;
+      border-radius: 12px;
       overflow: hidden;
-      transition: all 0.15s ease;
       display: flex;
       flex-direction: column;
-      width: 100%;
+      transition: border-color 0.15s;
     }
     .product-card:active {
       transform: scale(0.98);
@@ -299,15 +378,15 @@
     }
 
     .product-body {
-      padding: 0.7rem 0.7rem 0.8rem;
+      padding: 0.6rem 0.6rem 0.7rem;
       display: flex;
       flex-direction: column;
       flex: 1;
-      gap: 0.2rem;
+      gap: 0.15rem;
     }
 
     .product-category {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       color: #94a3b8;
       text-transform: uppercase;
       letter-spacing: 0.03em;
@@ -315,11 +394,10 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-
     .product-name {
       font-size: 0.85rem;
       font-weight: 600;
-      color: white;
+      color: #f1f5f9;
       line-height: 1.3;
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -327,18 +405,16 @@
       overflow: hidden;
       min-height: 2.2rem;
     }
-
     .product-price {
       font-size: 1rem;
       font-weight: 700;
       color: #60a5fa;
-      margin: 0.1rem 0;
+      margin: 0.05rem 0;
     }
-
     .product-stock {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       color: #94a3b8;
-      margin-bottom: 0.2rem;
+      margin-bottom: 0.1rem;
     }
     .product-stock.out {
       color: #f87171;
@@ -346,19 +422,19 @@
 
     .product-btn {
       width: 100%;
-      padding: 0.5rem 0;
-      border-radius: 0.6rem;
+      padding: 0.4rem 0;
+      border-radius: 8px;
       border: none;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 600;
-      transition: all 0.15s ease;
+      transition: background 0.15s, opacity 0.15s;
       cursor: pointer;
       margin-top: auto;
-      min-height: 2.6rem;
+      min-height: 2.4rem;
     }
     .product-btn.primary {
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      color: white;
+      background: #2563eb;
+      color: #fff;
     }
     .product-btn.primary:active:not(:disabled) {
       transform: scale(0.96);
@@ -374,162 +450,90 @@
       opacity: 0.6;
     }
 
-    /* ===== GRILLE PRODUITS ===== */
-    .products-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.9rem;
-      margin-top: 0.5rem;
-    }
-
-    /* ===== FOOTER ===== */
+    /* ----- FOOTER ----- */
     .footer {
       text-align: center;
-      padding: 1.2rem 0 0.5rem;
-      font-size: 0.65rem;
+      padding: 1rem 0 0.3rem;
+      font-size: 0.6rem;
       color: #475569;
       border-top: 1px solid #1e293b;
-      margin-top: 1.2rem;
+      margin-top: 1rem;
     }
 
-    /* ===== INPUTS ===== */
-    .input-modern {
-      background: #0f172a;
-      color: #f1f5f9;
-      border: 1px solid #334155;
-      border-radius: 0.6rem;
-      padding: 0.7rem 0.9rem;
-      font-size: 0.85rem;
-      width: 100%;
-      outline: none;
-      transition: border-color 0.2s;
-      min-height: 2.8rem;
-    }
-    .input-modern:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
-    }
-    .input-modern::placeholder {
-      color: #64748b;
-    }
-
-    .select-modern {
-      background: #0f172a;
-      color: #f1f5f9;
-      border: 1px solid #334155;
-      border-radius: 0.6rem;
-      padding: 0.7rem 0.9rem;
-      font-size: 0.85rem;
-      width: 100%;
-      appearance: none;
-      outline: none;
-      min-height: 2.8rem;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 0.8rem center;
-    }
-    .select-modern:focus {
-      border-color: #3b82f6;
-    }
-
-    /* ===== MODALES UNIFIÉES ===== */
+    /* ----- MODALES ----- */
     .modal-overlay {
       position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(6px);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1.5rem;
-      z-index: 1000;
-      animation: fadeIn 0.2s ease-out;
+      padding: 1.2rem;
+      z-index: 100;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.96); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
     .modal-card {
       background: #1e293b;
       border: 1px solid #334155;
-      border-radius: 1.2rem;
-      padding: 1.5rem 1.2rem;
-      max-width: 460px;
+      border-radius: 16px;
+      padding: 1.2rem;
+      max-width: 440px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
-      position: relative;
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
-      animation: slideUp 0.25s ease-out;
     }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 1rem;
-      margin-bottom: 1.2rem;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
     }
     .modal-title {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 700;
-      color: white;
+      color: #f1f5f9;
       flex: 1;
       margin: 0;
-      padding-right: 0.5rem;
+      padding-right: 0.3rem;
     }
-
-    /* Bouton fermeture grand et tactile */
-    .modal-close {
-      background: transparent;
-      border: none;
-      color: #94a3b8;
-      font-size: 2rem;
-      line-height: 1;
-      cursor: pointer;
-      padding: 0.2rem 0.5rem;
-      border-radius: 0.5rem;
-      transition: background 0.2s, color 0.2s;
-      min-height: 3rem;
-      min-width: 3rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: -0.3rem;
-      margin-right: -0.3rem;
-    }
-    .modal-close:hover {
-      background: rgba(255,255,255,0.08);
-      color: #f1f5f9;
-    }
-
     .modal-body {
       color: #e2e8f0;
       font-size: 0.9rem;
       line-height: 1.5;
     }
-    .modal-body .input-modern,
-    .modal-body .select-modern {
-      margin-bottom: 0.6rem;
+    .modal-body .input,
+    .modal-body .select {
+      margin-bottom: 0.5rem;
     }
     .modal-body .flex {
+      display: flex;
       gap: 0.5rem;
     }
 
-    /* ===== IFRAME ===== */
+    /* ----- ADMIN CARD ----- */
+    .admin-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+    .admin-card-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    /* ----- IFRAME ----- */
     .iframe-container {
       height: calc(100vh - 8rem);
       width: 100%;
-      background: white;
-      border-radius: 1rem;
+      background: #fff;
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
     }
     .iframe-container iframe {
       width: 100%;
@@ -537,58 +541,85 @@
       border: 0;
     }
 
-    /* ===== ADMIN CARD ===== */
-    .admin-card {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 0.75rem;
-      padding: 0.9rem;
-      margin-bottom: 0.9rem;
-    }
-    .admin-card-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    /* ===== SPINNER ===== */
+    /* ----- SPINNER ----- */
     .spinner {
       border: 3px solid #1e293b;
-      border-top: 3px solid #3b82f6;
+      border-top: 3px solid #2563eb;
       border-radius: 50%;
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       animation: spin 0.8s linear infinite;
       margin: 2rem auto;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 380px) {
-      .product-name { font-size: 0.75rem; }
+    /* ----- ICÔNES STABILISÉES ----- */
+    .icon {
+      display: inline-block;
+      font-size: 1rem;
+      width: 1.5rem;
+      text-align: center;
+      flex-shrink: 0;
+      vertical-align: middle;
+    }
+    .icon-sm {
+      display: inline-block;
+      font-size: 0.85rem;
+      width: 1.3rem;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    /* ----- UTILITAIRES ----- */
+    .flex { display: flex; }
+    .flex-1 { flex: 1; }
+    .gap-1 { gap: 0.25rem; }
+    .gap-2 { gap: 0.5rem; }
+    .gap-3 { gap: 0.75rem; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .text-center { text-align: center; }
+    .text-xs { font-size: 0.65rem; }
+    .text-sm { font-size: 0.75rem; }
+    .text-gray { color: #94a3b8; }
+    .text-white { color: #f1f5f9; }
+    .text-emerald { color: #4ade80; }
+    .text-red { color: #f87171; }
+    .text-blue { color: #60a5fa; }
+    .mt-1 { margin-top: 0.25rem; }
+    .mt-2 { margin-top: 0.5rem; }
+    .mt-3 { margin-top: 0.75rem; }
+    .mb-1 { margin-bottom: 0.25rem; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .w-full { width: 100%; }
+    .min-w-0 { min-width: 0; }
+    .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .hidden { display: none; }
+
+    /* ----- RESPONSIVE ----- */
+    @media (max-width: 400px) {
+      .product-name { font-size: 0.75rem; min-height: 1.8rem; }
       .product-price { font-size: 0.9rem; }
-      .product-btn { font-size: 0.65rem; min-height: 2.2rem; }
-      .products-grid { gap: 0.6rem; }
-      .header-title { font-size: 0.9rem; max-width: 48%; }
-      .btn-sm { padding: 0.4rem 0.6rem; font-size: 0.65rem; min-height: 2.2rem; }
+      .product-btn { font-size: 0.65rem; min-height: 2.1rem; }
+      .grid-layout { gap: 0.5rem; }
+      .header-title { font-size: 0.85rem; max-width: 48%; }
+      .btn { padding: 0.3rem 0.5rem; font-size: 0.65rem; min-height: 2rem; }
       .modal-card { padding: 1rem; }
-      .modal-title { font-size: 1rem; }
+      .modal-title { font-size: 0.95rem; }
     }
 
     @media (min-width: 600px) {
-      .products-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
-      }
-      .header-title { font-size: 1.2rem; max-width: 65%; }
+      .grid-layout { grid-template-columns: repeat(3, 1fr); gap: 0.9rem; }
+      .header-title { font-size: 1.1rem; max-width: 65%; }
     }
     @media (min-width: 900px) {
-      .products-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1.2rem;
-      }
+      .grid-layout { grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    }
+    @media (min-width: 640px) {
+      .hidden-sm { display: inline-block; }
     }
   </style>
+
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0f172a" />
   <link rel="apple-touch-icon" href="icon.png" />
@@ -699,9 +730,9 @@
           styles: {
             palette: {
               window: '#1e293b', sourceBg: '#0f172a', windowBorder: '#334155',
-              tabIcon: '#3b82f6', inactiveTabIcon: '#94a3b8', menuIcons: '#3b82f6',
-              link: '#3b82f6', action: '#3b82f6', inProgress: '#3b82f6',
-              complete: '#34d399', error: '#f87171',
+              tabIcon: '#2563eb', inactiveTabIcon: '#94a3b8', menuIcons: '#2563eb',
+              link: '#2563eb', action: '#2563eb', inProgress: '#2563eb',
+              complete: '#22c55e', error: '#ef4444',
               textDark: '#f1f5f9', textLight: '#94a3b8'
             }
           }
@@ -1079,7 +1110,7 @@
       if (field.type === "select") {
         var options = field.options === "categories" ? (editableData?.categories || []) : [];
         return (
-          <select key={field.key} value={val} onChange={onChange} className="select-modern">
+          <select key={field.key} value={val} onChange={onChange} className="select">
             <option value="">Choisir...</option>
             {options.map(function(opt) {
               return <option key={opt.id} value={opt.id}>{opt.icon} {opt.name}</option>;
@@ -1088,15 +1119,15 @@
         );
       }
       if (field.type === "textarea") {
-        return <textarea key={field.key} value={val} onChange={onChange} placeholder={field.label} rows={field.rows || 2} className="input-modern" style={{ resize: 'vertical' }} />;
+        return <textarea key={field.key} value={val} onChange={onChange} placeholder={field.label} rows={field.rows || 2} className="input" style={{ resize: 'vertical' }} />;
       }
       if (field.key === 'image') {
         return (
           <div key={field.key} className="flex gap-2 items-center">
-            <input type="text" step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="input-modern flex-1" />
-            <button onClick={function() { openCloudinaryWidget(field.key); }} className="btn-sm btn-primary-sm" type="button" title="Upload">📷</button>
+            <input type="text" step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="input flex-1" />
+            <button onClick={function() { openCloudinaryWidget(field.key); }} className="btn btn-primary" type="button" title="Upload">📷</button>
             {val && (
-              <div className="w-9 h-9 rounded overflow-hidden flex-shrink-0 bg-slate-800 border border-slate-700">
+              <div className="flex-shrink-0" style={{ width: '2.2rem', height: '2.2rem', borderRadius: '8px', overflow: 'hidden', background: '#0f172a', border: '1px solid #334155' }}>
                 <img src={val} alt="apercu" className="w-full h-full object-cover" onError={function(e) { e.target.style.display = 'none'; }} />
               </div>
             )}
@@ -1104,21 +1135,21 @@
         );
       }
       return (
-        <input key={field.key} type={field.type || "text"} step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="input-modern" />
+        <input key={field.key} type={field.type || "text"} step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="input" />
       );
     };
 
     // ---- RENDU ----
     if (isLoading) {
-      return <div className="min-h-screen flex items-center justify-center"><div className="spinner"></div></div>;
+      return <div className="flex items-center justify-center" style={{ minHeight: '100vh' }}><div className="spinner"></div></div>;
     }
     if (!vendeur || isPlaceholder) {
       return (
-        <div className="min-h-screen flex items-center justify-center p-4">
-          <div className="admin-card max-w-sm w-full text-center">
-            <h2 className="text-red-400 font-bold">Configuration requise</h2>
-            <p className="text-gray-300 text-sm mt-1">{isPlaceholder ? "Template non configure." : "Vendeur incorrect."}</p>
-            <p className="text-xs text-gray-400 mt-1">Utilisez le forkeur.</p>
+        <div className="flex items-center justify-center p-4" style={{ minHeight: '100vh' }}>
+          <div className="card" style={{ maxWidth: '320px', textAlign: 'center' }}>
+            <h2 style={{ color: '#f87171', fontWeight: '700' }}>Configuration requise</h2>
+            <p className="text-sm text-gray mt-1">{isPlaceholder ? "Template non configure." : "Vendeur incorrect."}</p>
+            <p className="text-xs text-gray mt-1">Utilisez le forkeur.</p>
           </div>
         </div>
       );
@@ -1129,7 +1160,7 @@
     var cartCount = cart.reduce(function(s, i) { return s + i.quantity; }, 0);
 
     return (
-      <div className="app-container">
+      <div className="container">
 
         {/* ---- HEADER ---- */}
         <header className="header">
@@ -1139,12 +1170,12 @@
             </span>
             <div className="header-actions">
               {sogUser ? (
-                <span className="badge badge-success hidden sm:inline">Connecte</span>
+                <span className="badge badge-success hidden-sm">Connecte</span>
               ) : isReady ? (
-                <span className="badge badge-warning hidden sm:inline">Invite</span>
+                <span className="badge badge-warning hidden-sm">Invite</span>
               ) : null}
-              <button onClick={handleAdminClick} className="btn-sm btn-secondary-sm">Admin</button>
-              <button onClick={function() { setShowCart(!showCart); }} className="btn-sm btn-secondary-sm cart-btn-wrapper">
+              <button onClick={handleAdminClick} className="btn btn-secondary">Admin</button>
+              <button onClick={function() { setShowCart(!showCart); }} className="btn btn-secondary cart-btn-wrapper">
                 Panier
                 {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
               </button>
@@ -1167,39 +1198,39 @@
         {/* ---- ADMIN ---- */}
         {isAdmin && isAdminAuthenticated ? (
           <div>
-            <h2 className="text-lg font-bold mt-3 mb-2">🛠 PANEL ADMIN</h2>
+            <h2 style={{ fontSize: '1.1rem', fontWeight: '700', marginTop: '0.75rem', marginBottom: '0.5rem' }}>🛠 PANEL ADMIN</h2>
 
             <div className="admin-card">
               <div className="admin-card-title">⚙️ Configuration</div>
-              <div className="space-y-2">
-                <input type="text" value={editableData?.settings?.title || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, title: e.target.value } }); }} placeholder="Titre" className="input-modern" />
-                <input type="text" value={editableData?.settings?.currency || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, currency: e.target.value } }); }} placeholder="Devise" className="input-modern" />
-                <input type="text" value={editableData?.settings?.ntfyTopic || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, ntfyTopic: e.target.value } }); }} placeholder="Topic ntfy" className="input-modern" />
+              <div className="flex gap-2" style={{ flexDirection: 'column' }}>
+                <input type="text" value={editableData?.settings?.title || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, title: e.target.value } }); }} placeholder="Titre" className="input" />
+                <input type="text" value={editableData?.settings?.currency || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, currency: e.target.value } }); }} placeholder="Devise" className="input" />
+                <input type="text" value={editableData?.settings?.ntfyTopic || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, ntfyTopic: e.target.value } }); }} placeholder="Topic ntfy" className="input" />
               </div>
             </div>
 
             <div className="admin-card">
               <div className="admin-card-title">🔑 Token FGT</div>
               <div className="flex gap-2 items-center">
-                <input type="password" value={fgtToken} onChange={function(e) { setFgtToken(e.target.value); setIsTokenSaved(false); }} placeholder="Token" className="input-modern flex-1" />
-                <button onClick={saveFgtToken} className="btn-sm btn-primary-sm">{isTokenSaved ? '✅' : '💾'}</button>
+                <input type="password" value={fgtToken} onChange={function(e) { setFgtToken(e.target.value); setIsTokenSaved(false); }} placeholder="Token" className="input flex-1" />
+                <button onClick={saveFgtToken} className="btn btn-primary">{isTokenSaved ? '✅' : '💾'}</button>
               </div>
-              {isTokenSaved && <p className="text-emerald-400 text-xs mt-1">✅ Sauvegarde.</p>}
+              {isTokenSaved && <p className="text-xs text-emerald mt-1">✅ Sauvegarde.</p>}
             </div>
 
             <div className="admin-card">
               <div className="flex justify-between items-center">
                 <span className="admin-card-title"><span className="icon">📂</span> Categories</span>
-                <button onClick={function() { openCatModal(null); }} className="btn-sm btn-primary-sm">+</button>
+                <button onClick={function() { openCatModal(null); }} className="btn btn-primary">+</button>
               </div>
-              <div className="grid grid-cols-2 gap-1 mt-1">
+              <div className="grid-layout" style={{ gridTemplateColumns: '1fr 1fr', gap: '0.25rem', marginTop: '0.25rem' }}>
                 {(editableData?.categories || []).map(function(c) {
                   return (
-                    <div key={c.id} className={'flex items-center gap-1 p-1 rounded border ' + (hasPending(c, "category") ? 'border-yellow-700 bg-yellow-900/20' : 'border-slate-700 bg-slate-800/30')}>
+                    <div key={c.id} className={'flex items-center gap-1 p-1 rounded border ' + (hasPending(c, "category") ? 'border-yellow-700' : 'border-slate-700')} style={{ background: hasPending(c, "category") ? 'rgba(234,179,8,0.1)' : 'rgba(30,41,59,0.3)' }}>
                       <span className="icon-sm">{c.icon}</span>
                       <span className="text-xs truncate flex-1 text-white">{c.name}</span>
-                      <button onClick={function() { openCatModal(c); }} className="text-blue-400 text-xs">✎</button>
-                      <button onClick={function() { deleteCategory(c.id); }} className="text-red-400 text-xs">✕</button>
+                      <button onClick={function() { openCatModal(c); }} className="text-blue" style={{ background: 'none', border: 'none', fontSize: '0.7rem', cursor: 'pointer' }}>✎</button>
+                      <button onClick={function() { deleteCategory(c.id); }} className="text-red" style={{ background: 'none', border: 'none', fontSize: '0.7rem', cursor: 'pointer' }}>✕</button>
                     </div>
                   );
                 })}
@@ -1209,19 +1240,19 @@
             <div className="admin-card">
               <div className="flex justify-between items-center">
                 <span className="admin-card-title"><span className="icon">📦</span> Produits</span>
-                <button onClick={function() { openProdModal(null); }} className="btn-sm btn-primary-sm">+</button>
+                <button onClick={function() { openProdModal(null); }} className="btn btn-primary">+</button>
               </div>
-              <div className="space-y-1 max-h-60 overflow-y-auto">
+              <div style={{ maxHeight: '240px', overflowY: 'auto' }}>
                 {(editableData?.products || []).map(function(p) {
                   return (
-                    <div key={p.id} className={'flex items-center gap-2 p-1 rounded border ' + (hasPending(p, "product") ? 'border-yellow-700 bg-yellow-900/20' : 'border-slate-700 bg-slate-800/30')}>
+                    <div key={p.id} className={'flex items-center gap-2 p-1 rounded border ' + (hasPending(p, "product") ? 'border-yellow-700' : 'border-slate-700')} style={{ background: hasPending(p, "product") ? 'rgba(234,179,8,0.1)' : 'rgba(30,41,59,0.3)', marginBottom: '0.2rem' }}>
                       <img src={p.image} alt={p.name} className="w-8 h-8 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-medium text-white truncate">{p.name}</p>
-                        <p className="text-[0.55rem] text-gray-400">{p.price}{currency} · {getCategoryName(p.categoryId)}</p>
+                        <p className="text-[0.55rem] text-gray">{p.price}{currency} · {getCategoryName(p.categoryId)}</p>
                       </div>
-                      <button onClick={function() { openProdModal(p); }} className="text-blue-400 text-xs">✎</button>
-                      <button onClick={function() { deleteProduct(p.id); }} className="text-red-400 text-xs">✕</button>
+                      <button onClick={function() { openProdModal(p); }} className="text-blue" style={{ background: 'none', border: 'none', fontSize: '0.7rem', cursor: 'pointer' }}>✎</button>
+                      <button onClick={function() { deleteProduct(p.id); }} className="text-red" style={{ background: 'none', border: 'none', fontSize: '0.7rem', cursor: 'pointer' }}>✕</button>
                     </div>
                   );
                 })}
@@ -1229,7 +1260,7 @@
             </div>
 
             <div className="admin-card">
-              <button onClick={handleCommit} disabled={isCommitting} className={'btn-sm btn-primary-sm w-full' + (isCommitting ? ' opacity-50' : '')}>
+              <button onClick={handleCommit} disabled={isCommitting} className={'btn btn-primary w-full' + (isCommitting ? ' opacity-50' : '')}>
                 {isCommitting ? '⏳ Sauvegarde...' : '💾 Sauvegarder (Commit)'}
               </button>
             </div>
@@ -1257,7 +1288,7 @@
             </div>
 
             {/* Grille produits */}
-            <div className="products-grid">
+            <div className="grid-layout">
               {getFiltered().map(function(p) {
                 var isOutOfStock = p.stock <= 0;
                 return (
@@ -1294,7 +1325,7 @@
             </div>
 
             {getFiltered().length === 0 && (
-              <div className="text-center py-6 text-gray-400 text-sm">
+              <div className="text-center py-6 text-gray text-sm">
                 {searchQuery ? "Aucun produit." : "Aucun produit dans cette categorie."}
               </div>
             )}
@@ -1308,7 +1339,7 @@
           </div>
         )}
 
-        {/* ---- MODALES UNIFIÉES ---- */}
+        {/* ---- MODALES ---- */}
 
         {/* MODALE ADMIN (mot de passe) */}
         {showPasswordModal && (
@@ -1316,16 +1347,16 @@
             <div className="modal-card" onClick={function(e) { e.stopPropagation(); }}>
               <div className="modal-header">
                 <h3 className="modal-title">🔐 Accès admin</h3>
-                <button className="modal-close" onClick={function() { setShowPasswordModal(false); }} aria-label="Fermer">×</button>
+                <button className="btn-close" onClick={function() { setShowPasswordModal(false); }} aria-label="Fermer">×</button>
               </div>
               <div className="modal-body">
-                <p className="text-gray-300 text-sm mb-3">Entrez votre mot de passe :</p>
-                <input type="password" value={adminPassword} onChange={function(e) { setAdminPassword(e.target.value); }} placeholder="Mot de passe" className="input-modern" onKeyDown={function(e) { if (e.key === "Enter") handleAdminLogin(); }} />
-                <div className="flex gap-2 mt-4">
-                  <button onClick={handleAdminLogin} className="btn-sm btn-primary-sm flex-1">Valider</button>
-                  <button onClick={function() { setShowPasswordModal(false); }} className="btn-sm btn-secondary-sm">Annuler</button>
+                <p className="text-sm text-gray mb-2">Entrez votre mot de passe :</p>
+                <input type="password" value={adminPassword} onChange={function(e) { setAdminPassword(e.target.value); }} placeholder="Mot de passe" className="input" onKeyDown={function(e) { if (e.key === "Enter") handleAdminLogin(); }} />
+                <div className="flex gap-2 mt-3">
+                  <button onClick={handleAdminLogin} className="btn btn-primary flex-1">Valider</button>
+                  <button onClick={function() { setShowPasswordModal(false); }} className="btn btn-secondary">Annuler</button>
                 </div>
-                {msg.text && msg.type === "error" && <p className="text-red-400 text-xs mt-2">{msg.text}</p>}
+                {msg.text && msg.type === "error" && <p className="text-red text-xs mt-2">{msg.text}</p>}
               </div>
             </div>
           </div>
@@ -1334,59 +1365,128 @@
         {/* MODALE IMAGE AGRANDIE */}
         {expandedImage && (
           <div className="modal-overlay" onClick={function() { setExpandedImage(null); }}>
-            <div className="modal-card" style={{ maxWidth: '600px', padding: '0.5rem', background: 'transparent', border: 'none', boxShadow: 'none' }} onClick={function(e) { e.stopPropagation(); }}>
-              <div className="relative">
-                <button className="modal-close" style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', borderRadius: '50%', width: '2.8rem', height: '2.8rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', border: 'none', fontSize: '1.8rem' }} onClick={function() { setExpandedImage(null); }}>×</button>
-                <img src={expandedImage} alt="Agrandissement" className="w-full rounded-xl" onError={function(e) { e.target.src = "https://via.placeholder.com/600"; }} />
+            <div className="modal-card" style={{ maxWidth: '600px', padding: '0.5rem', background: 'transparent', border: 'none' }} onClick={function(e) { e.stopPropagation(); }}>
+              <div style={{ position: 'relative' }}>
+                <button className="btn-close" style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', background: 'rgba(0,0,0,0.6)', borderRadius: '50%', width: '2.6rem', height: '2.6rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', border: 'none', fontSize: '1.6rem' }} onClick={function() { setExpandedImage(null); }}>×</button>
+                <img src={expandedImage} alt="Agrandissement" className="w-full" style={{ borderRadius: '12px' }} onError={function(e) { e.target.src = "https://via.placeholder.com/600"; }} />
               </div>
             </div>
           </div>
         )}
 
-        {/* MODALE PANIER */}
+        {/* MODALE PANIER AVEC BOUTONS AMELIORES */}
         {showCart && (
           <div className="modal-overlay" onClick={function() { setShowCart(false); }}>
             <div className="modal-card" onClick={function(e) { e.stopPropagation(); }}>
               <div className="modal-header">
                 <h3 className="modal-title">🛒 Mon Panier</h3>
-                <button className="modal-close" onClick={function() { setShowCart(false); }} aria-label="Fermer">×</button>
+                <button className="btn-close" onClick={function() { setShowCart(false); }} aria-label="Fermer">×</button>
               </div>
               <div className="modal-body">
                 {cart.length === 0 ? (
-                  <p className="text-center text-gray-400 py-4">Votre panier est vide.</p>
+                  <p className="text-center text-gray py-4">Votre panier est vide.</p>
                 ) : (
                   <div>
-                    <div className="space-y-2 max-h-56 overflow-y-auto">
+                    <div style={{ maxHeight: '220px', overflowY: 'auto' }}>
                       {cart.map(function(i) {
                         return (
-                          <div key={i.id} className="flex items-center gap-2 bg-slate-800/40 p-2 rounded-lg border border-slate-700">
-                            <img src={i.image} alt={i.name} className="w-10 h-10 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
+                          <div key={i.id} className="flex items-center gap-3 p-3 rounded border border-slate-700" style={{ background: 'rgba(30,41,59,0.4)', marginBottom: '0.5rem' }}>
+                            <img src={i.image} alt={i.name} className="w-12 h-12 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
                             <div className="flex-1 min-w-0">
-                              <p className="text-xs font-medium text-white truncate">{i.name}</p>
-                              <p className="text-[0.6rem] text-gray-400">{i.price}{currency}</p>
+                              <p className="text-sm font-medium text-white truncate">{i.name}</p>
+                              <p className="text-xs text-gray">{i.price}{currency}</p>
                             </div>
-                            <div className="flex items-center gap-1">
-                              <button onClick={function() { updateQty(i.id, -1); }} className="btn-sm btn-secondary-sm text-xs px-2 py-0.5">−</button>
-                              <span className="w-6 text-center text-sm">{i.quantity}</span>
-                              <button onClick={function() { updateQty(i.id, 1); }} className="btn-sm btn-secondary-sm text-xs px-2 py-0.5">+</button>
-                              <button onClick={function() { removeFromCart(i.id); }} className="text-red-400 text-xs px-1">✕</button>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={function() { updateQty(i.id, -1); }}
+                                className="btn btn-secondary"
+                                style={{
+                                  minWidth: '2.4rem',
+                                  minHeight: '2.4rem',
+                                  padding: '0',
+                                  fontSize: '1.2rem',
+                                  fontWeight: '700',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  borderRadius: '8px',
+                                  background: '#334155',
+                                  border: '1px solid #475569',
+                                  color: '#f1f5f9',
+                                  cursor: 'pointer',
+                                  transition: 'background 0.15s'
+                                }}
+                                onMouseEnter={function(e) { e.currentTarget.style.background = '#475569'; }}
+                                onMouseLeave={function(e) { e.currentTarget.style.background = '#334155'; }}
+                              >
+                                −
+                              </button>
+                              <span style={{ minWidth: '2.2rem', textAlign: 'center', fontSize: '1.1rem', fontWeight: '600', color: '#f1f5f9' }}>
+                                {i.quantity}
+                              </span>
+                              <button
+                                onClick={function() { updateQty(i.id, 1); }}
+                                className="btn btn-secondary"
+                                style={{
+                                  minWidth: '2.4rem',
+                                  minHeight: '2.4rem',
+                                  padding: '0',
+                                  fontSize: '1.2rem',
+                                  fontWeight: '700',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  borderRadius: '8px',
+                                  background: '#334155',
+                                  border: '1px solid #475569',
+                                  color: '#f1f5f9',
+                                  cursor: 'pointer',
+                                  transition: 'background 0.15s'
+                                }}
+                                onMouseEnter={function(e) { e.currentTarget.style.background = '#475569'; }}
+                                onMouseLeave={function(e) { e.currentTarget.style.background = '#334155'; }}
+                              >
+                                +
+                              </button>
+                              <button
+                                onClick={function() { removeFromCart(i.id); }}
+                                className="btn btn-danger"
+                                style={{
+                                  padding: '0 0.6rem',
+                                  minHeight: '2.4rem',
+                                  fontSize: '0.9rem',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  borderRadius: '8px',
+                                  background: 'transparent',
+                                  border: '1px solid #f87171',
+                                  color: '#f87171',
+                                  cursor: 'pointer',
+                                  transition: 'all 0.15s'
+                                }}
+                                onMouseEnter={function(e) { e.currentTarget.style.background = '#f87171'; e.currentTarget.style.color = '#fff'; }}
+                                onMouseLeave={function(e) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#f87171'; }}
+                              >
+                                ✕
+                              </button>
                             </div>
                           </div>
                         );
                       })}
                     </div>
-                    <div className="flex justify-between font-bold border-t border-slate-700 pt-2 mt-2">
+                    <div className="flex justify-between font-bold border-t border-slate-700 pt-3 mt-3">
                       <span>Total</span>
-                      <span className="text-blue-400">{getTotal()}{currency}</span>
+                      <span className="text-blue">{getTotal()}{currency}</span>
                     </div>
-                    <div className={'space-y-2 mt-3 ' + (!sogUser ? 'opacity-50 pointer-events-none' : '')}>
-                      <input type="text" value={order.name} onChange={function(e) { setOrder({ ...order, name: e.target.value }); }} placeholder="Nom *" className="input-modern" />
-                      <input type="text" value={order.address} onChange={function(e) { setOrder({ ...order, address: e.target.value }); }} placeholder="Adresse *" className="input-modern" />
-                      <input type="tel" value={order.phone} onChange={function(e) { setOrder({ ...order, phone: e.target.value }); }} placeholder="Tel *" className="input-modern" />
-                      <textarea value={order.comments} onChange={function(e) { setOrder({ ...order, comments: e.target.value }); }} placeholder="Commentaires" rows="2" className="input-modern" />
+                    <div className={'flex gap-2 flex-col mt-4 ' + (!sogUser ? 'opacity-50 pointer-events-none' : '')}>
+                      <input type="text" value={order.name} onChange={function(e) { setOrder({ ...order, name: e.target.value }); }} placeholder="Nom *" className="input" />
+                      <input type="text" value={order.address} onChange={function(e) { setOrder({ ...order, address: e.target.value }); }} placeholder="Adresse *" className="input" />
+                      <input type="tel" value={order.phone} onChange={function(e) { setOrder({ ...order, phone: e.target.value }); }} placeholder="Tel *" className="input" />
+                      <textarea value={order.comments} onChange={function(e) { setOrder({ ...order, comments: e.target.value }); }} placeholder="Commentaires" rows="2" className="input" />
                     </div>
-                    {!sogUser && <p className="text-yellow-400 text-xs text-center mt-2">🔒 Connectez-vous pour valider</p>}
-                    <button onClick={checkout} disabled={!sogUser || cart.length === 0} className={'btn-sm btn-primary-sm w-full mt-3' + (!sogUser || cart.length === 0 ? ' opacity-50' : '')}>
+                    {!sogUser && <p className="text-yellow-400 text-xs text-center mt-3">🔒 Connectez-vous pour valider</p>}
+                    <button onClick={checkout} disabled={!sogUser || cart.length === 0} className={'btn btn-primary w-full mt-4' + (!sogUser || cart.length === 0 ? ' opacity-50' : '')}>
                       ✅ Valider la commande
                     </button>
                   </div>
@@ -1405,10 +1505,10 @@
                   {modal.creating ? '✨ Nouveau ' : '✏️ Modifier '}
                   {modal.type === 'category' ? 'categorie' : 'produit'}
                 </h3>
-                <button className="modal-close" onClick={closeModal} aria-label="Fermer">×</button>
+                <button className="btn-close" onClick={closeModal} aria-label="Fermer">×</button>
               </div>
               <div className="modal-body">
-                <div className="space-y-3">
+                <div className="flex gap-2 flex-col">
                   {modal.type === "category"
                     ? schema.categories.fields.map(function(f) { return renderField(f); })
                     : schema.products.fields.map(function(f) {
@@ -1417,11 +1517,11 @@
                       })
                   }
                 </div>
-                <div className="flex gap-2 mt-4">
-                  <button onClick={modal.type === "category" ? saveCategory : saveProduct} className="btn-sm btn-primary-sm flex-1">
+                <div className="flex gap-2 mt-3">
+                  <button onClick={modal.type === "category" ? saveCategory : saveProduct} className="btn btn-primary flex-1">
                     {modal.creating ? '✅ Créer' : '💾 Sauvegarder'}
                   </button>
-                  <button onClick={closeModal} className="btn-sm btn-secondary-sm">Annuler</button>
+                  <button onClick={closeModal} className="btn btn-secondary">Annuler</button>
                 </div>
               </div>
             </div>
