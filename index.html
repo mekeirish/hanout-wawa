@@ -4,88 +4,176 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   <title>Hanout - Catalogue</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind CSS (version production minifiée) -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
+  <!-- React + ReactDOM (UMD) -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel Standalone -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <!-- Cloudinary Widget -->
   <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
   <style>
-    .neu-card {
-      background: #1e293b;
-      border-radius: 1.5rem;
-      box-shadow: inset 2px 2px 4px rgba(255,255,255,0.05),
-                  inset -2px -2px 4px rgba(0,0,0,0.8),
-                  6px 6px 12px rgba(0,0,0,0.6);
+    /* ---- STYLE DARK MODERN ---- */
+    body {
+      background: #0f172a;
+      color: #f1f5f9;
+      font-family: system-ui, -apple-system, sans-serif;
     }
-    .neu-button {
+
+    /* Cartes modernes */
+    .modern-card {
       background: #1e293b;
+      border-radius: 1rem;
+      border: 1px solid #334155;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s ease;
+    }
+    .modern-card:hover {
+      border-color: #475569;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Boutons modernes */
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
       color: white;
       border-radius: 0.75rem;
-      padding: 0.5rem 1rem;
-      box-shadow: inset 2px 2px 4px rgba(255,255,255,0.1),
-                  inset -2px -2px 4px rgba(0,0,0,0.9),
-                  4px 4px 8px rgba(0,0,0,0.6);
-      transition: all 0.2s ease;
-      cursor: pointer;
+      padding: 0.5rem 1.25rem;
       border: none;
       font-weight: 500;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
     }
-    .neu-button:hover {
-      box-shadow: inset -2px -2px 4px rgba(255,255,255,0.05),
-                  inset 2px 2px 4px rgba(0,0,0,0.9);
-      transform: scale(0.98);
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
     }
-    .neu-button:disabled {
+    .btn-primary:disabled {
       opacity: 0.5;
       cursor: not-allowed;
       transform: none;
     }
-    .neu-input {
-      background: #1e293b;
+
+    .btn-secondary {
+      background: #334155;
+      color: #f1f5f9;
+      border-radius: 0.75rem;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid #475569;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      background: #475569;
+      border-color: #64748b;
+    }
+    .btn-secondary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
       color: white;
       border-radius: 0.75rem;
-      padding: 0.5rem 1rem;
-      box-shadow: inset 4px 4px 8px rgba(0,0,0,0.8),
-                  inset -2px -2px 4px rgba(255,255,255,0.05);
+      padding: 0.5rem 1.25rem;
       border: none;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(34, 197, 94, 0.3);
+    }
+    .btn-success:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(34, 197, 94, 0.4);
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: #f87171;
+      border-radius: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border: 1px solid #f87171;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-danger:hover {
+      background: #f87171;
+      color: white;
+    }
+
+    /* Inputs modernes */
+    .input-modern {
+      background: #0f172a;
+      color: #f1f5f9;
+      border-radius: 0.75rem;
+      padding: 0.625rem 1rem;
+      border: 1px solid #334155;
       outline: none;
       width: 100%;
-      transition: box-shadow 0.2s;
+      transition: all 0.2s ease;
     }
-    .neu-input:focus {
-      box-shadow: inset 4px 4px 8px rgba(0,0,0,0.9),
-                  inset -2px -2px 4px rgba(255,255,255,0.1),
-                  0 0 0 2px #3b82f6;
+    .input-modern:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
     }
-    .neu-input::placeholder {
-      color: #94a3b8;
+    .input-modern::placeholder {
+      color: #64748b;
     }
-    .neu-select {
-      background: #1e293b;
-      color: white;
+
+    /* Select modern */
+    .select-modern {
+      background: #0f172a;
+      color: #f1f5f9;
       border-radius: 0.75rem;
-      padding: 0.5rem 1rem;
-      box-shadow: inset 4px 4px 8px rgba(0,0,0,0.8),
-                  inset -2px -2px 4px rgba(255,255,255,0.05);
-      border: none;
+      padding: 0.625rem 1rem;
+      border: 1px solid #334155;
       outline: none;
       width: 100%;
       appearance: none;
+      transition: all 0.2s ease;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
     }
-    .neu-select:focus {
-      box-shadow: inset 4px 4px 8px rgba(0,0,0,0.9),
-                  inset -2px -2px 4px rgba(255,255,255,0.1),
-                  0 0 0 2px #3b82f6;
+    .select-modern:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
     }
-    .modal-overlay {
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(4px);
+
+    /* Badge */
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 500;
     }
+    .badge-success {
+      background: rgba(34, 197, 94, 0.2);
+      color: #4ade80;
+    }
+    .badge-warning {
+      background: rgba(234, 179, 8, 0.2);
+      color: #facc15;
+    }
+
+    /* Header */
+    .header-modern {
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #334155;
+    }
+
+    /* Cart badge */
     .cart-badge {
       position: absolute;
-      top: -6px;
-      right: -6px;
+      top: -4px;
+      right: -4px;
       background: #ef4444;
       color: white;
       border-radius: 9999px;
@@ -94,9 +182,14 @@
       min-width: 1.2rem;
       text-align: center;
     }
+
+    /* Scrollbar */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #0f172a; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+    /* Spinner */
     .spinner {
       border: 3px solid #1e293b;
       border-top: 3px solid #3b82f6;
@@ -108,6 +201,63 @@
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
+    }
+
+    /* Modal overlay */
+    .modal-overlay {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+    }
+
+    /* Produit hover */
+    .product-card {
+      transition: all 0.2s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+      border-color: #3b82f6;
+    }
+
+    /* Message alerte */
+    .alert {
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      border: 1px solid;
+    }
+    .alert-success {
+      background: rgba(34, 197, 94, 0.1);
+      border-color: #22c55e;
+      color: #4ade80;
+    }
+    .alert-error {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: #ef4444;
+      color: #f87171;
+    }
+    .alert-info {
+      background: rgba(59, 130, 246, 0.1);
+      border-color: #3b82f6;
+      color: #60a5fa;
+    }
+    .alert-warning {
+      background: rgba(234, 179, 8, 0.1);
+      border-color: #eab308;
+      color: #facc15;
+    }
+
+    /* Iframe container */
+    .iframe-container {
+      height: calc(100vh - 7rem);
+      width: 100%;
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+    .iframe-container iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
     }
   </style>
   <link rel="manifest" href="manifest.json" />
@@ -664,7 +814,7 @@
       if (field.type === "select") {
         var options = field.options === "categories" ? (editableData?.categories || []) : [];
         return (
-          <select key={field.key} value={val} onChange={onChange} className="neu-select">
+          <select key={field.key} value={val} onChange={onChange} className="select-modern">
             <option value="">Choisir...</option>
             {options.map(function(opt) {
               return <option key={opt.id} value={opt.id}>{opt.icon} {opt.name}</option>;
@@ -673,7 +823,7 @@
         );
       }
       if (field.type === "textarea") {
-        return <textarea key={field.key} value={val} onChange={onChange} placeholder={field.label} rows={field.rows || 2} className="neu-input" style={{ resize: 'vertical' }} />;
+        return <textarea key={field.key} value={val} onChange={onChange} placeholder={field.label} rows={field.rows || 2} className="input-modern" style={{ resize: 'vertical' }} />;
       }
       
       // ---- AJOUT : Bouton Cloudinary pour les champs image ----
@@ -687,18 +837,18 @@
               value={val}
               onChange={onChange}
               placeholder={field.label}
-              className="neu-input flex-1"
+              className="input-modern flex-1"
             />
             <button
               onClick={function() { openCloudinaryWidget(field.key); }}
-              className="neu-button"
+              className="btn-primary"
               type="button"
               title="Telecharger une image"
             >
               📷
             </button>
             {val && (
-              <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-slate-800">
+              <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-slate-800 border border-slate-700">
                 <img
                   src={val}
                   alt="Apercu"
@@ -712,7 +862,7 @@
       }
       
       return (
-        <input key={field.key} type={field.type || "text"} step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="neu-input" />
+        <input key={field.key} type={field.type || "text"} step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="input-modern" />
       );
     };
 
@@ -728,7 +878,7 @@
     if (!vendeur || isPlaceholder) {
       return (
         <div className="min-h-screen flex items-center justify-center p-4 bg-slate-900">
-          <div className="neu-card max-w-md w-full p-6">
+          <div className="modern-card max-w-md w-full p-6">
             <div className="text-center">
               <h2 className="text-xl font-bold text-red-400">Configuration requise</h2>
               <p className="text-gray-300 mt-2">{isPlaceholder ? "Le template n'a pas ete configure." : "Le vendeur n'a pas ete configure correctement."}</p>
@@ -746,62 +896,64 @@
     return (
       <div className="min-h-screen bg-slate-900 text-white p-4">
 
-        <header className="neu-card p-4 flex flex-wrap items-center justify-between sticky top-0 z-30">
-          <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-xl font-bold text-white">{settings.title || "Catalogue"}</h1>
-            {sogUser ? (
-              <span className="text-xs bg-emerald-900/40 text-emerald-200 px-2 py-1 rounded-full">
-                Connecte en tant que {sogUser.name}
-              </span>
-            ) : isReady ? (
-              <span className="text-xs bg-yellow-900/40 text-yellow-200 px-2 py-1 rounded-full">
-                Invite
-              </span>
-            ) : null}
-          </div>
-          <div className="flex gap-2 items-center">
-            <button onClick={handleAdminClick} className="neu-button text-sm">
-              Admin
-            </button>
-            <button onClick={function() { setShowCart(!showCart); }} className="neu-button text-sm relative">
-              Panier
-              {cartCount > 0 && (
-                <span className="cart-badge">{cartCount}</span>
-              )}
-            </button>
+        {/* ---- HEADER MODERN ---- */}
+        <header className="header-modern sticky top-0 z-30 p-4 rounded-xl mb-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
+              <h1 className="text-xl font-bold text-white">{settings.title || "Catalogue"}</h1>
+              {sogUser ? (
+                <span className="badge badge-success">Connecte en tant que {sogUser.name}</span>
+              ) : isReady ? (
+                <span className="badge badge-warning">Invite</span>
+              ) : null}
+            </div>
+            <div className="flex gap-2 items-center">
+              <button onClick={handleAdminClick} className="btn-secondary text-sm">
+                Admin
+              </button>
+              <button onClick={function() { setShowCart(!showCart); }} className="btn-secondary text-sm relative">
+                Panier
+                {cartCount > 0 && (
+                  <span className="cart-badge">{cartCount}</span>
+                )}
+              </button>
+            </div>
           </div>
         </header>
 
+        {/* ---- MESSAGES ---- */}
         {!sogUser && isReady && (
-          <div className="mt-4 p-3 rounded-xl bg-yellow-900/40 text-yellow-200 border border-yellow-800 text-center">
-            Vous etes en mode invite. <a href="#" onClick={function(e) { e.preventDefault(); window.parent.postMessage({ type: 'SOG_LOGIN_REQUEST' }, '*'); }} className="underline hover:text-yellow-100">Connectez-vous</a> pour passer une commande.
+          <div className="alert alert-warning mb-4">
+            Vous etes en mode invite. <a href="#" onClick={function(e) { e.preventDefault(); window.parent.postMessage({ type: 'SOG_LOGIN_REQUEST' }, '*'); }} className="underline hover:text-yellow-200">Connectez-vous</a> pour passer une commande.
           </div>
         )}
 
         {msg.text && (
-          <div className={'mt-4 p-3 rounded-xl ' + (msg.type === 'success' ? 'bg-emerald-900/40 text-emerald-200' : msg.type === 'error' ? 'bg-red-900/40 text-red-200' : 'bg-blue-900/40 text-blue-200') + ' border border-slate-700'}>
+          <div className={'alert mb-4 ' + (msg.type === 'success' ? 'alert-success' : msg.type === 'error' ? 'alert-error' : 'alert-info')}>
             {msg.text}
           </div>
         )}
 
-        <div className="max-w-7xl mx-auto mt-6">
+        {/* ---- CONTENU ---- */}
+        <div className="max-w-7xl mx-auto">
 
           {isAdmin && isAdminAuthenticated ? (
+            // ---- ADMIN ----
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-white">PANEL ADMIN</h2>
 
-              {/* ---- Configuration ---- */}
-              <div className="neu-card p-6">
+              {/* Configuration */}
+              <div className="modern-card p-6">
                 <h3 className="font-semibold text-white mb-3">Configuration</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <input type="text" value={editableData?.settings?.title || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, title: e.target.value } }); }} placeholder="Titre" className="neu-input" />
-                  <input type="text" value={editableData?.settings?.currency || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, currency: e.target.value } }); }} placeholder="Devise" className="neu-input" />
-                  <input type="text" value={editableData?.settings?.ntfyTopic || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, ntfyTopic: e.target.value } }); }} placeholder="Topic ntfy" className="neu-input" />
+                  <input type="text" value={editableData?.settings?.title || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, title: e.target.value } }); }} placeholder="Titre" className="input-modern" />
+                  <input type="text" value={editableData?.settings?.currency || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, currency: e.target.value } }); }} placeholder="Devise" className="input-modern" />
+                  <input type="text" value={editableData?.settings?.ntfyTopic || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, ntfyTopic: e.target.value } }); }} placeholder="Topic ntfy" className="input-modern" />
                 </div>
               </div>
 
-              {/* ---- Token FGT ---- */}
-              <div className="neu-card p-6">
+              {/* Token FGT */}
+              <div className="modern-card p-6">
                 <h3 className="font-semibold text-white mb-3">Token FGT (pour le commit)</h3>
                 <div className="flex gap-3 items-center">
                   <input
@@ -809,9 +961,9 @@
                     value={fgtToken}
                     onChange={function(e) { setFgtToken(e.target.value); setIsTokenSaved(false); }}
                     placeholder="Entrez votre token fine-grained"
-                    className="neu-input flex-1"
+                    className="input-modern flex-1"
                   />
-                  <button onClick={saveFgtToken} className="neu-button">
+                  <button onClick={saveFgtToken} className="btn-primary">
                     {isTokenSaved ? '✅ Sauvegarde' : '💾 Sauvegarder'}
                   </button>
                 </div>
@@ -821,81 +973,85 @@
                 <p className="text-xs text-gray-400 mt-1">Le token est stocke localement dans votre navigateur.</p>
               </div>
 
-              {/* ---- Categories ---- */}
-              <div className="neu-card p-6">
+              {/* Categories */}
+              <div className="modern-card p-6">
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="font-semibold text-white">{schema.categories.icon} {schema.categories.label}</h3>
-                  <button onClick={function() { openCatModal(null); }} className="neu-button text-sm">Ajouter</button>
+                  <button onClick={function() { openCatModal(null); }} className="btn-primary text-sm">Ajouter</button>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {(editableData?.categories || []).map(function(c) {
                     return (
-                      <div key={c.id} className={'flex items-center gap-2 p-2 rounded-lg ' + (hasPending(c, "category") ? 'bg-yellow-900/40 border border-yellow-700' : 'bg-slate-800/40')}>
+                      <div key={c.id} className={'flex items-center gap-2 p-2 rounded-lg border ' + (hasPending(c, "category") ? 'border-yellow-700 bg-yellow-900/20' : 'border-slate-700 bg-slate-800/30')}>
                         <span className="text-xl">{c.icon}</span>
                         <span className="flex-1 text-sm truncate text-white">{c.name}</span>
-                        <button onClick={function() { openCatModal(c); }} className="text-gray-400 hover:text-white text-sm">Modifier</button>
-                        <button onClick={function() { deleteCategory(c.id); }} className="text-red-400 hover:text-red-300 text-sm">Supprimer</button>
+                        <button onClick={function() { openCatModal(c); }} className="text-blue-400 hover:text-blue-300 text-sm">Modifier</button>
+                        <button onClick={function() { deleteCategory(c.id); }} className="btn-danger text-sm">Supprimer</button>
                       </div>
                     );
                   })}
                 </div>
               </div>
 
-              {/* ---- Produits ---- */}
-              <div className="neu-card p-6">
+              {/* Produits */}
+              <div className="modern-card p-6">
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="font-semibold text-white">{schema.products.icon} {schema.products.label}</h3>
-                  <button onClick={function() { openProdModal(null); }} className="neu-button text-sm">Ajouter</button>
+                  <button onClick={function() { openProdModal(null); }} className="btn-primary text-sm">Ajouter</button>
                 </div>
                 <div className="space-y-2">
                   {(editableData?.products || []).map(function(p) {
                     return (
-                      <div key={p.id} className={'flex items-center gap-3 p-2 rounded-lg ' + (hasPending(p, "product") ? 'bg-yellow-900/40 border border-yellow-700' : 'bg-slate-800/40')}>
+                      <div key={p.id} className={'flex items-center gap-3 p-2 rounded-lg border ' + (hasPending(p, "product") ? 'border-yellow-700 bg-yellow-900/20' : 'border-slate-700 bg-slate-800/30')}>
                         <img src={p.image} alt={p.name} className="w-10 h-10 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
                         <div className="flex-1">
                           <p className="text-sm font-medium text-white">{p.name}</p>
                           <p className="text-xs text-gray-400">{p.price}{currency} · {getCategoryName(p.categoryId)} · stock:{p.stock}</p>
                         </div>
-                        <button onClick={function() { openProdModal(p); }} className="text-gray-400 hover:text-white text-sm">Modifier</button>
-                        <button onClick={function() { deleteProduct(p.id); }} className="text-red-400 hover:text-red-300 text-sm">Supprimer</button>
+                        <button onClick={function() { openProdModal(p); }} className="text-blue-400 hover:text-blue-300 text-sm">Modifier</button>
+                        <button onClick={function() { deleteProduct(p.id); }} className="btn-danger text-sm">Supprimer</button>
                       </div>
                     );
                   })}
                 </div>
               </div>
 
-              {/* ---- Commit ---- */}
-              <div className="neu-card p-6">
-                <button onClick={handleCommit} disabled={isCommitting} className={'neu-button w-full ' + (isCommitting ? 'opacity-50' : '')}>
+              {/* Commit */}
+              <div className="modern-card p-6">
+                <button onClick={handleCommit} disabled={isCommitting} className={'btn-primary w-full ' + (isCommitting ? 'opacity-50' : '')}>
                   {isCommitting ? 'Sauvegarde...' : 'Sauvegarder (Commit)'}
                 </button>
               </div>
             </div>
           ) : (
+            // ---- CATALOGUE ----
             <div>
+              {/* Recherche */}
               <div className="mb-4">
-                <input type="text" value={searchQuery} onChange={function(e) { setSearchQuery(e.target.value); }} placeholder="Rechercher..." className="neu-input" />
+                <input type="text" value={searchQuery} onChange={function(e) { setSearchQuery(e.target.value); }} placeholder="Rechercher..." className="input-modern" />
               </div>
 
+              {/* Catégories */}
               <div className="flex flex-wrap gap-2 mb-4 overflow-x-auto pb-2">
-                <button onClick={function() { setSelectedCategoryId(null); }} className={'neu-button text-sm ' + (!selectedCategoryId ? 'bg-blue-600' : '')}>
+                <button onClick={function() { setSelectedCategoryId(null); }} className={'btn-secondary text-sm ' + (!selectedCategoryId ? 'bg-blue-600 border-blue-500' : '')}>
                   Tous
                 </button>
                 {(editableData?.categories || []).map(function(c) {
                   return (
-                    <button key={c.id} onClick={function() { setSelectedCategoryId(c.id); }} className={'neu-button text-sm ' + (selectedCategoryId === c.id ? 'bg-blue-600' : '')}>
+                    <button key={c.id} onClick={function() { setSelectedCategoryId(c.id); }} className={'btn-secondary text-sm ' + (selectedCategoryId === c.id ? 'bg-blue-600 border-blue-500' : '')}>
                       {c.icon} {c.name}
                     </button>
                   );
                 })}
               </div>
 
+              {/* Grille produits */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                 {getFiltered().map(function(p) {
                   var isOutOfStock = p.stock <= 0;
                   return (
-                    <div key={p.id} className="neu-card p-4 hover:scale-[1.02] transition-transform duration-200">
-                      <div className="aspect-square w-full mb-2 overflow-hidden rounded-xl bg-slate-800">
+                    <div key={p.id} className="modern-card product-card p-4">
+                      <div className="aspect-square w-full mb-2 overflow-hidden rounded-lg bg-slate-800">
                         <img
                           src={p.image}
                           alt={p.name}
@@ -913,11 +1069,11 @@
                         </p>
                       )}
                       {sogUser ? (
-                        <button onClick={function() { addToCart(p); }} disabled={isOutOfStock} className={'neu-button w-full mt-2 text-sm ' + (isOutOfStock ? 'opacity-50' : '')}>
+                        <button onClick={function() { addToCart(p); }} disabled={isOutOfStock} className={'btn-primary w-full mt-2 text-sm ' + (isOutOfStock ? 'opacity-50' : '')}>
                           Ajouter au panier
                         </button>
                       ) : (
-                        <button disabled className="neu-button w-full mt-2 text-sm opacity-50 cursor-not-allowed">
+                        <button disabled className="btn-secondary w-full mt-2 text-sm opacity-50 cursor-not-allowed">
                           Connexion requise
                         </button>
                       )}
@@ -932,6 +1088,7 @@
                 </div>
               )}
 
+              {/* Footer */}
               <div className="mt-8 text-center text-xs text-gray-500 border-t border-slate-800 pt-4">
                 {(data?.products || []).length} PRODUITS · {(data?.categories || []).length} CATEGORIES
                 {settings.ntfyTopic && <span className="ml-4">🔔 {settings.ntfyTopic}</span>}
@@ -943,21 +1100,23 @@
 
         {/* ---- MODALS ---- */}
 
+        {/* Modal mot de passe admin */}
         {showPasswordModal && (
           <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setShowPasswordModal(false); }}>
-            <div className="neu-card max-w-md w-full p-6" onClick={function(e) { e.stopPropagation(); }}>
+            <div className="modern-card max-w-md w-full p-6" onClick={function(e) { e.stopPropagation(); }}>
               <h3 className="text-xl font-bold text-white mb-4">Acces admin</h3>
               <p className="text-gray-300 text-sm mb-4">Entrez votre mot de passe.</p>
-              <input type="password" value={adminPassword} onChange={function(e) { setAdminPassword(e.target.value); }} placeholder="Mot de passe" className="neu-input" onKeyDown={function(e) { if (e.key === "Enter") handleAdminLogin(); }} />
+              <input type="password" value={adminPassword} onChange={function(e) { setAdminPassword(e.target.value); }} placeholder="Mot de passe" className="input-modern" onKeyDown={function(e) { if (e.key === "Enter") handleAdminLogin(); }} />
               <div className="flex gap-2 mt-4">
-                <button onClick={handleAdminLogin} className="neu-button flex-1">Valider</button>
-                <button onClick={function() { setShowPasswordModal(false); }} className="neu-button">Annuler</button>
+                <button onClick={handleAdminLogin} className="btn-primary flex-1">Valider</button>
+                <button onClick={function() { setShowPasswordModal(false); }} className="btn-secondary">Annuler</button>
               </div>
               {msg.text && msg.type === "error" && <p className="text-red-400 text-sm mt-2">{msg.text}</p>}
             </div>
           </div>
         )}
 
+        {/* Modal image agrandie */}
         {expandedImage && (
           <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setExpandedImage(null); }}>
             <div className="max-w-3xl w-full" onClick={function(e) { e.stopPropagation(); }}>
@@ -967,9 +1126,10 @@
           </div>
         )}
 
+        {/* Modal Panier */}
         {showCart && (
           <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setShowCart(false); }}>
-            <div className="neu-card max-w-md w-full p-6 max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
+            <div className="modern-card max-w-md w-full p-6 max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
               <h3 className="text-xl font-bold text-white mb-4">Mon Panier</h3>
               {cart.length === 0 ? (
                 <p className="py-4 text-center text-gray-400">Panier vide</p>
@@ -978,17 +1138,17 @@
                   <div className="space-y-2 max-h-60 overflow-y-auto">
                     {cart.map(function(i) {
                       return (
-                        <div key={i.id} className="flex items-center gap-3 bg-slate-800/40 p-2 rounded-lg">
+                        <div key={i.id} className="flex items-center gap-3 bg-slate-800/40 p-2 rounded-lg border border-slate-700">
                           <img src={i.image} alt={i.name} className="w-12 h-12 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
                           <div className="flex-1">
                             <p className="text-sm font-medium text-white">{i.name}</p>
                             <p className="text-xs text-gray-400">{i.price}{currency}</p>
                           </div>
                           <div className="flex items-center gap-1">
-                            <button onClick={function() { updateQty(i.id, -1); }} className="neu-button text-xs px-2 py-1">-</button>
+                            <button onClick={function() { updateQty(i.id, -1); }} className="btn-secondary text-xs px-2 py-1">-</button>
                             <span className="w-6 text-center text-white">{i.quantity}</span>
-                            <button onClick={function() { updateQty(i.id, 1); }} className="neu-button text-xs px-2 py-1">+</button>
-                            <button onClick={function() { removeFromCart(i.id); }} className="text-red-400 hover:text-red-300 text-sm ml-1">×</button>
+                            <button onClick={function() { updateQty(i.id, 1); }} className="btn-secondary text-xs px-2 py-1">+</button>
+                            <button onClick={function() { removeFromCart(i.id); }} className="btn-danger text-sm ml-1">×</button>
                           </div>
                         </div>
                       );
@@ -1000,10 +1160,10 @@
                   </div>
 
                   <div className={'space-y-2 mt-4 ' + (!sogUser ? 'opacity-50 pointer-events-none' : '')}>
-                    <input type="text" value={order.name} onChange={function(e) { setOrder({ ...order, name: e.target.value }); }} placeholder="Nom complet *" className="neu-input" />
-                    <input type="text" value={order.address} onChange={function(e) { setOrder({ ...order, address: e.target.value }); }} placeholder="Adresse *" className="neu-input" />
-                    <input type="tel" value={order.phone} onChange={function(e) { setOrder({ ...order, phone: e.target.value }); }} placeholder="Telephone *" className="neu-input" />
-                    <textarea value={order.comments} onChange={function(e) { setOrder({ ...order, comments: e.target.value }); }} placeholder="Commentaires (facultatif)" rows="2" className="neu-input" style={{ resize: 'vertical' }} />
+                    <input type="text" value={order.name} onChange={function(e) { setOrder({ ...order, name: e.target.value }); }} placeholder="Nom complet *" className="input-modern" />
+                    <input type="text" value={order.address} onChange={function(e) { setOrder({ ...order, address: e.target.value }); }} placeholder="Adresse *" className="input-modern" />
+                    <input type="tel" value={order.phone} onChange={function(e) { setOrder({ ...order, phone: e.target.value }); }} placeholder="Telephone *" className="input-modern" />
+                    <textarea value={order.comments} onChange={function(e) { setOrder({ ...order, comments: e.target.value }); }} placeholder="Commentaires (facultatif)" rows="2" className="input-modern" style={{ resize: 'vertical' }} />
                   </div>
 
                   {!sogUser && (
@@ -1013,7 +1173,7 @@
                   )}
 
                   <div className="modal-action mt-4">
-                    <button onClick={checkout} disabled={!sogUser || cart.length === 0} className={'neu-button w-full ' + (!sogUser || cart.length === 0 ? 'opacity-50' : '')}>
+                    <button onClick={checkout} disabled={!sogUser || cart.length === 0} className={'btn-primary w-full ' + (!sogUser || cart.length === 0 ? 'opacity-50' : '')}>
                       Valider la commande
                     </button>
                   </div>
@@ -1023,9 +1183,10 @@
           </div>
         )}
 
+        {/* Modal générique (création/édition) */}
         {modal.open && (
           <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={closeModal}>
-            <div className="neu-card max-w-md w-full p-6 max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
+            <div className="modern-card max-w-md w-full p-6 max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
               <h3 className="text-xl font-bold text-white mb-4">
                 {modal.creating ? "Nouveau " + (modal.type === "category" ? "categorie" : "produit") : "Modifier " + (modal.type === "category" ? "la categorie" : "le produit")}
               </h3>
@@ -1039,10 +1200,10 @@
                 }
               </div>
               <div className="flex gap-2 mt-4">
-                <button onClick={modal.type === "category" ? saveCategory : saveProduct} className="neu-button flex-1">
+                <button onClick={modal.type === "category" ? saveCategory : saveProduct} className="btn-primary flex-1">
                   {modal.creating ? 'Creer' : 'Sauvegarder'}
                 </button>
-                <button onClick={closeModal} className="neu-button">Annuler</button>
+                <button onClick={closeModal} className="btn-secondary">Annuler</button>
               </div>
             </div>
           </div>
