@@ -4,17 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   <title>Hanout - Catalogue</title>
-  <!-- React + ReactDOM (UMD) -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <!-- Babel Standalone -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- Cloudinary Widget -->
   <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
 
   <style>
     /* ==========================================
-       MATTE MINIMALIST — CSS pur, zéro dépendance
+       MATTE MINIMALIST — CSS pur, optimisé mobile
        ========================================== */
 
     /* ----- RESET & BASE ----- */
@@ -32,30 +29,31 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       padding: 0 0.75rem;
       min-height: 100vh;
-      line-height: 1.4;
+      line-height: 1.5;
     }
     a {
       color: #60a5fa;
-      text-decoration: underline;
+      text-decoration: none;
     }
     a:hover {
-      color: #93bbfc;
+      text-decoration: underline;
     }
 
     /* ----- CONTENEUR PRINCIPAL ----- */
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0.5rem 0 1.5rem;
+      padding: 0.5rem 0 2rem;
     }
 
     /* ----- HEADER ----- */
     .header {
-      background: #0f172a;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       border-bottom: 1px solid #334155;
-      padding: 0.6rem 0;
-      margin: 0 -0.75rem 0.75rem;
-      padding: 0.6rem 0.75rem;
+      padding: 0.8rem 0.75rem;
+      margin: 0 -0.75rem 1rem;
       position: sticky;
       top: 0;
       z-index: 30;
@@ -68,17 +66,17 @@
       margin: 0 auto;
     }
     .header-title {
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: #f1f5f9;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 55%;
+      max-width: 50%;
     }
     .header-actions {
       display: flex;
-      gap: 0.4rem;
+      gap: 0.5rem;
       align-items: center;
     }
 
@@ -87,80 +85,91 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.3rem;
-      padding: 0.4rem 0.7rem;
-      font-size: 0.75rem;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
       font-weight: 600;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: background 0.15s, opacity 0.15s;
-      min-height: 2.3rem;
-      min-width: 2.3rem;
-      line-height: 1;
+      transition: all 0.15s ease;
+      min-height: 2.75rem;
+      min-width: 2.75rem;
+      line-height: 1.2;
     }
     .btn:disabled {
-      opacity: 0.4;
+      opacity: 0.5;
       cursor: not-allowed;
     }
     .btn:active:not(:disabled) {
-      transform: scale(0.96);
+      transform: scale(0.97);
     }
 
     .btn-primary {
       background: #2563eb;
-      color: #fff;
+      color: #ffffff;
     }
     .btn-primary:hover:not(:disabled) {
       background: #1d4ed8;
     }
 
     .btn-secondary {
-      background: #334155;
+      background: #1e293b;
       color: #f1f5f9;
       border: 1px solid #475569;
     }
     .btn-secondary:hover:not(:disabled) {
-      background: #475569;
+      background: #334155;
     }
 
     .btn-danger {
-      background: transparent;
+      background: rgba(248, 113, 113, 0.1);
       color: #f87171;
       border: 1px solid #f87171;
     }
     .btn-danger:hover:not(:disabled) {
       background: #f87171;
-      color: #fff;
+      color: #ffffff;
+    }
+
+    .btn-icon {
+      padding: 0;
+      min-width: 2.4rem;
+      min-height: 2.4rem;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
     }
 
     .btn-close {
       background: transparent;
       border: none;
       color: #94a3b8;
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       line-height: 1;
       cursor: pointer;
-      padding: 0 0.4rem;
-      min-height: 2.6rem;
-      min-width: 2.6rem;
+      min-height: 2.75rem;
+      min-width: 2.75rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 8px;
+      border-radius: 10px;
+      transition: background 0.15s;
     }
     .btn-close:hover {
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.1);
       color: #f1f5f9;
     }
 
-    /* ----- BADGES ----- */
+    /* ----- BADGES & CART ----- */
     .badge {
       display: inline-block;
-      padding: 0.1rem 0.5rem;
+      padding: 0.2rem 0.6rem;
       border-radius: 9999px;
-      font-size: 0.6rem;
-      font-weight: 500;
+      font-size: 0.7rem;
+      font-weight: 600;
       border: 1px solid transparent;
     }
     .badge-success {
@@ -174,176 +183,114 @@
       border-color: rgba(234,179,8,0.3);
     }
 
-    /* ----- CART BADGE ----- */
     .cart-btn-wrapper {
       position: relative;
-      display: inline-flex;
-      align-items: center;
     }
     .cart-badge {
       position: absolute;
-      top: -4px;
-      right: -4px;
+      top: -6px;
+      right: -6px;
       background: #ef4444;
       color: #fff;
       border-radius: 9999px;
-      font-size: 0.55rem;
-      padding: 0.05rem 0.35rem;
-      min-width: 1.1rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.1rem 0.4rem;
+      min-width: 1.2rem;
       text-align: center;
-      line-height: 1.2;
+      border: 2px solid #0f172a;
     }
 
     /* ----- ALERTES ----- */
     .alert {
-      padding: 0.5rem 0.7rem;
-      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
       border: 1px solid;
-      font-size: 0.8rem;
-      margin-bottom: 0.75rem;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
     }
-    .alert-warning {
-      background: rgba(234,179,8,0.06);
-      border-color: #eab308;
-      color: #facc15;
-    }
-    .alert-success {
-      background: rgba(34,197,94,0.06);
-      border-color: #22c55e;
-      color: #4ade80;
-    }
-    .alert-error {
-      background: rgba(239,68,68,0.06);
-      border-color: #ef4444;
-      color: #f87171;
-    }
-    .alert-info {
-      background: rgba(59,130,246,0.06);
-      border-color: #3b82f6;
-      color: #60a5fa;
-    }
-
-    /* ----- CARTE (card) ----- */
-    .card {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 0.9rem;
-      overflow: hidden;
-    }
+    .alert-warning { background: rgba(234,179,8,0.1); border-color: #ca8a04; color: #facc15; }
+    .alert-success { background: rgba(34,197,94,0.1); border-color: #16a34a; color: #4ade80; }
+    .alert-error { background: rgba(239,68,68,0.1); border-color: #dc2626; color: #f87171; }
 
     /* ----- INPUTS ----- */
     .input {
-      background: #0f172a;
+      background: rgba(15, 23, 42, 0.6);
       color: #f1f5f9;
-      border: 1px solid #334155;
-      border-radius: 8px;
-      padding: 0.6rem 0.8rem;
-      font-size: 0.85rem;
+      border: 1px solid #475569;
+      border-radius: 10px;
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
       width: 100%;
       outline: none;
-      transition: border-color 0.15s;
-      min-height: 2.6rem;
+      transition: border-color 0.2s, background 0.2s;
+      min-height: 2.75rem;
     }
     .input:focus {
       border-color: #3b82f6;
+      background: rgba(15, 23, 42, 1);
     }
-    .input::placeholder {
-      color: #64748b;
-    }
+    .input::placeholder { color: #64748b; }
 
     .select {
-      background: #0f172a;
+      background: rgba(15, 23, 42, 0.6);
       color: #f1f5f9;
-      border: 1px solid #334155;
-      border-radius: 8px;
-      padding: 0.6rem 0.8rem;
-      font-size: 0.85rem;
+      border: 1px solid #475569;
+      border-radius: 10px;
+      padding: 0.6rem 2.5rem 0.6rem 1rem;
+      font-size: 0.9rem;
       width: 100%;
       appearance: none;
       outline: none;
-      min-height: 2.6rem;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+      min-height: 2.75rem;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394a3b8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-position: right 0.8rem center;
+      background-position: right 1rem center;
     }
-    .select:focus {
-      border-color: #3b82f6;
-    }
+    .select:focus { border-color: #3b82f6; }
 
-    /* ----- RECHERCHE ----- */
-    .search-input {
-      background: #0f172a;
-      color: #f1f5f9;
-      border: 1px solid #334155;
-      border-radius: 8px;
-      padding: 0.6rem 0.8rem;
-      font-size: 0.85rem;
-      width: 100%;
-      outline: none;
-      transition: border-color 0.15s;
-      min-height: 2.6rem;
-    }
-    .search-input:focus {
-      border-color: #3b82f6;
-    }
-    .search-input::placeholder {
-      color: #64748b;
-    }
-
-    /* ----- CATEGORIES (scroll horizontal) ----- */
+    /* ----- CATEGORIES SCROLL ----- */
     .categories-scroll {
       display: flex;
-      gap: 0.4rem;
+      gap: 0.5rem;
       overflow-x: auto;
-      padding: 0.3rem 0 0.5rem;
-      scrollbar-width: thin;
+      padding: 0.5rem 0 1rem;
+      scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
       white-space: nowrap;
     }
-    .categories-scroll::-webkit-scrollbar {
-      height: 3px;
-    }
-    .categories-scroll::-webkit-scrollbar-track {
-      background: #1e293b;
-    }
-    .categories-scroll::-webkit-scrollbar-thumb {
-      background: #475569;
-      border-radius: 8px;
-    }
+    .categories-scroll::-webkit-scrollbar { display: none; }
+    
     .category-btn {
       flex-shrink: 0;
-      padding: 0.25rem 0.7rem;
+      padding: 0.4rem 1rem;
       border-radius: 9999px;
       border: 1px solid #475569;
-      background: transparent;
-      color: #94a3b8;
-      font-size: 0.7rem;
-      font-weight: 500;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      background: #1e293b;
+      color: #cbd5e1;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: all 0.2s;
       cursor: pointer;
-      min-height: 2rem;
+      min-height: 2.2rem;
       display: inline-flex;
       align-items: center;
-      gap: 0.2rem;
+      gap: 0.3rem;
     }
     .category-btn.active {
       background: #2563eb;
       border-color: #2563eb;
-      color: #fff;
-    }
-    .category-btn:active {
-      transform: scale(0.95);
+      color: #ffffff;
     }
 
     /* ----- GRILLE PRODUITS ----- */
     .grid-layout {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.7rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
       margin-top: 0.5rem;
     }
 
@@ -355,7 +302,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      transition: border-color 0.15s;
+      transition: transform 0.15s, border-color 0.15s;
     }
     .product-card:active {
       transform: scale(0.98);
@@ -369,6 +316,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
     .product-image img {
       width: 100%;
@@ -378,24 +326,23 @@
     }
 
     .product-body {
-      padding: 0.6rem 0.6rem 0.7rem;
+      padding: 0.75rem;
       display: flex;
       flex-direction: column;
       flex: 1;
-      gap: 0.15rem;
+      gap: 0.25rem;
     }
-
     .product-category {
-      font-size: 0.6rem;
+      font-size: 0.65rem;
       color: #94a3b8;
       text-transform: uppercase;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      white-space: nowrap;
     }
     .product-name {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 600;
       color: #f1f5f9;
       line-height: 1.3;
@@ -403,61 +350,37 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      min-height: 2.2rem;
+      min-height: 2.3rem;
     }
     .product-price {
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: #60a5fa;
-      margin: 0.05rem 0;
+      margin-top: 0.2rem;
     }
     .product-stock {
-      font-size: 0.6rem;
-      color: #94a3b8;
-      margin-bottom: 0.1rem;
-    }
-    .product-stock.out {
-      color: #f87171;
-    }
-
-    .product-btn {
-      width: 100%;
-      padding: 0.4rem 0;
-      border-radius: 8px;
-      border: none;
       font-size: 0.7rem;
-      font-weight: 600;
-      transition: background 0.15s, opacity 0.15s;
-      cursor: pointer;
-      margin-top: auto;
-      min-height: 2.4rem;
-    }
-    .product-btn.primary {
-      background: #2563eb;
-      color: #fff;
-    }
-    .product-btn.primary:active:not(:disabled) {
-      transform: scale(0.96);
-    }
-    .product-btn.primary:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-    .product-btn.secondary {
-      background: #334155;
       color: #94a3b8;
-      cursor: not-allowed;
-      opacity: 0.6;
+      margin-bottom: 0.25rem;
     }
+    .product-stock.out { color: #f87171; }
 
-    /* ----- FOOTER ----- */
-    .footer {
-      text-align: center;
-      padding: 1rem 0 0.3rem;
-      font-size: 0.6rem;
-      color: #475569;
-      border-top: 1px solid #1e293b;
-      margin-top: 1rem;
+    /* ----- ADMIN CARD ----- */
+    .admin-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .admin-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
     }
 
     /* ----- MODALES ----- */
@@ -467,163 +390,98 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1.2rem;
+      padding: 1rem;
       z-index: 100;
     }
     .modal-card {
       background: #1e293b;
-      border: 1px solid #334155;
+      border: 1px solid #475569;
       border-radius: 16px;
-      padding: 1.2rem;
-      max-width: 440px;
+      padding: 1.5rem;
+      max-width: 480px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
     }
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 0.8rem;
-      margin-bottom: 1rem;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
     }
     .modal-title {
-      font-size: 1.05rem;
+      font-size: 1.2rem;
       font-weight: 700;
-      color: #f1f5f9;
+      color: #f8fafc;
       flex: 1;
       margin: 0;
-      padding-right: 0.3rem;
-    }
-    .modal-body {
-      color: #e2e8f0;
-      font-size: 0.9rem;
-      line-height: 1.5;
-    }
-    .modal-body .input,
-    .modal-body .select {
-      margin-bottom: 0.5rem;
-    }
-    .modal-body .flex {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    /* ----- ADMIN CARD ----- */
-    .admin-card {
-      background: #1e293b;
-      border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 0.8rem;
-      margin-bottom: 0.8rem;
-    }
-    .admin-card-title {
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 0.4rem;
-    }
-
-    /* ----- IFRAME ----- */
-    .iframe-container {
-      height: calc(100vh - 8rem);
-      width: 100%;
-      background: #fff;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    .iframe-container iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
+      padding-top: 0.25rem;
     }
 
     /* ----- SPINNER ----- */
+    .spinner-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 1rem;
+    }
     .spinner {
-      border: 3px solid #1e293b;
-      border-top: 3px solid #2563eb;
+      border: 3px solid #334155;
+      border-top: 3px solid #3b82f6;
       border-radius: 50%;
-      width: 32px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
       animation: spin 0.8s linear infinite;
-      margin: 2rem auto;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ----- ICÔNES STABILISÉES ----- */
-    .icon {
-      display: inline-block;
-      font-size: 1rem;
-      width: 1.5rem;
-      text-align: center;
-      flex-shrink: 0;
-      vertical-align: middle;
-    }
-    .icon-sm {
-      display: inline-block;
-      font-size: 0.85rem;
-      width: 1.3rem;
-      text-align: center;
-      flex-shrink: 0;
+    .spinner-text {
+      color: #94a3b8;
+      font-size: 0.9rem;
     }
 
-    /* ----- UTILITAIRES ----- */
+    /* ----- UTILITAIRES REUSABLES ----- */
     .flex { display: flex; }
     .flex-col { flex-direction: column; }
     .flex-1 { flex: 1; }
     .gap-1 { gap: 0.25rem; }
     .gap-2 { gap: 0.5rem; }
     .gap-3 { gap: 0.75rem; }
+    .gap-4 { gap: 1rem; }
     .items-center { align-items: center; }
     .justify-between { justify-content: space-between; }
     .text-center { text-align: center; }
-    .text-xs { font-size: 0.65rem; }
-    .text-sm { font-size: 0.75rem; }
+    .text-xs { font-size: 0.75rem; }
+    .text-sm { font-size: 0.85rem; }
     .text-gray { color: #94a3b8; }
-    .text-white { color: #f1f5f9; }
-    .text-emerald { color: #4ade80; }
-    .text-red { color: #f87171; }
+    .text-white { color: #f8fafc; }
     .text-blue { color: #60a5fa; }
-    .mt-1 { margin-top: 0.25rem; }
-    .mt-2 { margin-top: 0.5rem; }
-    .mt-3 { margin-top: 0.75rem; }
-    .mb-1 { margin-bottom: 0.25rem; }
-    .mb-2 { margin-bottom: 0.5rem; }
+    .text-red { color: #f87171; }
     .w-full { width: 100%; }
-    .min-w-0 { min-width: 0; }
     .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .hidden { display: none; }
 
     /* ----- RESPONSIVE ----- */
-    @media (max-width: 400px) {
-      .product-name { font-size: 0.75rem; min-height: 1.8rem; }
-      .product-price { font-size: 0.9rem; }
-      .product-btn { font-size: 0.65rem; min-height: 2.1rem; }
-      .grid-layout { gap: 0.5rem; }
-      .header-title { font-size: 0.85rem; max-width: 48%; }
-      .btn { padding: 0.3rem 0.5rem; font-size: 0.65rem; min-height: 2rem; }
-      .modal-card { padding: 1rem; }
-      .modal-title { font-size: 0.95rem; }
+    @media (max-width: 380px) {
+      .grid-layout { grid-template-columns: 1fr; gap: 1rem; }
+      .header-title { max-width: 45%; }
+      .btn { padding: 0.5rem 0.75rem; }
     }
-
     @media (min-width: 600px) {
-      .grid-layout { grid-template-columns: repeat(3, 1fr); gap: 0.9rem; }
-      .header-title { font-size: 1.1rem; max-width: 65%; }
+      .grid-layout { grid-template-columns: repeat(3, 1fr); }
     }
     @media (min-width: 900px) {
-      .grid-layout { grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-    }
-    @media (min-width: 640px) {
-      .hidden-sm { display: inline-block; }
+      .grid-layout { grid-template-columns: repeat(4, 1fr); }
     }
   </style>
-
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0f172a" />
-  <link rel="apple-touch-icon" href="icon.png" />
 </head>
 <body>
 <div id="root"></div>
@@ -668,7 +526,7 @@
     // ---- SCHEMA ----
     var schema = {
       categories: {
-        label: "Categories",
+        label: "Catégories",
         icon: "📂",
         fields: [
           { key: "icon", label: "Icône", type: "text", maxLength: 2, default: "📁" },
@@ -682,7 +540,7 @@
           { key: "name", label: "Nom", type: "text", required: true },
           { key: "price", label: "Prix", type: "number", step: "0.01", required: true },
           { key: "image", label: "URL image", type: "text" },
-          { key: "categoryId", label: "Categorie", type: "select", options: "categories" },
+          { key: "categoryId", label: "Catégorie", type: "select", options: "categories" },
           { key: "stock", label: "Stock", type: "number" },
         ]
       }
@@ -714,7 +572,7 @@
     // ---- CLOUDINARY ----
     var openCloudinaryWidget = function(fieldKey) {
       if (!window.cloudinary) {
-        alert("Le widget Cloudinary n'est pas charge.");
+        alert("Le widget Cloudinary n'est pas chargé.");
         return;
       }
       var widget = window.cloudinary.createUploadWidget(
@@ -746,7 +604,7 @@
           }
           if (result.event === 'success') {
             setFormData(function(prev) { return { ...prev, [fieldKey]: result.info.secure_url }; });
-            setMsg({ text: "Image telechargee avec succes !", type: "success" });
+            setMsg({ text: "Image téléchargée avec succès !", type: "success" });
           }
         }
       );
@@ -801,7 +659,7 @@
       if (fgtToken.trim()) {
         localStorage.setItem('fgt_token_' + repoName, fgtToken.trim());
         setIsTokenSaved(true);
-        setMsg({ text: "Token FGT sauvegarde !", type: "success" });
+        setMsg({ text: "Token FGT sauvegardé !", type: "success" });
         MASTER_TOKEN = fgtToken.trim();
       } else {
         setMsg({ text: "Entrez un token valide.", type: "error" });
@@ -831,8 +689,15 @@
           } else if (res.ok) {
             var d = await res.json();
             var decoded = base64ToUtf8(d.content);
-            setData(JSON.parse(decoded));
-            setEditableData(JSON.parse(decoded));
+            try {
+              var parsed = JSON.parse(decoded);
+              setData(parsed);
+              setEditableData(parsed);
+            } catch (parseErr) {
+              setMsg({ text: "Erreur: le fichier don.json est mal formé.", type: "error" });
+              setData(null);
+              setEditableData(null);
+            }
           }
         } catch (err) {
           setMsg({ text: "Erreur: " + err.message, type: "error" });
@@ -853,7 +718,7 @@
         var getRes = await fetch(url, { headers: { Authorization: "token " + token } });
         if (getRes.ok) { var d = await getRes.json(); sha = d.sha; }
       } catch (e) {}
-      var payload = { message: "Mise a jour", content: encoded, branch: "main" };
+      var payload = { message: "Mise à jour", content: encoded, branch: "main" };
       if (sha) payload.sha = sha;
       var putRes = await fetch(url, {
         method: "PUT",
@@ -880,7 +745,7 @@
         setIsAdminAuthenticated(true);
         setShowPasswordModal(false);
         setAdminPassword("");
-        setMsg({ text: "Acces admin autorise", type: "success" });
+        setMsg({ text: "Accès admin autorisé", type: "success" });
         setIsAdmin(true);
       } else {
         setMsg({ text: "Mot de passe incorrect", type: "error" });
@@ -911,16 +776,16 @@
       }
       setEditableData({ ...editableData });
       closeModal();
-      setMsg({ text: "Categorie sauvegardee", type: "info" });
+      setMsg({ text: "Catégorie sauvegardée", type: "info" });
     };
     var deleteCategory = function(id) {
-      if (!confirm("Supprimer cette categorie ?")) return;
+      if (!confirm("Supprimer cette catégorie ?")) return;
       setEditableData({
         ...editableData,
         categories: editableData.categories.filter(function(c) { return c.id !== id; }),
         products: editableData.products.filter(function(p) { return p.categoryId !== id; }),
       });
-      setMsg({ text: "Categorie supprimee", type: "info" });
+      setMsg({ text: "Catégorie supprimée", type: "info" });
     };
 
     // ---- CRUD PRODUITS ----
@@ -955,12 +820,12 @@
       }
       setEditableData({ ...editableData });
       closeModal();
-      setMsg({ text: "Produit sauvegarde", type: "info" });
+      setMsg({ text: "Produit sauvegardé", type: "info" });
     };
     var deleteProduct = function(id) {
       if (!confirm("Supprimer ce produit ?")) return;
       setEditableData({ ...editableData, products: editableData.products.filter(function(p) { return p.id !== id; }) });
-      setMsg({ text: "Produit supprime", type: "info" });
+      setMsg({ text: "Produit supprimé", type: "info" });
     };
 
     // ---- COMMIT ----
@@ -968,9 +833,9 @@
       setIsCommitting(true);
       try {
         await saveEditableData();
-        setMsg({ text: "Donnees sauvegardees !", type: "success" });
+        setMsg({ text: "Données sauvegardées !", type: "success" });
       } catch (err) {
-        setMsg({ text: "Echec: " + err.message, type: "error" });
+        setMsg({ text: "Échec: " + err.message, type: "error" });
       }
       setIsCommitting(false);
     };
@@ -978,10 +843,8 @@
     // ---- PANIER ----
     var addToCart = function(product) {
       if (product.stock <= 0) { alert("Rupture de stock"); return; }
-      if (!sogUser) {
-        alert("Connectez-vous a SOG.");
-        return;
-      }
+      if (!sogUser) { alert("Connectez-vous à SOG."); return; }
+      
       setCart(function(prev) {
         var existing = prev.find(function(i) { return i.id === product.id; });
         if (existing) {
@@ -993,6 +856,7 @@
         return [...prev, { ...product, quantity: 1 }];
       });
     };
+    
     var updateQty = function(id, delta) {
       setCart(function(prev) {
         var item = prev.find(function(i) { return i.id === id; });
@@ -1005,9 +869,11 @@
         });
       });
     };
+    
     var removeFromCart = function(id) {
       setCart(function(prev) { return prev.filter(function(i) { return i.id !== id; }); });
     };
+    
     var getTotal = function() {
       return cart.reduce(function(sum, i) { return sum + i.price * i.quantity; }, 0).toFixed(2);
     };
@@ -1032,10 +898,7 @@
     // ---- CHECKOUT ----
     var checkout = async function() {
       if (cart.length === 0) { alert("Panier vide"); return; }
-      if (!sogUser) {
-        alert("Connectez-vous a SOG.");
-        return;
-      }
+      if (!sogUser) { alert("Connectez-vous à SOG."); return; }
       if (!order.name.trim() || !order.address.trim() || !order.phone.trim()) {
         alert("Champs obligatoires.");
         return;
@@ -1045,13 +908,13 @@
       if (topic) {
         var currencySymbol = editableData?.settings?.currency || "€";
         var total = getTotal();
-        var message = "RECAPITULATIF\n\n";
+        var message = "RÉCAPITULATIF\n\n";
         message += "Client : " + order.name + "\n";
         message += "Adresse : " + order.address + "\n";
-        message += "Tel : " + order.phone + "\n";
+        message += "Tél : " + order.phone + "\n";
         message += "Remarque : " + (order.comments || "Aucun") + "\n\n";
         message += "----------------------------------------\n\n";
-        message += "Articles commandes :\n";
+        message += "Articles commandés :\n";
         cart.forEach(function(i) {
           message += "  " + i.name + " x" + i.quantity + " = " + (i.price * i.quantity).toFixed(2) + " " + currencySymbol + "\n";
         });
@@ -1066,13 +929,13 @@
       setCart([]);
       setOrder({ name: "", address: "", phone: "", comments: "" });
       setShowCart(false);
-      alert("Commande validee !");
+      alert("Commande validée !");
     };
 
     // ---- UTILITAIRES ----
     var getCategoryName = function(id) {
       var cat = data?.categories?.find(function(c) { return c.id === id; });
-      return cat ? cat.name : "Sans categorie";
+      return cat ? cat.name : "Sans catégorie";
     };
     var getCategoryIcon = function(id) {
       var cat = data?.categories?.find(function(c) { return c.id === id; });
@@ -1105,51 +968,73 @@
     // ---- RENDER FIELD ----
     var renderField = function(field) {
       var val = formData[field.key] || "";
-      var onChange = function(e) {
-        setFormData({ ...formData, [field.key]: e.target.value });
-      };
+      var onChange = function(e) { setFormData({ ...formData, [field.key]: e.target.value }); };
+      
       if (field.type === "select") {
         var options = field.options === "categories" ? (editableData?.categories || []) : [];
         return (
-          <select key={field.key} value={val} onChange={onChange} className="select">
-            <option value="">Choisir...</option>
-            {options.map(function(opt) {
-              return <option key={opt.id} value={opt.id}>{opt.icon} {opt.name}</option>;
-            })}
-          </select>
-        );
-      }
-      if (field.type === "textarea") {
-        return <textarea key={field.key} value={val} onChange={onChange} placeholder={field.label} rows={field.rows || 2} className="input" style={{ resize: 'vertical' }} />;
-      }
-      if (field.key === 'image') {
-        return (
-          <div key={field.key} className="flex gap-2 items-center">
-            <input type="text" step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="input flex-1" />
-            <button onClick={function() { openCloudinaryWidget(field.key); }} className="btn btn-primary" type="button" title="Upload">📷</button>
-            {val && (
-              <div className="flex-shrink-0" style={{ width: '2.2rem', height: '2.2rem', borderRadius: '8px', overflow: 'hidden', background: '#0f172a', border: '1px solid #334155' }}>
-                <img src={val} alt="apercu" className="w-full h-full object-cover" onError={function(e) { e.target.style.display = 'none'; }} />
-              </div>
-            )}
+          <div key={field.key} className="flex flex-col gap-1 w-full">
+            <label className="text-sm text-gray">{field.label}</label>
+            <select value={val} onChange={onChange} className="select">
+              <option value="">Choisir...</option>
+              {options.map(function(opt) {
+                return <option key={opt.id} value={opt.id}>{opt.icon} {opt.name}</option>;
+              })}
+            </select>
           </div>
         );
       }
+      
+      if (field.type === "textarea") {
+        return (
+          <div key={field.key} className="flex flex-col gap-1 w-full">
+             <label className="text-sm text-gray">{field.label}</label>
+             <textarea value={val} onChange={onChange} placeholder={field.label} rows={field.rows || 3} className="input" style={{ resize: 'vertical' }} />
+          </div>
+        );
+      }
+      
+      if (field.key === 'image') {
+        return (
+          <div key={field.key} className="flex flex-col gap-1 w-full">
+            <label className="text-sm text-gray">{field.label}</label>
+            <div className="flex gap-2 items-center">
+              <input type="text" step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="input flex-1" />
+              <button onClick={function() { openCloudinaryWidget(field.key); }} className="btn btn-primary btn-icon" type="button" title="Upload">📷</button>
+              {val && (
+                <div className="flex-shrink-0" style={{ width: '2.75rem', height: '2.75rem', borderRadius: '10px', overflow: 'hidden', background: '#0f172a', border: '1px solid #475569' }}>
+                  <img src={val} alt="aperçu" className="w-full h-full object-cover" onError={function(e) { e.target.style.display = 'none'; }} />
+                </div>
+              )}
+            </div>
+          </div>
+        );
+      }
+      
       return (
-        <input key={field.key} type={field.type || "text"} step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="input" />
+        <div key={field.key} className="flex flex-col gap-1 w-full">
+          <label className="text-sm text-gray">{field.label}</label>
+          <input type={field.type || "text"} step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="input" />
+        </div>
       );
     };
 
-    // ---- RENDU ----
+    // ---- RENDU PRINCIPAL ----
     if (isLoading) {
-      return <div className="flex items-center justify-center" style={{ minHeight: '100vh' }}><div className="spinner"></div></div>;
+      return (
+        <div className="spinner-wrapper">
+          <div className="spinner"></div>
+          <span className="spinner-text">Chargement du catalogue...</span>
+        </div>
+      );
     }
+    
     if (!vendeur || isPlaceholder) {
       return (
         <div className="flex items-center justify-center p-4" style={{ minHeight: '100vh' }}>
-          <div className="card" style={{ maxWidth: '320px', textAlign: 'center' }}>
-            <h2 style={{ color: '#f87171', fontWeight: '700' }}>Configuration requise</h2>
-            <p className="text-sm text-gray mt-1">{isPlaceholder ? "Template non configure." : "Vendeur incorrect."}</p>
+          <div className="admin-card text-center" style={{ maxWidth: '320px' }}>
+            <h2 className="text-red font-bold text-lg">Configuration requise</h2>
+            <p className="text-sm text-gray mt-2">{isPlaceholder ? "Template non configuré." : "Vendeur incorrect."}</p>
             <p className="text-xs text-gray mt-1">Utilisez le forkeur.</p>
           </div>
         </div>
@@ -1170,68 +1055,62 @@
               {settings.title || "Catalogue"}
             </span>
             <div className="header-actions">
-              {sogUser ? (
-                <span className="badge badge-success hidden-sm">Connecte</span>
-              ) : isReady ? (
-                <span className="badge badge-warning hidden-sm">Invite</span>
-              ) : null}
               <button onClick={handleAdminClick} className="btn btn-secondary">Admin</button>
-              <button onClick={function() { setShowCart(!showCart); }} className="btn btn-secondary cart-btn-wrapper">
-                Panier
+              <button onClick={function() { setShowCart(true); }} className="btn btn-primary cart-btn-wrapper">
+                🛒 Panier
                 {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
               </button>
             </div>
           </div>
         </header>
 
-        {/* ---- MESSAGES ---- */}
+        {/* ---- MESSAGES D'ALERTE ---- */}
         {!sogUser && isReady && (
           <div className="alert alert-warning">
-            <span className="icon">🔒</span> Invite. <a href="#" onClick={function(e) { e.preventDefault(); window.parent.postMessage({ type: 'SOG_LOGIN_REQUEST' }, '*'); }}>Connectez-vous</a> pour commander.
+            <span>🔒 Mode Invité. <a href="#" onClick={function(e) { e.preventDefault(); window.parent.postMessage({ type: 'SOG_LOGIN_REQUEST' }, '*'); }}>Connectez-vous</a> pour commander.</span>
           </div>
         )}
         {msg.text && (
-          <div className={'alert ' + (msg.type === 'success' ? 'alert-success' : msg.type === 'error' ? 'alert-error' : 'alert-info')}>
-            <span className="icon">{msg.type === 'success' ? '✅' : msg.type === 'error' ? '❌' : 'ℹ️'}</span> {msg.text}
+          <div className={'alert ' + (msg.type === 'success' ? 'alert-success' : msg.type === 'error' ? 'alert-error' : 'alert-warning')}>
+            {msg.text}
           </div>
         )}
 
-        {/* ---- ADMIN ---- */}
+        {/* ---- VUE ADMIN ---- */}
         {isAdmin && isAdminAuthenticated ? (
           <div>
-            <h2 style={{ fontSize: '1.1rem', fontWeight: '700', marginTop: '0.75rem', marginBottom: '0.5rem' }}>🛠 PANEL ADMIN</h2>
+            <h2 className="text-white font-bold mb-4">🛠 PANEL ADMIN</h2>
 
             <div className="admin-card">
-              <div className="admin-card-title">⚙️ Configuration</div>
-              <div className="flex gap-2" style={{ flexDirection: 'column' }}>
-                <input type="text" value={editableData?.settings?.title || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, title: e.target.value } }); }} placeholder="Titre" className="input" />
-                <input type="text" value={editableData?.settings?.currency || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, currency: e.target.value } }); }} placeholder="Devise" className="input" />
-                <input type="text" value={editableData?.settings?.ntfyTopic || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, ntfyTopic: e.target.value } }); }} placeholder="Topic ntfy" className="input" />
+              <div className="admin-card-title">⚙️ Configuration Générale</div>
+              <div className="flex gap-3 flex-col">
+                <input type="text" value={editableData?.settings?.title || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, title: e.target.value } }); }} placeholder="Titre de la boutique" className="input" />
+                <input type="text" value={editableData?.settings?.currency || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, currency: e.target.value } }); }} placeholder="Devise (ex: DZD, €)" className="input" />
+                <input type="text" value={editableData?.settings?.ntfyTopic || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, ntfyTopic: e.target.value } }); }} placeholder="Topic Notifications (Ntfy)" className="input" />
               </div>
             </div>
 
             <div className="admin-card">
-              <div className="admin-card-title">🔑 Token FGT</div>
+              <div className="admin-card-title">🔑 Jeton GitHub (FGT)</div>
               <div className="flex gap-2 items-center">
-                <input type="password" value={fgtToken} onChange={function(e) { setFgtToken(e.target.value); setIsTokenSaved(false); }} placeholder="Token" className="input flex-1" />
-                <button onClick={saveFgtToken} className="btn btn-primary">{isTokenSaved ? '✅' : '💾'}</button>
+                <input type="password" value={fgtToken} onChange={function(e) { setFgtToken(e.target.value); setIsTokenSaved(false); }} placeholder="Collez votre token ici..." className="input flex-1" />
+                <button onClick={saveFgtToken} className="btn btn-primary">{isTokenSaved ? '✅ Sauvé' : '💾 Sauver'}</button>
               </div>
-              {isTokenSaved && <p className="text-xs text-emerald mt-1">✅ Sauvegarde.</p>}
             </div>
 
             <div className="admin-card">
-              <div className="flex justify-between items-center">
-                <span className="admin-card-title"><span className="icon">📂</span> Categories</span>
-                <button onClick={function() { openCatModal(null); }} className="btn btn-primary">+</button>
+              <div className="flex justify-between items-center mb-3">
+                <span className="admin-card-title m-0">📂 Catégories</span>
+                <button onClick={function() { openCatModal(null); }} className="btn btn-primary btn-icon">+</button>
               </div>
-              <div className="grid-layout" style={{ gridTemplateColumns: '1fr 1fr', gap: '0.25rem', marginTop: '0.25rem' }}>
+              <div className="grid-layout" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '0.5rem' }}>
                 {(editableData?.categories || []).map(function(c) {
                   return (
-                    <div key={c.id} className={'flex items-center gap-1 p-1 rounded border ' + (hasPending(c, "category") ? 'border-yellow-700' : 'border-slate-700')} style={{ background: hasPending(c, "category") ? 'rgba(234,179,8,0.1)' : 'rgba(30,41,59,0.3)' }}>
-                      <span className="icon-sm">{c.icon}</span>
-                      <span className="text-xs truncate flex-1 text-white">{c.name}</span>
-                      <button onClick={function() { openCatModal(c); }} className="text-blue" style={{ background: 'none', border: 'none', fontSize: '0.7rem', cursor: 'pointer' }}>✎</button>
-                      <button onClick={function() { deleteCategory(c.id); }} className="text-red" style={{ background: 'none', border: 'none', fontSize: '0.7rem', cursor: 'pointer' }}>✕</button>
+                    <div key={c.id} className="flex items-center gap-2 p-2 rounded-lg border border-slate-700 bg-slate-800/50">
+                      <span>{c.icon}</span>
+                      <span className="text-sm truncate flex-1 text-white">{c.name}</span>
+                      <button onClick={function() { openCatModal(c); }} className="text-blue bg-transparent border-none cursor-pointer text-lg">✎</button>
+                      <button onClick={function() { deleteCategory(c.id); }} className="text-red bg-transparent border-none cursor-pointer text-lg">✕</button>
                     </div>
                   );
                 })}
@@ -1239,86 +1118,66 @@
             </div>
 
             <div className="admin-card">
-              <div className="flex justify-between items-center">
-                <span className="admin-card-title"><span className="icon">📦</span> Produits</span>
-                <button onClick={function() { openProdModal(null); }} className="btn btn-primary">+</button>
+              <div className="flex justify-between items-center mb-3">
+                <span className="admin-card-title m-0">📦 Produits</span>
+                <button onClick={function() { openProdModal(null); }} className="btn btn-primary btn-icon">+</button>
               </div>
-              <div style={{ maxHeight: '240px', overflowY: 'auto' }}>
+              <div className="flex flex-col gap-2" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                 {(editableData?.products || []).map(function(p) {
                   return (
-                    <div key={p.id} className={'flex items-center gap-2 p-1 rounded border ' + (hasPending(p, "product") ? 'border-yellow-700' : 'border-slate-700')} style={{ background: hasPending(p, "product") ? 'rgba(234,179,8,0.1)' : 'rgba(30,41,59,0.3)', marginBottom: '0.2rem' }}>
-                      <img src={p.image} alt={p.name} className="w-8 h-8 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
+                    <div key={p.id} className="flex items-center gap-3 p-2 rounded-lg border border-slate-700 bg-slate-800/50">
+                      <img src={p.image} alt={p.name} className="w-10 h-10 object-cover rounded-md" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium text-white truncate">{p.name}</p>
-                        <p className="text-[0.55rem] text-gray">{p.price}{currency} · {getCategoryName(p.categoryId)}</p>
+                        <p className="text-sm font-medium text-white truncate">{p.name}</p>
+                        <p className="text-xs text-gray">{p.price}{currency} · {getCategoryName(p.categoryId)}</p>
                       </div>
-                      <button onClick={function() { openProdModal(p); }} className="text-blue" style={{ background: 'none', border: 'none', fontSize: '0.7rem', cursor: 'pointer' }}>✎</button>
-                      <button onClick={function() { deleteProduct(p.id); }} className="text-red" style={{ background: 'none', border: 'none', fontSize: '0.7rem', cursor: 'pointer' }}>✕</button>
+                      <a href={window.location.origin + window.location.pathname} target="_blank" rel="noopener noreferrer" className="text-blue hover:text-blue-300 text-sm font-medium">Voir</a>
+                      <button onClick={function() { openProdModal(p); }} className="text-blue bg-transparent border-none cursor-pointer text-lg p-2">✎</button>
+                      <button onClick={function() { deleteProduct(p.id); }} className="text-red bg-transparent border-none cursor-pointer text-lg p-2">✕</button>
                     </div>
                   );
                 })}
               </div>
             </div>
 
-            <div className="admin-card">
-              <button onClick={handleCommit} disabled={isCommitting} className={'btn btn-primary w-full' + (isCommitting ? ' opacity-50' : '')}>
-                {isCommitting ? '⏳ Sauvegarde...' : '💾 Sauvegarder (Commit)'}
-              </button>
-            </div>
+            <button onClick={handleCommit} disabled={isCommitting} className="btn btn-primary w-full mt-4" style={{ minHeight: '3.5rem', fontSize: '1rem' }}>
+              {isCommitting ? '⏳ Sauvegarde en cours...' : '💾 Pousser les modifications (Commit)'}
+            </button>
           </div>
         ) : (
-          // ---- CATALOGUE ----
+          // ---- VUE CATALOGUE PUBLIC ----
           <div>
-            {/* Recherche */}
-            <div className="mt-2">
-              <input type="text" value={searchQuery} onChange={function(e) { setSearchQuery(e.target.value); }} placeholder="Rechercher..." className="search-input" />
-            </div>
+            <input type="text" value={searchQuery} onChange={function(e) { setSearchQuery(e.target.value); }} placeholder="Rechercher un produit..." className="input mb-3" />
 
-            {/* Catégories */}
             <div className="categories-scroll">
               <button onClick={function() { setSelectedCategoryId(null); }} className={'category-btn ' + (!selectedCategoryId ? 'active' : '')}>
-                Tous
+                Tout voir
               </button>
               {(editableData?.categories || []).map(function(c) {
                 return (
                   <button key={c.id} onClick={function() { setSelectedCategoryId(c.id); }} className={'category-btn ' + (selectedCategoryId === c.id ? 'active' : '')}>
-                    <span className="icon-sm">{c.icon}</span> {c.name}
+                    <span>{c.icon}</span> {c.name}
                   </button>
                 );
               })}
             </div>
 
-            {/* Grille produits */}
             <div className="grid-layout">
               {getFiltered().map(function(p) {
                 var isOutOfStock = p.stock <= 0;
                 return (
                   <div key={p.id} className="product-card">
-                    <div className="product-image">
-                      <img
-                        src={p.image}
-                        alt={p.name}
-                        onClick={function() { setExpandedImage(p.image); }}
-                        onError={function(e) { e.target.src = "https://via.placeholder.com/300"; }}
-                        loading="lazy"
-                      />
+                    <div className="product-image" onClick={function() { setExpandedImage(p.image); }}>
+                      <img src={p.image} alt={p.name} loading="lazy" onError={function(e) { e.target.src = "https://via.placeholder.com/300"; }} />
                     </div>
                     <div className="product-body">
-                      <div className="product-category"><span className="icon-sm">{getCategoryIcon(p.categoryId)}</span> {getCategoryName(p.categoryId)}</div>
+                      <div className="product-category">{getCategoryIcon(p.categoryId)} {getCategoryName(p.categoryId)}</div>
                       <div className="product-name">{p.name}</div>
                       <div className="product-price">{p.price}{currency}</div>
-                      {settings.showStock && (
-                        <div className={'product-stock ' + (isOutOfStock ? 'out' : '')}>
-                          {isOutOfStock ? '⚠️ Rupture' : '📦 ' + p.stock}
-                        </div>
-                      )}
-                      {sogUser ? (
-                        <button onClick={function() { addToCart(p); }} disabled={isOutOfStock} className={'product-btn primary' + (isOutOfStock ? ' opacity-50' : '')}>
-                          🛒 Ajouter
-                        </button>
-                      ) : (
-                        <button disabled className="product-btn secondary">🔒</button>
-                      )}
+                      
+                      <button onClick={function() { addToCart(p); }} disabled={isOutOfStock || !sogUser} className={'btn mt-auto ' + (isOutOfStock ? 'btn-secondary' : 'btn-primary')}>
+                        {isOutOfStock ? 'Rupture' : '🛒 Ajouter'}
+                      </button>
                     </div>
                   </div>
                 );
@@ -1326,224 +1185,129 @@
             </div>
 
             {getFiltered().length === 0 && (
-              <div className="text-center py-6 text-gray text-sm">
-                {searchQuery ? "Aucun produit." : "Aucun produit dans cette categorie."}
+              <div className="text-center py-10 text-gray">
+                {searchQuery ? "Aucun résultat trouvé." : "Ce catalogue est vide."}
               </div>
             )}
-
-            {/* Footer */}
-            <div className="footer">
-              {(data?.products || []).length} PRODUITS · {(data?.categories || []).length} CATEGORIES
-              {settings.ntfyTopic && <span className="ml-2">🔔 {settings.ntfyTopic}</span>}
-              {sogUser && <span className="ml-2">✅ Connecte</span>}
-            </div>
           </div>
         )}
 
-        {/* ---- MODALES ---- */}
+        {/* =========================================
+            MODALES (SUPERPOSITIONS)
+            ========================================= */}
 
-        {/* MODALE ADMIN (mot de passe) */}
+        {/* MODALE CONNEXION ADMIN */}
         {showPasswordModal && (
           <div className="modal-overlay" onClick={function() { setShowPasswordModal(false); }}>
             <div className="modal-card" onClick={function(e) { e.stopPropagation(); }}>
               <div className="modal-header">
-                <h3 className="modal-title">🔐 Accès admin</h3>
-                <button className="btn-close" onClick={function() { setShowPasswordModal(false); }} aria-label="Fermer">×</button>
+                <h3 className="modal-title">🔐 Accès restreint</h3>
+                <button className="btn-close" onClick={function() { setShowPasswordModal(false); }}>×</button>
               </div>
-              <div className="modal-body">
-                <p className="text-sm text-gray mb-2">Entrez votre mot de passe :</p>
-                <input type="password" value={adminPassword} onChange={function(e) { setAdminPassword(e.target.value); }} placeholder="Mot de passe" className="input" onKeyDown={function(e) { if (e.key === "Enter") handleAdminLogin(); }} />
-                <div className="flex gap-2 mt-3">
-                  <button onClick={handleAdminLogin} className="btn btn-primary flex-1">Valider</button>
-                  <button onClick={function() { setShowPasswordModal(false); }} className="btn btn-secondary">Annuler</button>
-                </div>
-                {msg.text && msg.type === "error" && <p className="text-red text-xs mt-2">{msg.text}</p>}
+              <p className="text-sm text-gray mb-3">Veuillez saisir le mot de passe administrateur :</p>
+              <input type="password" value={adminPassword} onChange={function(e) { setAdminPassword(e.target.value); }} placeholder="Mot de passe..." className="input mb-4" onKeyDown={function(e) { if (e.key === "Enter") handleAdminLogin(); }} />
+              <div className="flex gap-3">
+                <button onClick={handleAdminLogin} className="btn btn-primary flex-1">Déverrouiller</button>
+                <button onClick={function() { setShowPasswordModal(false); }} className="btn btn-secondary flex-1">Annuler</button>
               </div>
             </div>
           </div>
         )}
 
-        {/* MODALE IMAGE AGRANDIE */}
+        {/* MODALE IMAGE PLEIN ECRAN */}
         {expandedImage && (
-          <div className="modal-overlay" onClick={function() { setExpandedImage(null); }}>
-            <div className="modal-card" style={{ maxWidth: '600px', padding: '0.5rem', background: 'transparent', border: 'none' }} onClick={function(e) { e.stopPropagation(); }}>
-              <div style={{ position: 'relative' }}>
-                <button className="btn-close" style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', background: 'rgba(0,0,0,0.6)', borderRadius: '50%', width: '2.6rem', height: '2.6rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', border: 'none', fontSize: '1.6rem' }} onClick={function() { setExpandedImage(null); }}>×</button>
-                <img src={expandedImage} alt="Agrandissement" className="w-full" style={{ borderRadius: '12px' }} onError={function(e) { e.target.src = "https://via.placeholder.com/600"; }} />
-              </div>
-            </div>
+          <div className="modal-overlay" onClick={function() { setExpandedImage(null); }} style={{ padding: '0', background: 'rgba(0,0,0,0.9)' }}>
+            <button className="btn-close" style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'rgba(255,255,255,0.1)', color: '#fff' }} onClick={function() { setExpandedImage(null); }}>×</button>
+            <img src={expandedImage} alt="Zoom" style={{ width: '100%', height: '100%', objectFit: 'contain' }} onClick={function(e) { e.stopPropagation(); }} />
           </div>
         )}
 
-        {/* ---- MODALE PANIER (VERSION PROFESSIONNELLE) ---- */}
+        {/* MODALE PANIER */}
         {showCart && (
           <div className="modal-overlay" onClick={function() { setShowCart(false); }}>
             <div className="modal-card" onClick={function(e) { e.stopPropagation(); }}>
               <div className="modal-header">
                 <h3 className="modal-title">🛒 Mon Panier</h3>
-                <button className="btn-close" onClick={function() { setShowCart(false); }} aria-label="Fermer">×</button>
+                <button className="btn-close" onClick={function() { setShowCart(false); }}>×</button>
               </div>
-              <div className="modal-body">
-                {cart.length === 0 ? (
-                  <p className="text-center text-gray py-4">Votre panier est vide.</p>
-                ) : (
-                  <div>
-                    {/* Liste des articles */}
-                    <div style={{ maxHeight: '200px', overflowY: 'auto', marginBottom: '1rem' }}>
-                      {cart.map(function(i) {
-                        return (
-                          <div key={i.id} className="flex items-center gap-3 p-3 rounded border border-slate-700" style={{ background: 'rgba(30,41,59,0.4)', marginBottom: '0.5rem' }}>
-                            <img src={i.image} alt={i.name} className="w-12 h-12 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-white truncate">{i.name}</p>
-                              <p className="text-xs text-gray">{i.price}{currency}</p>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <button
-                                onClick={function() { updateQty(i.id, -1); }}
-                                className="btn btn-secondary"
-                                style={{
-                                  minWidth: '2.4rem',
-                                  minHeight: '2.4rem',
-                                  padding: '0',
-                                  fontSize: '1.2rem',
-                                  fontWeight: '700',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  borderRadius: '8px',
-                                  background: '#334155',
-                                  border: '1px solid #475569',
-                                  color: '#f1f5f9',
-                                  cursor: 'pointer',
-                                  transition: 'background 0.15s'
-                                }}
-                                onMouseEnter={function(e) { e.currentTarget.style.background = '#475569'; }}
-                                onMouseLeave={function(e) { e.currentTarget.style.background = '#334155'; }}
-                              >
-                                −
-                              </button>
-                              <span style={{ minWidth: '2rem', textAlign: 'center', fontSize: '1rem', fontWeight: '600', color: '#f1f5f9' }}>
-                                {i.quantity}
-                              </span>
-                              <button
-                                onClick={function() { updateQty(i.id, 1); }}
-                                className="btn btn-secondary"
-                                style={{
-                                  minWidth: '2.4rem',
-                                  minHeight: '2.4rem',
-                                  padding: '0',
-                                  fontSize: '1.2rem',
-                                  fontWeight: '700',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  borderRadius: '8px',
-                                  background: '#334155',
-                                  border: '1px solid #475569',
-                                  color: '#f1f5f9',
-                                  cursor: 'pointer',
-                                  transition: 'background 0.15s'
-                                }}
-                                onMouseEnter={function(e) { e.currentTarget.style.background = '#475569'; }}
-                                onMouseLeave={function(e) { e.currentTarget.style.background = '#334155'; }}
-                              >
-                                +
-                              </button>
-                              <button
-                                onClick={function() { removeFromCart(i.id); }}
-                                className="btn btn-danger"
-                                style={{
-                                  padding: '0 0.6rem',
-                                  minHeight: '2.4rem',
-                                  fontSize: '0.9rem',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                  borderRadius: '8px',
-                                  background: 'transparent',
-                                  border: '1px solid #f87171',
-                                  color: '#f87171',
-                                  cursor: 'pointer',
-                                  transition: 'all 0.15s'
-                                }}
-                                onMouseEnter={function(e) { e.currentTarget.style.background = '#f87171'; e.currentTarget.style.color = '#fff'; }}
-                                onMouseLeave={function(e) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#f87171'; }}
-                              >
-                                ✕
-                              </button>
-                            </div>
+              
+              {cart.length === 0 ? (
+                <div className="text-center py-8 text-gray">Votre panier est tristement vide.</div>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  {/* Liste d'articles */}
+                  <div className="flex flex-col gap-2" style={{ maxHeight: '250px', overflowY: 'auto' }}>
+                    {cart.map(function(i) {
+                      return (
+                        <div key={i.id} className="flex items-center gap-3 p-2 rounded-lg border border-slate-700 bg-slate-800/50">
+                          <img src={i.image} alt={i.name} className="w-12 h-12 object-cover rounded-md" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-white truncate">{i.name}</p>
+                            <p className="text-xs text-blue font-bold">{i.price}{currency}</p>
                           </div>
-                        );
-                      })}
-                    </div>
-
-                    {/* Total */}
-                    <div className="flex justify-between font-bold border-t border-slate-700 pt-3 mt-2">
-                      <span>Total</span>
-                      <span className="text-blue">{getTotal()}{currency}</span>
-                    </div>
-
-                    {/* Champs commande avec labels */}
-                    <div className="flex flex-col gap-3 mt-4">
-                      <div>
-                        <label className="block text-xs text-gray mb-1">Nom complet *</label>
-                        <input type="text" value={order.name} onChange={function(e) { setOrder({ ...order, name: e.target.value }); }} placeholder="Votre nom" className="input" />
-                      </div>
-                      <div>
-                        <label className="block text-xs text-gray mb-1">Adresse de livraison *</label>
-                        <input type="text" value={order.address} onChange={function(e) { setOrder({ ...order, address: e.target.value }); }} placeholder="Votre adresse" className="input" />
-                      </div>
-                      <div>
-                        <label className="block text-xs text-gray mb-1">Téléphone *</label>
-                        <input type="tel" value={order.phone} onChange={function(e) { setOrder({ ...order, phone: e.target.value }); }} placeholder="Votre numéro" className="input" />
-                      </div>
-                      <div>
-                        <label className="block text-xs text-gray mb-1">Commentaires (facultatif)</label>
-                        <textarea value={order.comments} onChange={function(e) { setOrder({ ...order, comments: e.target.value }); }} placeholder="Instructions spéciales..." rows="2" className="input" />
-                      </div>
-                    </div>
-
-                    {!sogUser && (
-                      <p className="text-yellow-400 text-xs text-center mt-3">🔒 Connectez-vous pour valider</p>
-                    )}
-                    <button onClick={checkout} disabled={!sogUser || cart.length === 0} className={'btn btn-primary w-full mt-4' + (!sogUser || cart.length === 0 ? ' opacity-50' : '')}>
-                      ✅ Valider la commande
-                    </button>
+                          
+                          {/* Boutons d'action panier nettoyés */}
+                          <div className="flex items-center gap-1">
+                            <button onClick={function() { updateQty(i.id, -1); }} className="btn btn-secondary btn-icon">−</button>
+                            <span className="text-white font-bold w-6 text-center">{i.quantity}</span>
+                            <button onClick={function() { updateQty(i.id, 1); }} className="btn btn-secondary btn-icon">+</button>
+                            <button onClick={function() { removeFromCart(i.id); }} className="btn btn-danger btn-icon ml-1">✕</button>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
-                )}
-              </div>
+
+                  <div className="flex justify-between items-center py-3 border-t border-slate-700 text-lg font-bold">
+                    <span>Total</span>
+                    <span className="text-blue">{getTotal()}{currency}</span>
+                  </div>
+
+                  {/* Formulaire de commande */}
+                  <div className="flex flex-col gap-3">
+                    <input type="text" value={order.name} onChange={function(e) { setOrder({ ...order, name: e.target.value }); }} placeholder="Votre nom complet *" className="input" />
+                    <input type="text" value={order.address} onChange={function(e) { setOrder({ ...order, address: e.target.value }); }} placeholder="Adresse de livraison *" className="input" />
+                    <input type="tel" value={order.phone} onChange={function(e) { setOrder({ ...order, phone: e.target.value }); }} placeholder="Numéro de téléphone *" className="input" />
+                    <textarea value={order.comments} onChange={function(e) { setOrder({ ...order, comments: e.target.value }); }} placeholder="Note ou instruction spéciale..." rows="2" className="input" style={{ resize: 'vertical' }} />
+                  </div>
+
+                  <button onClick={checkout} disabled={!sogUser} className="btn btn-primary w-full mt-2" style={{ minHeight: '3.5rem', fontSize: '1rem' }}>
+                    ✅ Valider ma commande
+                  </button>
+                  {!sogUser && <p className="text-center text-xs text-yellow-500">Connexion SOG requise pour commander.</p>}
+                </div>
+              )}
             </div>
           </div>
         )}
 
-        {/* MODALE GENERIQUE (création/édition catégorie ou produit) */}
+        {/* MODALE EDITION / CREATION (Cat/Prod) */}
         {modal.open && (
           <div className="modal-overlay" onClick={closeModal}>
             <div className="modal-card" onClick={function(e) { e.stopPropagation(); }}>
               <div className="modal-header">
                 <h3 className="modal-title">
-                  {modal.creating ? '✨ Nouveau ' : '✏️ Modifier '}
-                  {modal.type === 'category' ? 'categorie' : 'produit'}
+                  {modal.creating ? '✨ Ajouter ' : '✏️ Modifier '}
+                  {modal.type === 'category' ? 'une catégorie' : 'un produit'}
                 </h3>
-                <button className="btn-close" onClick={closeModal} aria-label="Fermer">×</button>
+                <button className="btn-close" onClick={closeModal}>×</button>
               </div>
-              <div className="modal-body">
-                <div className="flex gap-2 flex-col">
-                  {modal.type === "category"
-                    ? schema.categories.fields.map(function(f) { return renderField(f); })
-                    : schema.products.fields.map(function(f) {
-                        if (f.key === "categoryId") return renderField({ ...f, options: "categories" });
-                        return renderField(f);
-                      })
-                  }
-                </div>
-                <div className="flex gap-2 mt-3">
-                  <button onClick={modal.type === "category" ? saveCategory : saveProduct} className="btn btn-primary flex-1">
-                    {modal.creating ? '✅ Créer' : '💾 Sauvegarder'}
-                  </button>
-                  <button onClick={closeModal} className="btn btn-secondary">Annuler</button>
-                </div>
+              
+              <div className="flex flex-col gap-3">
+                {modal.type === "category"
+                  ? schema.categories.fields.map(function(f) { return renderField(f); })
+                  : schema.products.fields.map(function(f) {
+                      if (f.key === "categoryId") return renderField({ ...f, options: "categories" });
+                      return renderField(f);
+                    })
+                }
+              </div>
+
+              <div className="flex gap-3 mt-5">
+                <button onClick={modal.type === "category" ? saveCategory : saveProduct} className="btn btn-primary flex-1">
+                  {modal.creating ? 'Créer' : 'Enregistrer'}
+                </button>
+                <button onClick={closeModal} className="btn btn-secondary flex-1">Annuler</button>
               </div>
             </div>
           </div>
