@@ -11,6 +11,25 @@
   <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
 
   <style>
+    /* ===== POLICE SYSTÈME ROBUSTE ===== */
+    * {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    /* ===== ICÔNES STABILISÉES ===== */
+    .icon {
+      display: inline-block;
+      font-size: 1.1rem;
+      width: 1.6rem;
+      text-align: center;
+      flex-shrink: 0;
+      vertical-align: middle;
+    }
+    .icon-sm {
+      font-size: 0.9rem;
+      width: 1.4rem;
+    }
+
     /* ===== BASE ===== */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { -webkit-text-size-adjust: 100%; }
@@ -18,12 +37,11 @@
     body {
       background: #0f172a;
       color: #f1f5f9;
-      font-family: system-ui, -apple-system, sans-serif;
       padding: 0 1rem;
       min-height: 100vh;
+      font-family: inherit;
     }
 
-    /* ===== CONTENEUR ===== */
     .app-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -93,6 +111,27 @@
       border: 1px solid #475569;
     }
     .btn-secondary-sm:active { background: #475569; }
+
+    .btn-close-modal {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.8rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.5rem;
+      transition: background 0.2s, color 0.2s;
+      min-height: 2.8rem;
+      min-width: 2.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-close-modal:hover {
+      background: rgba(255,255,255,0.08);
+      color: #f1f5f9;
+    }
 
     /* ===== BADGES ===== */
     .badge {
@@ -228,10 +267,10 @@
       transform: scale(0.95);
     }
 
-    /* ===== CARTE PRODUIT (améliorée) ===== */
+    /* ===== CARTE PRODUIT ===== */
     .product-card {
       background: #1e293b;
-      border-radius: 1rem;           /* rounded-xl */
+      border-radius: 1rem;
       border: 1px solid #334155;
       overflow: hidden;
       transition: all 0.15s ease;
@@ -278,7 +317,7 @@
     }
 
     .product-name {
-      font-size: 0.85rem;            /* augmenté */
+      font-size: 0.85rem;
       font-weight: 600;
       color: white;
       line-height: 1.3;
@@ -290,7 +329,7 @@
     }
 
     .product-price {
-      font-size: 1rem;              /* augmenté */
+      font-size: 1rem;
       font-weight: 700;
       color: #60a5fa;
       margin: 0.1rem 0;
@@ -307,7 +346,7 @@
 
     .product-btn {
       width: 100%;
-      padding: 0.5rem 0;            /* padding vertical augmenté */
+      padding: 0.5rem 0;
       border-radius: 0.6rem;
       border: none;
       font-size: 0.75rem;
@@ -339,7 +378,7 @@
     .products-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.9rem;                 /* gap plus grand */
+      gap: 0.9rem;
       margin-top: 0.5rem;
     }
 
@@ -353,13 +392,13 @@
       margin-top: 1.2rem;
     }
 
-    /* ===== INPUTS / FORMULAIRES ===== */
+    /* ===== INPUTS ===== */
     .input-modern {
       background: #0f172a;
       color: #f1f5f9;
       border: 1px solid #334155;
       border-radius: 0.6rem;
-      padding: 0.7rem 0.9rem;        /* padding augmenté */
+      padding: 0.7rem 0.9rem;
       font-size: 0.85rem;
       width: 100%;
       outline: none;
@@ -393,37 +432,95 @@
       border-color: #3b82f6;
     }
 
-    /* ===== MODAL ===== */
+    /* ===== MODALES UNIFIÉES ===== */
     .modal-overlay {
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(4px);
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(6px);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 1.2rem;
+      padding: 1.5rem;
+      z-index: 1000;
+      animation: fadeIn 0.2s ease-out;
     }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
     .modal-card {
       background: #1e293b;
       border: 1px solid #334155;
-      border-radius: 1rem;
-      padding: 1.2rem;
-      max-width: 420px;
+      border-radius: 1.2rem;
+      padding: 1.5rem 1.2rem;
+      max-width: 460px;
       width: 100%;
       max-height: 90vh;
       overflow-y: auto;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
+      animation: slideUp 0.25s ease-out;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ===== SPINNER ===== */
-    .spinner {
-      border: 3px solid #1e293b;
-      border-top: 3px solid #3b82f6;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      animation: spin 0.8s linear infinite;
-      margin: 2rem auto;
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: white;
+      flex: 1;
+      margin: 0;
+      padding-right: 0.5rem;
+    }
+
+    /* Bouton fermeture grand et tactile */
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 2rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.5rem;
+      transition: background 0.2s, color 0.2s;
+      min-height: 3rem;
+      min-width: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: -0.3rem;
+      margin-right: -0.3rem;
+    }
+    .modal-close:hover {
+      background: rgba(255,255,255,0.08);
+      color: #f1f5f9;
+    }
+
+    .modal-body {
+      color: #e2e8f0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .modal-body .input-modern,
+    .modal-body .select-modern {
+      margin-bottom: 0.6rem;
+    }
+    .modal-body .flex {
+      gap: 0.5rem;
+    }
 
     /* ===== IFRAME ===== */
     .iframe-container {
@@ -454,6 +551,18 @@
       margin-bottom: 0.5rem;
     }
 
+    /* ===== SPINNER ===== */
+    .spinner {
+      border: 3px solid #1e293b;
+      border-top: 3px solid #3b82f6;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      animation: spin 0.8s linear infinite;
+      margin: 2rem auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 380px) {
       .product-name { font-size: 0.75rem; }
@@ -462,6 +571,8 @@
       .products-grid { gap: 0.6rem; }
       .header-title { font-size: 0.9rem; max-width: 48%; }
       .btn-sm { padding: 0.4rem 0.6rem; font-size: 0.65rem; min-height: 2.2rem; }
+      .modal-card { padding: 1rem; }
+      .modal-title { font-size: 1rem; }
     }
 
     @media (min-width: 600px) {
@@ -1044,22 +1155,22 @@
         {/* ---- MESSAGES ---- */}
         {!sogUser && isReady && (
           <div className="alert alert-warning">
-            Invite. <a href="#" onClick={function(e) { e.preventDefault(); window.parent.postMessage({ type: 'SOG_LOGIN_REQUEST' }, '*'); }}>Connectez-vous</a> pour commander.
+            <span className="icon">🔒</span> Invite. <a href="#" onClick={function(e) { e.preventDefault(); window.parent.postMessage({ type: 'SOG_LOGIN_REQUEST' }, '*'); }}>Connectez-vous</a> pour commander.
           </div>
         )}
         {msg.text && (
           <div className={'alert ' + (msg.type === 'success' ? 'alert-success' : msg.type === 'error' ? 'alert-error' : 'alert-info')}>
-            {msg.text}
+            <span className="icon">{msg.type === 'success' ? '✅' : msg.type === 'error' ? '❌' : 'ℹ️'}</span> {msg.text}
           </div>
         )}
 
         {/* ---- ADMIN ---- */}
         {isAdmin && isAdminAuthenticated ? (
           <div>
-            <h2 className="text-lg font-bold mt-3 mb-2">PANEL ADMIN</h2>
+            <h2 className="text-lg font-bold mt-3 mb-2">🛠 PANEL ADMIN</h2>
 
             <div className="admin-card">
-              <div className="admin-card-title">Configuration</div>
+              <div className="admin-card-title">⚙️ Configuration</div>
               <div className="space-y-2">
                 <input type="text" value={editableData?.settings?.title || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, title: e.target.value } }); }} placeholder="Titre" className="input-modern" />
                 <input type="text" value={editableData?.settings?.currency || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, currency: e.target.value } }); }} placeholder="Devise" className="input-modern" />
@@ -1068,7 +1179,7 @@
             </div>
 
             <div className="admin-card">
-              <div className="admin-card-title">Token FGT</div>
+              <div className="admin-card-title">🔑 Token FGT</div>
               <div className="flex gap-2 items-center">
                 <input type="password" value={fgtToken} onChange={function(e) { setFgtToken(e.target.value); setIsTokenSaved(false); }} placeholder="Token" className="input-modern flex-1" />
                 <button onClick={saveFgtToken} className="btn-sm btn-primary-sm">{isTokenSaved ? '✅' : '💾'}</button>
@@ -1078,14 +1189,14 @@
 
             <div className="admin-card">
               <div className="flex justify-between items-center">
-                <span className="admin-card-title">{schema.categories.icon} Categories</span>
+                <span className="admin-card-title"><span className="icon">📂</span> Categories</span>
                 <button onClick={function() { openCatModal(null); }} className="btn-sm btn-primary-sm">+</button>
               </div>
               <div className="grid grid-cols-2 gap-1 mt-1">
                 {(editableData?.categories || []).map(function(c) {
                   return (
                     <div key={c.id} className={'flex items-center gap-1 p-1 rounded border ' + (hasPending(c, "category") ? 'border-yellow-700 bg-yellow-900/20' : 'border-slate-700 bg-slate-800/30')}>
-                      <span className="text-sm">{c.icon}</span>
+                      <span className="icon-sm">{c.icon}</span>
                       <span className="text-xs truncate flex-1 text-white">{c.name}</span>
                       <button onClick={function() { openCatModal(c); }} className="text-blue-400 text-xs">✎</button>
                       <button onClick={function() { deleteCategory(c.id); }} className="text-red-400 text-xs">✕</button>
@@ -1097,7 +1208,7 @@
 
             <div className="admin-card">
               <div className="flex justify-between items-center">
-                <span className="admin-card-title">{schema.products.icon} Produits</span>
+                <span className="admin-card-title"><span className="icon">📦</span> Produits</span>
                 <button onClick={function() { openProdModal(null); }} className="btn-sm btn-primary-sm">+</button>
               </div>
               <div className="space-y-1 max-h-60 overflow-y-auto">
@@ -1119,7 +1230,7 @@
 
             <div className="admin-card">
               <button onClick={handleCommit} disabled={isCommitting} className={'btn-sm btn-primary-sm w-full' + (isCommitting ? ' opacity-50' : '')}>
-                {isCommitting ? 'Sauvegarde...' : 'Sauvegarder (Commit)'}
+                {isCommitting ? '⏳ Sauvegarde...' : '💾 Sauvegarder (Commit)'}
               </button>
             </div>
           </div>
@@ -1139,7 +1250,7 @@
               {(editableData?.categories || []).map(function(c) {
                 return (
                   <button key={c.id} onClick={function() { setSelectedCategoryId(c.id); }} className={'category-btn ' + (selectedCategoryId === c.id ? 'active' : '')}>
-                    {c.icon} {c.name}
+                    <span className="icon-sm">{c.icon}</span> {c.name}
                   </button>
                 );
               })}
@@ -1161,7 +1272,7 @@
                       />
                     </div>
                     <div className="product-body">
-                      <div className="product-category">{getCategoryIcon(p.categoryId)} {getCategoryName(p.categoryId)}</div>
+                      <div className="product-category"><span className="icon-sm">{getCategoryIcon(p.categoryId)}</span> {getCategoryName(p.categoryId)}</div>
                       <div className="product-name">{p.name}</div>
                       <div className="product-price">{p.price}{currency}</div>
                       {settings.showStock && (
@@ -1197,99 +1308,121 @@
           </div>
         )}
 
-        {/* ---- MODALS ---- */}
+        {/* ---- MODALES UNIFIÉES ---- */}
 
+        {/* MODALE ADMIN (mot de passe) */}
         {showPasswordModal && (
-          <div className="fixed inset-0 modal-overlay z-50" onClick={function() { setShowPasswordModal(false); }}>
+          <div className="modal-overlay" onClick={function() { setShowPasswordModal(false); }}>
             <div className="modal-card" onClick={function(e) { e.stopPropagation(); }}>
-              <h3 className="font-bold text-white">Acces admin</h3>
-              <p className="text-gray-300 text-sm my-2">Mot de passe :</p>
-              <input type="password" value={adminPassword} onChange={function(e) { setAdminPassword(e.target.value); }} placeholder="Mot de passe" className="input-modern" onKeyDown={function(e) { if (e.key === "Enter") handleAdminLogin(); }} />
-              <div className="flex gap-2 mt-3">
-                <button onClick={handleAdminLogin} className="btn-sm btn-primary-sm flex-1">Valider</button>
-                <button onClick={function() { setShowPasswordModal(false); }} className="btn-sm btn-secondary-sm">Annuler</button>
+              <div className="modal-header">
+                <h3 className="modal-title">🔐 Accès admin</h3>
+                <button className="modal-close" onClick={function() { setShowPasswordModal(false); }} aria-label="Fermer">×</button>
               </div>
-              {msg.text && msg.type === "error" && <p className="text-red-400 text-xs mt-2">{msg.text}</p>}
-            </div>
-          </div>
-        )}
-
-        {expandedImage && (
-          <div className="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4" onClick={function() { setExpandedImage(null); }}>
-            <div className="max-w-full max-h-full" onClick={function(e) { e.stopPropagation(); }}>
-              <img src={expandedImage} alt="agrandissement" className="max-w-full max-h-screen rounded-lg" onError={function(e) { e.target.src = "https://via.placeholder.com/600"; }} />
-              <button onClick={function() { setExpandedImage(null); }} className="absolute top-2 right-4 text-white text-2xl">×</button>
-            </div>
-          </div>
-        )}
-
-        {showCart && (
-          <div className="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4" onClick={function() { setShowCart(false); }}>
-            <div className="modal-card max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
-              <h3 className="font-bold text-white text-lg">Mon Panier</h3>
-              {cart.length === 0 ? (
-                <p className="py-4 text-center text-gray-400 text-sm">Vide</p>
-              ) : (
-                <div>
-                  <div className="space-y-2 max-h-52 overflow-y-auto">
-                    {cart.map(function(i) {
-                      return (
-                        <div key={i.id} className="flex items-center gap-2 bg-slate-800/40 p-2 rounded border border-slate-700">
-                          <img src={i.image} alt={i.name} className="w-10 h-10 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-xs font-medium text-white truncate">{i.name}</p>
-                            <p className="text-[0.6rem] text-gray-400">{i.price}{currency}</p>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <button onClick={function() { updateQty(i.id, -1); }} className="btn-sm btn-secondary-sm text-xs px-2 py-0.5">−</button>
-                            <span className="w-6 text-center text-sm">{i.quantity}</span>
-                            <button onClick={function() { updateQty(i.id, 1); }} className="btn-sm btn-secondary-sm text-xs px-2 py-0.5">+</button>
-                            <button onClick={function() { removeFromCart(i.id); }} className="text-red-400 text-xs px-1">✕</button>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <div className="flex justify-between font-bold border-t border-slate-700 pt-2 mt-2">
-                    <span>Total</span>
-                    <span className="text-blue-400">{getTotal()}{currency}</span>
-                  </div>
-                  <div className={'space-y-2 mt-3 ' + (!sogUser ? 'opacity-50 pointer-events-none' : '')}>
-                    <input type="text" value={order.name} onChange={function(e) { setOrder({ ...order, name: e.target.value }); }} placeholder="Nom *" className="input-modern" />
-                    <input type="text" value={order.address} onChange={function(e) { setOrder({ ...order, address: e.target.value }); }} placeholder="Adresse *" className="input-modern" />
-                    <input type="tel" value={order.phone} onChange={function(e) { setOrder({ ...order, phone: e.target.value }); }} placeholder="Tel *" className="input-modern" />
-                    <textarea value={order.comments} onChange={function(e) { setOrder({ ...order, comments: e.target.value }); }} placeholder="Commentaires" rows="2" className="input-modern" />
-                  </div>
-                  {!sogUser && <p className="text-yellow-400 text-xs text-center mt-2">Connectez-vous pour valider</p>}
-                  <button onClick={checkout} disabled={!sogUser || cart.length === 0} className={'btn-sm btn-primary-sm w-full mt-3' + (!sogUser || cart.length === 0 ? ' opacity-50' : '')}>
-                    Valider
-                  </button>
+              <div className="modal-body">
+                <p className="text-gray-300 text-sm mb-3">Entrez votre mot de passe :</p>
+                <input type="password" value={adminPassword} onChange={function(e) { setAdminPassword(e.target.value); }} placeholder="Mot de passe" className="input-modern" onKeyDown={function(e) { if (e.key === "Enter") handleAdminLogin(); }} />
+                <div className="flex gap-2 mt-4">
+                  <button onClick={handleAdminLogin} className="btn-sm btn-primary-sm flex-1">Valider</button>
+                  <button onClick={function() { setShowPasswordModal(false); }} className="btn-sm btn-secondary-sm">Annuler</button>
                 </div>
-              )}
+                {msg.text && msg.type === "error" && <p className="text-red-400 text-xs mt-2">{msg.text}</p>}
+              </div>
             </div>
           </div>
         )}
 
-        {modal.open && (
-          <div className="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4" onClick={closeModal}>
-            <div className="modal-card max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
-              <h3 className="font-bold text-white">
-                {modal.creating ? "Nouveau " + (modal.type === "category" ? "categorie" : "produit") : "Modifier " + (modal.type === "category" ? "la categorie" : "le produit")}
-              </h3>
-              <div className="space-y-3 mt-3">
-                {modal.type === "category"
-                  ? schema.categories.fields.map(function(f) { return renderField(f); })
-                  : schema.products.fields.map(function(f) {
-                      if (f.key === "categoryId") return renderField({ ...f, options: "categories" });
-                      return renderField(f);
-                    })
-                }
+        {/* MODALE IMAGE AGRANDIE */}
+        {expandedImage && (
+          <div className="modal-overlay" onClick={function() { setExpandedImage(null); }}>
+            <div className="modal-card" style={{ maxWidth: '600px', padding: '0.5rem', background: 'transparent', border: 'none', boxShadow: 'none' }} onClick={function(e) { e.stopPropagation(); }}>
+              <div className="relative">
+                <button className="modal-close" style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', borderRadius: '50%', width: '2.8rem', height: '2.8rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', border: 'none', fontSize: '1.8rem' }} onClick={function() { setExpandedImage(null); }}>×</button>
+                <img src={expandedImage} alt="Agrandissement" className="w-full rounded-xl" onError={function(e) { e.target.src = "https://via.placeholder.com/600"; }} />
               </div>
-              <div className="flex gap-2 mt-4">
-                <button onClick={modal.type === "category" ? saveCategory : saveProduct} className="btn-sm btn-primary-sm flex-1">
-                  {modal.creating ? 'Creer' : 'Sauvegarder'}
-                </button>
-                <button onClick={closeModal} className="btn-sm btn-secondary-sm">Annuler</button>
+            </div>
+          </div>
+        )}
+
+        {/* MODALE PANIER */}
+        {showCart && (
+          <div className="modal-overlay" onClick={function() { setShowCart(false); }}>
+            <div className="modal-card" onClick={function(e) { e.stopPropagation(); }}>
+              <div className="modal-header">
+                <h3 className="modal-title">🛒 Mon Panier</h3>
+                <button className="modal-close" onClick={function() { setShowCart(false); }} aria-label="Fermer">×</button>
+              </div>
+              <div className="modal-body">
+                {cart.length === 0 ? (
+                  <p className="text-center text-gray-400 py-4">Votre panier est vide.</p>
+                ) : (
+                  <div>
+                    <div className="space-y-2 max-h-56 overflow-y-auto">
+                      {cart.map(function(i) {
+                        return (
+                          <div key={i.id} className="flex items-center gap-2 bg-slate-800/40 p-2 rounded-lg border border-slate-700">
+                            <img src={i.image} alt={i.name} className="w-10 h-10 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-medium text-white truncate">{i.name}</p>
+                              <p className="text-[0.6rem] text-gray-400">{i.price}{currency}</p>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <button onClick={function() { updateQty(i.id, -1); }} className="btn-sm btn-secondary-sm text-xs px-2 py-0.5">−</button>
+                              <span className="w-6 text-center text-sm">{i.quantity}</span>
+                              <button onClick={function() { updateQty(i.id, 1); }} className="btn-sm btn-secondary-sm text-xs px-2 py-0.5">+</button>
+                              <button onClick={function() { removeFromCart(i.id); }} className="text-red-400 text-xs px-1">✕</button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div className="flex justify-between font-bold border-t border-slate-700 pt-2 mt-2">
+                      <span>Total</span>
+                      <span className="text-blue-400">{getTotal()}{currency}</span>
+                    </div>
+                    <div className={'space-y-2 mt-3 ' + (!sogUser ? 'opacity-50 pointer-events-none' : '')}>
+                      <input type="text" value={order.name} onChange={function(e) { setOrder({ ...order, name: e.target.value }); }} placeholder="Nom *" className="input-modern" />
+                      <input type="text" value={order.address} onChange={function(e) { setOrder({ ...order, address: e.target.value }); }} placeholder="Adresse *" className="input-modern" />
+                      <input type="tel" value={order.phone} onChange={function(e) { setOrder({ ...order, phone: e.target.value }); }} placeholder="Tel *" className="input-modern" />
+                      <textarea value={order.comments} onChange={function(e) { setOrder({ ...order, comments: e.target.value }); }} placeholder="Commentaires" rows="2" className="input-modern" />
+                    </div>
+                    {!sogUser && <p className="text-yellow-400 text-xs text-center mt-2">🔒 Connectez-vous pour valider</p>}
+                    <button onClick={checkout} disabled={!sogUser || cart.length === 0} className={'btn-sm btn-primary-sm w-full mt-3' + (!sogUser || cart.length === 0 ? ' opacity-50' : '')}>
+                      ✅ Valider la commande
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* MODALE GENERIQUE (création/édition catégorie ou produit) */}
+        {modal.open && (
+          <div className="modal-overlay" onClick={closeModal}>
+            <div className="modal-card" onClick={function(e) { e.stopPropagation(); }}>
+              <div className="modal-header">
+                <h3 className="modal-title">
+                  {modal.creating ? '✨ Nouveau ' : '✏️ Modifier '}
+                  {modal.type === 'category' ? 'categorie' : 'produit'}
+                </h3>
+                <button className="modal-close" onClick={closeModal} aria-label="Fermer">×</button>
+              </div>
+              <div className="modal-body">
+                <div className="space-y-3">
+                  {modal.type === "category"
+                    ? schema.categories.fields.map(function(f) { return renderField(f); })
+                    : schema.products.fields.map(function(f) {
+                        if (f.key === "categoryId") return renderField({ ...f, options: "categories" });
+                        return renderField(f);
+                      })
+                  }
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <button onClick={modal.type === "category" ? saveCategory : saveProduct} className="btn-sm btn-primary-sm flex-1">
+                    {modal.creating ? '✅ Créer' : '💾 Sauvegarder'}
+                  </button>
+                  <button onClick={closeModal} className="btn-sm btn-secondary-sm">Annuler</button>
+                </div>
               </div>
             </div>
           </div>
