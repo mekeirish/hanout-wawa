@@ -4,172 +4,114 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   <title>Hanout - Catalogue</title>
-  <!-- Tailwind CSS (version production minifiée) -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
-  <!-- React + ReactDOM (UMD) -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <!-- Babel Standalone -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <!-- Cloudinary Widget -->
   <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+
   <style>
-    /* ---- STYLE DARK MODERN ---- */
+    /* ===== BASE ===== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+
     body {
       background: #0f172a;
       color: #f1f5f9;
       font-family: system-ui, -apple-system, sans-serif;
+      padding: 0 1rem;
+      min-height: 100vh;
     }
 
-    /* Cartes modernes */
-    .modern-card {
-      background: #1e293b;
-      border-radius: 1rem;
-      border: 1px solid #334155;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-      transition: all 0.2s ease;
-    }
-    .modern-card:hover {
-      border-color: #475569;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    /* ===== CONTENEUR ===== */
+    .app-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.5rem 0 1.5rem;
     }
 
-    /* Boutons modernes */
-    .btn-primary {
+    /* ===== HEADER ===== */
+    .header {
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid #334155;
+      padding: 0.75rem 0;
+      margin: 0 -1rem 0.75rem;
+      padding: 0.75rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .header-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: white;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 55%;
+    }
+    .header-actions {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    /* ===== BOUTONS ===== */
+    .btn-sm {
+      padding: 0.5rem 0.8rem;
+      font-size: 0.75rem;
+      border-radius: 0.6rem;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      min-height: 2.5rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+    }
+    .btn-sm:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-sm:active:not(:disabled) { transform: scale(0.96); }
+
+    .btn-primary-sm {
       background: linear-gradient(135deg, #3b82f6, #2563eb);
       color: white;
-      border-radius: 0.75rem;
-      padding: 0.5rem 1.25rem;
-      border: none;
-      font-weight: 500;
-      transition: all 0.2s ease;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 2px 6px rgba(59,130,246,0.25);
     }
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
-    }
-    .btn-primary:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .btn-secondary {
+    .btn-secondary-sm {
       background: #334155;
       color: #f1f5f9;
-      border-radius: 0.75rem;
-      padding: 0.5rem 1.25rem;
       border: 1px solid #475569;
-      font-weight: 500;
-      transition: all 0.2s ease;
-      cursor: pointer;
     }
-    .btn-secondary:hover {
-      background: #475569;
-      border-color: #64748b;
-    }
-    .btn-secondary:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    .btn-secondary-sm:active { background: #475569; }
 
-    .btn-success {
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: white;
-      border-radius: 0.75rem;
-      padding: 0.5rem 1.25rem;
-      border: none;
-      font-weight: 500;
-      transition: all 0.2s ease;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(34, 197, 94, 0.3);
-    }
-    .btn-success:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(34, 197, 94, 0.4);
-    }
-
-    .btn-danger {
-      background: transparent;
-      color: #f87171;
-      border-radius: 0.75rem;
-      padding: 0.25rem 0.75rem;
-      border: 1px solid #f87171;
-      font-weight: 500;
-      transition: all 0.2s ease;
-      cursor: pointer;
-    }
-    .btn-danger:hover {
-      background: #f87171;
-      color: white;
-    }
-
-    /* Inputs modernes */
-    .input-modern {
-      background: #0f172a;
-      color: #f1f5f9;
-      border-radius: 0.75rem;
-      padding: 0.625rem 1rem;
-      border: 1px solid #334155;
-      outline: none;
-      width: 100%;
-      transition: all 0.2s ease;
-    }
-    .input-modern:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-    }
-    .input-modern::placeholder {
-      color: #64748b;
-    }
-
-    /* Select modern */
-    .select-modern {
-      background: #0f172a;
-      color: #f1f5f9;
-      border-radius: 0.75rem;
-      padding: 0.625rem 1rem;
-      border: 1px solid #334155;
-      outline: none;
-      width: 100%;
-      appearance: none;
-      transition: all 0.2s ease;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-    }
-    .select-modern:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-    }
-
-    /* Badge */
+    /* ===== BADGES ===== */
     .badge {
       display: inline-block;
       padding: 0.2rem 0.6rem;
       border-radius: 9999px;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 500;
     }
     .badge-success {
-      background: rgba(34, 197, 94, 0.2);
+      background: rgba(34,197,94,0.18);
       color: #4ade80;
     }
     .badge-warning {
-      background: rgba(234, 179, 8, 0.2);
+      background: rgba(234,179,8,0.18);
       color: #facc15;
     }
 
-    /* Header */
-    .header-modern {
-      background: rgba(15, 23, 42, 0.8);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid #334155;
-    }
-
-    /* Cart badge */
+    /* ===== CART BADGE ===== */
     .cart-badge {
       position: absolute;
       top: -4px;
@@ -178,86 +120,362 @@
       color: white;
       border-radius: 9999px;
       font-size: 0.6rem;
-      padding: 0.1rem 0.4rem;
+      padding: 0.05rem 0.4rem;
       min-width: 1.2rem;
       text-align: center;
+      line-height: 1.3;
+    }
+    .cart-btn-wrapper {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
     }
 
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; }
-    ::-webkit-scrollbar-thumb:hover { background: #475569; }
-
-    /* Spinner */
-    .spinner {
-      border: 3px solid #1e293b;
-      border-top: 3px solid #3b82f6;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Modal overlay */
-    .modal-overlay {
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
-    }
-
-    /* Produit hover */
-    .product-card {
-      transition: all 0.2s ease;
-    }
-    .product-card:hover {
-      transform: translateY(-4px);
-      border-color: #3b82f6;
-    }
-
-    /* Message alerte */
+    /* ===== ALERTES ===== */
     .alert {
-      padding: 0.75rem 1rem;
-      border-radius: 0.75rem;
+      padding: 0.65rem 0.85rem;
+      border-radius: 0.65rem;
       border: 1px solid;
+      font-size: 0.8rem;
+      margin-bottom: 0.75rem;
+    }
+    .alert-warning {
+      background: rgba(234,179,8,0.08);
+      border-color: #eab308;
+      color: #facc15;
     }
     .alert-success {
-      background: rgba(34, 197, 94, 0.1);
+      background: rgba(34,197,94,0.08);
       border-color: #22c55e;
       color: #4ade80;
     }
     .alert-error {
-      background: rgba(239, 68, 68, 0.1);
+      background: rgba(239,68,68,0.08);
       border-color: #ef4444;
       color: #f87171;
     }
     .alert-info {
-      background: rgba(59, 130, 246, 0.1);
+      background: rgba(59,130,246,0.08);
       border-color: #3b82f6;
       color: #60a5fa;
     }
-    .alert-warning {
-      background: rgba(234, 179, 8, 0.1);
-      border-color: #eab308;
-      color: #facc15;
+    .alert a {
+      text-decoration: underline;
+      font-weight: 500;
     }
 
-    /* Iframe container */
+    /* ===== RECHERCHE ===== */
+    .search-input {
+      background: #0f172a;
+      color: #f1f5f9;
+      border: 1px solid #334155;
+      border-radius: 0.75rem;
+      padding: 0.7rem 1rem;
+      font-size: 0.9rem;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s;
+      min-height: 2.8rem;
+    }
+    .search-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+    }
+    .search-input::placeholder {
+      color: #64748b;
+    }
+
+    /* ===== CATEGORIES ===== */
+    .categories-scroll {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding: 0.4rem 0 0.6rem;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+      white-space: nowrap;
+      margin-bottom: 0.25rem;
+    }
+    .categories-scroll::-webkit-scrollbar {
+      height: 3px;
+    }
+    .categories-scroll::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+    .categories-scroll::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 8px;
+    }
+    .category-btn {
+      flex-shrink: 0;
+      padding: 0.35rem 0.8rem;
+      border-radius: 9999px;
+      border: 1px solid #475569;
+      background: transparent;
+      color: #94a3b8;
+      font-size: 0.75rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      min-height: 2.2rem;
+    }
+    .category-btn.active {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      color: white;
+    }
+    .category-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* ===== CARTE PRODUIT (améliorée) ===== */
+    .product-card {
+      background: #1e293b;
+      border-radius: 1rem;           /* rounded-xl */
+      border: 1px solid #334155;
+      overflow: hidden;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+    .product-card:active {
+      transform: scale(0.98);
+    }
+
+    .product-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #0f172a;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .product-body {
+      padding: 0.7rem 0.7rem 0.8rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 0.2rem;
+    }
+
+    .product-category {
+      font-size: 0.65rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .product-name {
+      font-size: 0.85rem;            /* augmenté */
+      font-weight: 600;
+      color: white;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 2.2rem;
+    }
+
+    .product-price {
+      font-size: 1rem;              /* augmenté */
+      font-weight: 700;
+      color: #60a5fa;
+      margin: 0.1rem 0;
+    }
+
+    .product-stock {
+      font-size: 0.65rem;
+      color: #94a3b8;
+      margin-bottom: 0.2rem;
+    }
+    .product-stock.out {
+      color: #f87171;
+    }
+
+    .product-btn {
+      width: 100%;
+      padding: 0.5rem 0;            /* padding vertical augmenté */
+      border-radius: 0.6rem;
+      border: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      margin-top: auto;
+      min-height: 2.6rem;
+    }
+    .product-btn.primary {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+    }
+    .product-btn.primary:active:not(:disabled) {
+      transform: scale(0.96);
+    }
+    .product-btn.primary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .product-btn.secondary {
+      background: #334155;
+      color: #94a3b8;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    /* ===== GRILLE PRODUITS ===== */
+    .products-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;                 /* gap plus grand */
+      margin-top: 0.5rem;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      text-align: center;
+      padding: 1.2rem 0 0.5rem;
+      font-size: 0.65rem;
+      color: #475569;
+      border-top: 1px solid #1e293b;
+      margin-top: 1.2rem;
+    }
+
+    /* ===== INPUTS / FORMULAIRES ===== */
+    .input-modern {
+      background: #0f172a;
+      color: #f1f5f9;
+      border: 1px solid #334155;
+      border-radius: 0.6rem;
+      padding: 0.7rem 0.9rem;        /* padding augmenté */
+      font-size: 0.85rem;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s;
+      min-height: 2.8rem;
+    }
+    .input-modern:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+    }
+    .input-modern::placeholder {
+      color: #64748b;
+    }
+
+    .select-modern {
+      background: #0f172a;
+      color: #f1f5f9;
+      border: 1px solid #334155;
+      border-radius: 0.6rem;
+      padding: 0.7rem 0.9rem;
+      font-size: 0.85rem;
+      width: 100%;
+      appearance: none;
+      outline: none;
+      min-height: 2.8rem;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.8rem center;
+    }
+    .select-modern:focus {
+      border-color: #3b82f6;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.2rem;
+    }
+    .modal-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 1rem;
+      padding: 1.2rem;
+      max-width: 420px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    /* ===== SPINNER ===== */
+    .spinner {
+      border: 3px solid #1e293b;
+      border-top: 3px solid #3b82f6;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      animation: spin 0.8s linear infinite;
+      margin: 2rem auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== IFRAME ===== */
     .iframe-container {
-      height: calc(100vh - 7rem);
+      height: calc(100vh - 8rem);
       width: 100%;
       background: white;
       border-radius: 1rem;
       overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
     }
     .iframe-container iframe {
       width: 100%;
       height: 100%;
       border: 0;
+    }
+
+    /* ===== ADMIN CARD ===== */
+    .admin-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 0.75rem;
+      padding: 0.9rem;
+      margin-bottom: 0.9rem;
+    }
+    .admin-card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 380px) {
+      .product-name { font-size: 0.75rem; }
+      .product-price { font-size: 0.9rem; }
+      .product-btn { font-size: 0.65rem; min-height: 2.2rem; }
+      .products-grid { gap: 0.6rem; }
+      .header-title { font-size: 0.9rem; max-width: 48%; }
+      .btn-sm { padding: 0.4rem 0.6rem; font-size: 0.65rem; min-height: 2.2rem; }
+    }
+
+    @media (min-width: 600px) {
+      .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+      .header-title { font-size: 1.2rem; max-width: 65%; }
+    }
+    @media (min-width: 900px) {
+      .products-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.2rem;
+      }
     }
   </style>
   <link rel="manifest" href="manifest.json" />
@@ -271,86 +489,21 @@
   const { useState, useEffect, useRef } = React;
 
   function App() {
-
-    // ---- CONSTANTES INJECTEES PAR LE FORKEUR ----
+    // ---- CONSTANTES INJECTEES ----
     var VENDOR = "wawa";
     var PASSWORD_HASH = "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e";
     var isPlaceholder = VENDOR.startsWith("{{");
 
-    // ---- DEDUCTION AUTOMATIQUE ----
     var params = new URLSearchParams(window.location.search);
     var repoName = window.location.pathname.split('/')[1] || '';
     var deducedVendor = repoName.startsWith('hanout-') ? repoName.replace('hanout-', '') : null;
     var vendeur = params.get("vendeur") || deducedVendor || localStorage.getItem("vendeur_name") || VENDOR;
 
-    // ---- ETAT POUR L'UTILISATEUR SOG ----
+    // ---- ETATS ----
     var [sogUser, setSogUser] = useState(null);
     var [isReady, setIsReady] = useState(false);
-
-    // ---- ETAT POUR LE TOKEN FGT ----
     var [fgtToken, setFgtToken] = useState('');
     var [isTokenSaved, setIsTokenSaved] = useState(false);
-
-    // ---- ECOUTE DES MESSAGES DE SOG ----
-    useEffect(function() {
-      var handleMessage = function(event) {
-        if (event.data.type === 'SOG_AUTH') {
-          setSogUser(event.data.payload.user);
-        }
-      };
-      
-      window.addEventListener('message', handleMessage);
-      window.parent.postMessage({ type: 'SOG_READY' }, '*');
-      setIsReady(true);
-
-      return function() {
-        window.removeEventListener('message', handleMessage);
-      };
-    }, []);
-
-    // ---- CHARGEMENT DU TOKEN FGT DEPUIS LOCALSTORAGE ----
-    useEffect(function() {
-      var storedToken = localStorage.getItem('fgt_token_' + repoName);
-      if (storedToken) {
-        setFgtToken(storedToken);
-        setIsTokenSaved(true);
-      }
-    }, []);
-
-    // ---- TOKEN FGT ----
-    var MASTER_TOKEN = null;
-    function getToken() {
-      if (MASTER_TOKEN) return MASTER_TOKEN;
-      var tokenKey = "fgt_token_" + repoName;
-      var token = localStorage.getItem(tokenKey);
-      if (!token) {
-        token = prompt("Entrez le token pour " + repoName + " :");
-        if (token) {
-          localStorage.setItem(tokenKey, token);
-          setFgtToken(token);
-          setIsTokenSaved(true);
-        } else {
-          alert("Token requis pour cette action.");
-          return null;
-        }
-      }
-      MASTER_TOKEN = token;
-      return token;
-    }
-
-    // ---- SAUVEGARDE DU TOKEN FGT ----
-    var saveFgtToken = function() {
-      if (fgtToken.trim()) {
-        localStorage.setItem('fgt_token_' + repoName, fgtToken.trim());
-        setIsTokenSaved(true);
-        setMsg({ text: "Token FGT sauvegarde avec succes !", type: "success" });
-        MASTER_TOKEN = fgtToken.trim();
-      } else {
-        setMsg({ text: "Veuillez entrer un token valide.", type: "error" });
-      }
-    };
-
-    // ---- ETATS ----
     var [isLoading, setIsLoading] = useState(true);
     var [data, setData] = useState(null);
     var [editableData, setEditableData] = useState(null);
@@ -392,7 +545,7 @@
       }
     };
 
-    // ---- ENCODAGE UTF-8 POUR btoa ----
+    // ---- UTF-8 ----
     var utf8ToBase64 = function(str) {
       try {
         var utf8Bytes = new TextEncoder().encode(str);
@@ -402,8 +555,6 @@
         return btoa(unescape(encodeURIComponent(str)));
       }
     };
-
-    // ---- DECODAGE UTF-8 POUR atob ----
     var base64ToUtf8 = function(str) {
       try {
         var binaryString = atob(str);
@@ -417,13 +568,12 @@
       }
     };
 
-    // ---- CLOUDINARY WIDGET ----
+    // ---- CLOUDINARY ----
     var openCloudinaryWidget = function(fieldKey) {
       if (!window.cloudinary) {
         alert("Le widget Cloudinary n'est pas charge.");
         return;
       }
-
       var widget = window.cloudinary.createUploadWidget(
         {
           cloudName: 'h91be5lz',
@@ -437,19 +587,11 @@
           maxImageFileSize: 5000000,
           styles: {
             palette: {
-              window: '#1e293b',
-              sourceBg: '#0f172a',
-              windowBorder: '#334155',
-              tabIcon: '#3b82f6',
-              inactiveTabIcon: '#94a3b8',
-              menuIcons: '#3b82f6',
-              link: '#3b82f6',
-              action: '#3b82f6',
-              inProgress: '#3b82f6',
-              complete: '#34d399',
-              error: '#f87171',
-              textDark: '#f1f5f9',
-              textLight: '#94a3b8'
+              window: '#1e293b', sourceBg: '#0f172a', windowBorder: '#334155',
+              tabIcon: '#3b82f6', inactiveTabIcon: '#94a3b8', menuIcons: '#3b82f6',
+              link: '#3b82f6', action: '#3b82f6', inProgress: '#3b82f6',
+              complete: '#34d399', error: '#f87171',
+              textDark: '#f1f5f9', textLight: '#94a3b8'
             }
           }
         },
@@ -459,12 +601,8 @@
             alert("Erreur lors de l'upload de l'image.");
             return;
           }
-          
           if (result.event === 'success') {
-            var secureUrl = result.info.secure_url;
-            setFormData(function(prev) {
-              return { ...prev, [fieldKey]: secureUrl };
-            });
+            setFormData(function(prev) { return { ...prev, [fieldKey]: result.info.secure_url }; });
             setMsg({ text: "Image telechargee avec succes !", type: "success" });
           }
         }
@@ -472,7 +610,62 @@
       widget.open();
     };
 
-    // ---- CHARGEMENT ----
+    // ---- ECOUTE SOG ----
+    useEffect(function() {
+      var handleMessage = function(event) {
+        if (event.data.type === 'SOG_AUTH') {
+          setSogUser(event.data.payload.user);
+        }
+      };
+      window.addEventListener('message', handleMessage);
+      window.parent.postMessage({ type: 'SOG_READY' }, '*');
+      setIsReady(true);
+      return function() {
+        window.removeEventListener('message', handleMessage);
+      };
+    }, []);
+
+    // ---- CHARGEMENT FGT ----
+    useEffect(function() {
+      var stored = localStorage.getItem('fgt_token_' + repoName);
+      if (stored) {
+        setFgtToken(stored);
+        setIsTokenSaved(true);
+      }
+    }, []);
+
+    // ---- TOKEN FGT ----
+    var MASTER_TOKEN = null;
+    function getToken() {
+      if (MASTER_TOKEN) return MASTER_TOKEN;
+      var tokenKey = "fgt_token_" + repoName;
+      var token = localStorage.getItem(tokenKey);
+      if (!token) {
+        token = prompt("Entrez le token pour " + repoName + " :");
+        if (token) {
+          localStorage.setItem(tokenKey, token);
+          setFgtToken(token);
+          setIsTokenSaved(true);
+        } else {
+          alert("Token requis.");
+          return null;
+        }
+      }
+      MASTER_TOKEN = token;
+      return token;
+    }
+    var saveFgtToken = function() {
+      if (fgtToken.trim()) {
+        localStorage.setItem('fgt_token_' + repoName, fgtToken.trim());
+        setIsTokenSaved(true);
+        setMsg({ text: "Token FGT sauvegarde !", type: "success" });
+        MASTER_TOKEN = fgtToken.trim();
+      } else {
+        setMsg({ text: "Entrez un token valide.", type: "error" });
+      }
+    };
+
+    // ---- CHARGEMENT DONNEES ----
     useEffect(function() {
       var load = async function() {
         if (!vendeur || isPlaceholder) { setIsLoading(false); return; }
@@ -481,11 +674,11 @@
           var res = await fetch(url);
           if (res.status === 404) {
             var defaultData = {
-              settings: { 
-                title: "Boutique de " + vendeur, 
-                currency: "DZD", 
-                showStock: true, 
-                ntfyTopic: vendeur + "_commandes" 
+              settings: {
+                title: "Boutique de " + vendeur,
+                currency: "DZD",
+                showStock: true,
+                ntfyTopic: vendeur + "_commandes"
               },
               categories: [],
               products: [],
@@ -527,7 +720,6 @@
       if (!putRes.ok) { var err = await putRes.json(); throw new Error("GitHub " + putRes.status + ": " + err.message); }
       return putRes.json();
     };
-
     var saveEditableData = async function() {
       await saveFile(editableData);
       setData(editableData);
@@ -539,7 +731,6 @@
       var hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
       return Array.from(new Uint8Array(hashBuffer)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
     };
-
     var handleAdminLogin = async function() {
       var hash = await sha256(adminPassword);
       if (hash === PASSWORD_HASH) {
@@ -552,13 +743,8 @@
         setMsg({ text: "Mot de passe incorrect", type: "error" });
       }
     };
-
     var handleAdminClick = function() {
-      if (isAdminAuthenticated) {
-        setIsAdmin(!isAdmin);
-      } else {
-        setShowPasswordModal(true);
-      }
+      if (isAdminAuthenticated) { setIsAdmin(!isAdmin); } else { setShowPasswordModal(true); }
     };
 
     // ---- CRUD CATEGORIES ----
@@ -571,19 +757,12 @@
       });
       setFormData(defaultVals);
     };
-
     var saveCategory = function() {
       var maxId = 0;
       editableData.categories.forEach(function(c) { if (c.id > maxId) maxId = c.id; });
-      var newCat = {
-        id: modal.creating ? maxId + 1 : modal.item.id
-      };
-      schema.categories.fields.forEach(function(f) {
-        newCat[f.key] = formData[f.key] || f.default;
-      });
-      if (modal.creating) {
-        editableData.categories.push(newCat);
-      } else {
+      var newCat = { id: modal.creating ? maxId + 1 : modal.item.id };
+      schema.categories.fields.forEach(function(f) { newCat[f.key] = formData[f.key] || f.default; });
+      if (modal.creating) { editableData.categories.push(newCat); } else {
         var idx = editableData.categories.findIndex(function(c) { return c.id === modal.item.id; });
         if (idx > -1) editableData.categories[idx] = newCat;
       }
@@ -591,7 +770,6 @@
       closeModal();
       setMsg({ text: "Categorie sauvegardee", type: "info" });
     };
-
     var deleteCategory = function(id) {
       if (!confirm("Supprimer cette categorie ?")) return;
       setEditableData({
@@ -617,23 +795,18 @@
       });
       setFormData(defaultVals);
     };
-
     var saveProduct = function() {
       if (!formData.categoryId && editableData.categories.length > 0) {
         formData.categoryId = editableData.categories[0].id;
       }
       var maxId = 0;
       editableData.products.forEach(function(p) { if (p.id > maxId) maxId = p.id; });
-      var newProd = {
-        id: modal.creating ? maxId + 1 : modal.item.id
-      };
+      var newProd = { id: modal.creating ? maxId + 1 : modal.item.id };
       schema.products.fields.forEach(function(f) {
         var val = formData[f.key] !== undefined ? formData[f.key] : f.default;
         newProd[f.key] = f.type === "number" ? parseFloat(val) || 0 : val;
       });
-      if (modal.creating) {
-        editableData.products.push(newProd);
-      } else {
+      if (modal.creating) { editableData.products.push(newProd); } else {
         var idx = editableData.products.findIndex(function(p) { return p.id === modal.item.id; });
         if (idx > -1) editableData.products[idx] = newProd;
       }
@@ -641,7 +814,6 @@
       closeModal();
       setMsg({ text: "Produit sauvegarde", type: "info" });
     };
-
     var deleteProduct = function(id) {
       if (!confirm("Supprimer ce produit ?")) return;
       setEditableData({ ...editableData, products: editableData.products.filter(function(p) { return p.id !== id; }) });
@@ -653,9 +825,9 @@
       setIsCommitting(true);
       try {
         await saveEditableData();
-        setMsg({ text: "Donnees sauvegardees sur GitHub", type: "success" });
+        setMsg({ text: "Donnees sauvegardees !", type: "success" });
       } catch (err) {
-        setMsg({ text: "Echec : " + err.message, type: "error" });
+        setMsg({ text: "Echec: " + err.message, type: "error" });
       }
       setIsCommitting(false);
     };
@@ -664,7 +836,7 @@
     var addToCart = function(product) {
       if (product.stock <= 0) { alert("Rupture de stock"); return; }
       if (!sogUser) {
-        alert("Vous devez etre connecte a SOG pour ajouter au panier.");
+        alert("Connectez-vous a SOG.");
         return;
       }
       setCart(function(prev) {
@@ -678,7 +850,6 @@
         return [...prev, { ...product, quantity: 1 }];
       });
     };
-
     var updateQty = function(id, delta) {
       setCart(function(prev) {
         var item = prev.find(function(i) { return i.id === id; });
@@ -691,28 +862,20 @@
         });
       });
     };
-
     var removeFromCart = function(id) {
-      setCart(function(prev) {
-        return prev.filter(function(i) { return i.id !== id; });
-      });
+      setCart(function(prev) { return prev.filter(function(i) { return i.id !== id; }); });
     };
-
     var getTotal = function() {
-      return cart.reduce(function(sum, i) {
-        return sum + i.price * i.quantity;
-      }, 0).toFixed(2);
+      return cart.reduce(function(sum, i) { return sum + i.price * i.quantity; }, 0).toFixed(2);
     };
 
-    // ---- ENVOI DE LA COMMANDE A SOG ----
+    // ---- ENVOI COMMANDE A SOG ----
     var sendOrderToSOG = function(orderData) {
       window.parent.postMessage({
         type: 'SOG_ORDER',
         payload: {
           vendor: vendeur,
-          items: cart.map(function(i) {
-            return { name: i.name, quantity: i.quantity, price: i.price };
-          }),
+          items: cart.map(function(i) { return { name: i.name, quantity: i.quantity, price: i.price }; }),
           total: parseFloat(getTotal()),
           currency: editableData?.settings?.currency || "DZD",
           customerName: orderData.name,
@@ -727,16 +890,14 @@
     var checkout = async function() {
       if (cart.length === 0) { alert("Panier vide"); return; }
       if (!sogUser) {
-        alert("Vous devez etre connecte a SOG pour commander.");
+        alert("Connectez-vous a SOG.");
         return;
       }
       if (!order.name.trim() || !order.address.trim() || !order.phone.trim()) {
-        alert("Veuillez remplir tous les champs obligatoires");
+        alert("Champs obligatoires.");
         return;
       }
-      
       sendOrderToSOG(order);
-
       var topic = editableData?.settings?.ntfyTopic;
       if (topic) {
         var currencySymbol = editableData?.settings?.currency || "€";
@@ -753,14 +914,12 @@
         });
         message += "\n----------------------------------------\n\n";
         message += "TOTAL : " + total + " " + currencySymbol;
-
         await fetch("https://ntfy.sh/" + topic, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ topic: topic, title: "NOUVELLE COMMANDE", message: message, priority: 5 }),
         }).catch(console.error);
       }
-      
       setCart([]);
       setOrder({ name: "", address: "", phone: "", comments: "" });
       setShowCart(false);
@@ -772,19 +931,16 @@
       var cat = data?.categories?.find(function(c) { return c.id === id; });
       return cat ? cat.name : "Sans categorie";
     };
-
     var getCategoryIcon = function(id) {
       var cat = data?.categories?.find(function(c) { return c.id === id; });
       return cat ? cat.icon : "📁";
     };
-
     var hasPending = function(item, type) {
       if (!data) return false;
       var orig = type === "product" ? data.products.find(function(p) { return p.id === item.id; }) : data.categories.find(function(c) { return c.id === item.id; });
       var draft = type === "product" ? editableData.products.find(function(p) { return p.id === item.id; }) : editableData.categories.find(function(c) { return c.id === item.id; });
       return JSON.stringify(orig) !== JSON.stringify(draft);
     };
-
     var getFiltered = function() {
       if (!editableData) return [];
       var filtered = editableData.products || [];
@@ -799,18 +955,16 @@
       }
       return filtered;
     };
-
     var closeModal = function() {
       setModal({ open: false, type: "", item: null, creating: false });
     };
 
-    // ---- RENDER FIELD AVEC CLOUDINARY ----
+    // ---- RENDER FIELD ----
     var renderField = function(field) {
       var val = formData[field.key] || "";
       var onChange = function(e) {
         setFormData({ ...formData, [field.key]: e.target.value });
       };
-
       if (field.type === "select") {
         var options = field.options === "categories" ? (editableData?.categories || []) : [];
         return (
@@ -825,42 +979,19 @@
       if (field.type === "textarea") {
         return <textarea key={field.key} value={val} onChange={onChange} placeholder={field.label} rows={field.rows || 2} className="input-modern" style={{ resize: 'vertical' }} />;
       }
-      
-      // ---- AJOUT : Bouton Cloudinary pour les champs image ----
       if (field.key === 'image') {
         return (
           <div key={field.key} className="flex gap-2 items-center">
-            <input
-              type="text"
-              step={field.step}
-              maxLength={field.maxLength}
-              value={val}
-              onChange={onChange}
-              placeholder={field.label}
-              className="input-modern flex-1"
-            />
-            <button
-              onClick={function() { openCloudinaryWidget(field.key); }}
-              className="btn-primary"
-              type="button"
-              title="Telecharger une image"
-            >
-              📷
-            </button>
+            <input type="text" step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="input-modern flex-1" />
+            <button onClick={function() { openCloudinaryWidget(field.key); }} className="btn-sm btn-primary-sm" type="button" title="Upload">📷</button>
             {val && (
-              <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-slate-800 border border-slate-700">
-                <img
-                  src={val}
-                  alt="Apercu"
-                  className="w-full h-full object-cover"
-                  onError={function(e) { e.target.style.display = 'none'; }}
-                />
+              <div className="w-9 h-9 rounded overflow-hidden flex-shrink-0 bg-slate-800 border border-slate-700">
+                <img src={val} alt="apercu" className="w-full h-full object-cover" onError={function(e) { e.target.style.display = 'none'; }} />
               </div>
             )}
           </div>
         );
       }
-      
       return (
         <input key={field.key} type={field.type || "text"} step={field.step} maxLength={field.maxLength} value={val} onChange={onChange} placeholder={field.label} className="input-modern" />
       );
@@ -868,22 +999,15 @@
 
     // ---- RENDU ----
     if (isLoading) {
-      return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-900">
-          <div className="spinner"></div>
-        </div>
-      );
+      return <div className="min-h-screen flex items-center justify-center"><div className="spinner"></div></div>;
     }
-
     if (!vendeur || isPlaceholder) {
       return (
-        <div className="min-h-screen flex items-center justify-center p-4 bg-slate-900">
-          <div className="modern-card max-w-md w-full p-6">
-            <div className="text-center">
-              <h2 className="text-xl font-bold text-red-400">Configuration requise</h2>
-              <p className="text-gray-300 mt-2">{isPlaceholder ? "Le template n'a pas ete configure." : "Le vendeur n'a pas ete configure correctement."}</p>
-              <p className="text-sm text-gray-400 mt-2">Utilisez le forkeur pour creer une boutique.</p>
-            </div>
+        <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="admin-card max-w-sm w-full text-center">
+            <h2 className="text-red-400 font-bold">Configuration requise</h2>
+            <p className="text-gray-300 text-sm mt-1">{isPlaceholder ? "Template non configure." : "Vendeur incorrect."}</p>
+            <p className="text-xs text-gray-400 mt-1">Utilisez le forkeur.</p>
           </div>
         </div>
       );
@@ -894,28 +1018,24 @@
     var cartCount = cart.reduce(function(s, i) { return s + i.quantity; }, 0);
 
     return (
-      <div className="min-h-screen bg-slate-900 text-white p-4">
+      <div className="app-container">
 
-        {/* ---- HEADER MODERN ---- */}
-        <header className="header-modern sticky top-0 z-30 p-4 rounded-xl mb-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="text-xl font-bold text-white">{settings.title || "Catalogue"}</h1>
+        {/* ---- HEADER ---- */}
+        <header className="header">
+          <div className="header-inner">
+            <span className="header-title" title={settings.title || "Catalogue"}>
+              {settings.title || "Catalogue"}
+            </span>
+            <div className="header-actions">
               {sogUser ? (
-                <span className="badge badge-success">Connecte en tant que {sogUser.name}</span>
+                <span className="badge badge-success hidden sm:inline">Connecte</span>
               ) : isReady ? (
-                <span className="badge badge-warning">Invite</span>
+                <span className="badge badge-warning hidden sm:inline">Invite</span>
               ) : null}
-            </div>
-            <div className="flex gap-2 items-center">
-              <button onClick={handleAdminClick} className="btn-secondary text-sm">
-                Admin
-              </button>
-              <button onClick={function() { setShowCart(!showCart); }} className="btn-secondary text-sm relative">
+              <button onClick={handleAdminClick} className="btn-sm btn-secondary-sm">Admin</button>
+              <button onClick={function() { setShowCart(!showCart); }} className="btn-sm btn-secondary-sm cart-btn-wrapper">
                 Panier
-                {cartCount > 0 && (
-                  <span className="cart-badge">{cartCount}</span>
-                )}
+                {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
               </button>
             </div>
           </div>
@@ -923,274 +1043,240 @@
 
         {/* ---- MESSAGES ---- */}
         {!sogUser && isReady && (
-          <div className="alert alert-warning mb-4">
-            Vous etes en mode invite. <a href="#" onClick={function(e) { e.preventDefault(); window.parent.postMessage({ type: 'SOG_LOGIN_REQUEST' }, '*'); }} className="underline hover:text-yellow-200">Connectez-vous</a> pour passer une commande.
+          <div className="alert alert-warning">
+            Invite. <a href="#" onClick={function(e) { e.preventDefault(); window.parent.postMessage({ type: 'SOG_LOGIN_REQUEST' }, '*'); }}>Connectez-vous</a> pour commander.
           </div>
         )}
-
         {msg.text && (
-          <div className={'alert mb-4 ' + (msg.type === 'success' ? 'alert-success' : msg.type === 'error' ? 'alert-error' : 'alert-info')}>
+          <div className={'alert ' + (msg.type === 'success' ? 'alert-success' : msg.type === 'error' ? 'alert-error' : 'alert-info')}>
             {msg.text}
           </div>
         )}
 
-        {/* ---- CONTENU ---- */}
-        <div className="max-w-7xl mx-auto">
+        {/* ---- ADMIN ---- */}
+        {isAdmin && isAdminAuthenticated ? (
+          <div>
+            <h2 className="text-lg font-bold mt-3 mb-2">PANEL ADMIN</h2>
 
-          {isAdmin && isAdminAuthenticated ? (
-            // ---- ADMIN ----
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-white">PANEL ADMIN</h2>
-
-              {/* Configuration */}
-              <div className="modern-card p-6">
-                <h3 className="font-semibold text-white mb-3">Configuration</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <input type="text" value={editableData?.settings?.title || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, title: e.target.value } }); }} placeholder="Titre" className="input-modern" />
-                  <input type="text" value={editableData?.settings?.currency || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, currency: e.target.value } }); }} placeholder="Devise" className="input-modern" />
-                  <input type="text" value={editableData?.settings?.ntfyTopic || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, ntfyTopic: e.target.value } }); }} placeholder="Topic ntfy" className="input-modern" />
-                </div>
-              </div>
-
-              {/* Token FGT */}
-              <div className="modern-card p-6">
-                <h3 className="font-semibold text-white mb-3">Token FGT (pour le commit)</h3>
-                <div className="flex gap-3 items-center">
-                  <input
-                    type="password"
-                    value={fgtToken}
-                    onChange={function(e) { setFgtToken(e.target.value); setIsTokenSaved(false); }}
-                    placeholder="Entrez votre token fine-grained"
-                    className="input-modern flex-1"
-                  />
-                  <button onClick={saveFgtToken} className="btn-primary">
-                    {isTokenSaved ? '✅ Sauvegarde' : '💾 Sauvegarder'}
-                  </button>
-                </div>
-                {isTokenSaved && (
-                  <p className="text-xs text-emerald-400 mt-2">✅ Token sauvegarde dans votre navigateur.</p>
-                )}
-                <p className="text-xs text-gray-400 mt-1">Le token est stocke localement dans votre navigateur.</p>
-              </div>
-
-              {/* Categories */}
-              <div className="modern-card p-6">
-                <div className="flex justify-between items-center mb-3">
-                  <h3 className="font-semibold text-white">{schema.categories.icon} {schema.categories.label}</h3>
-                  <button onClick={function() { openCatModal(null); }} className="btn-primary text-sm">Ajouter</button>
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                  {(editableData?.categories || []).map(function(c) {
-                    return (
-                      <div key={c.id} className={'flex items-center gap-2 p-2 rounded-lg border ' + (hasPending(c, "category") ? 'border-yellow-700 bg-yellow-900/20' : 'border-slate-700 bg-slate-800/30')}>
-                        <span className="text-xl">{c.icon}</span>
-                        <span className="flex-1 text-sm truncate text-white">{c.name}</span>
-                        <button onClick={function() { openCatModal(c); }} className="text-blue-400 hover:text-blue-300 text-sm">Modifier</button>
-                        <button onClick={function() { deleteCategory(c.id); }} className="btn-danger text-sm">Supprimer</button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Produits */}
-              <div className="modern-card p-6">
-                <div className="flex justify-between items-center mb-3">
-                  <h3 className="font-semibold text-white">{schema.products.icon} {schema.products.label}</h3>
-                  <button onClick={function() { openProdModal(null); }} className="btn-primary text-sm">Ajouter</button>
-                </div>
-                <div className="space-y-2">
-                  {(editableData?.products || []).map(function(p) {
-                    return (
-                      <div key={p.id} className={'flex items-center gap-3 p-2 rounded-lg border ' + (hasPending(p, "product") ? 'border-yellow-700 bg-yellow-900/20' : 'border-slate-700 bg-slate-800/30')}>
-                        <img src={p.image} alt={p.name} className="w-10 h-10 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-white">{p.name}</p>
-                          <p className="text-xs text-gray-400">{p.price}{currency} · {getCategoryName(p.categoryId)} · stock:{p.stock}</p>
-                        </div>
-                        <button onClick={function() { openProdModal(p); }} className="text-blue-400 hover:text-blue-300 text-sm">Modifier</button>
-                        <button onClick={function() { deleteProduct(p.id); }} className="btn-danger text-sm">Supprimer</button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Commit */}
-              <div className="modern-card p-6">
-                <button onClick={handleCommit} disabled={isCommitting} className={'btn-primary w-full ' + (isCommitting ? 'opacity-50' : '')}>
-                  {isCommitting ? 'Sauvegarde...' : 'Sauvegarder (Commit)'}
-                </button>
+            <div className="admin-card">
+              <div className="admin-card-title">Configuration</div>
+              <div className="space-y-2">
+                <input type="text" value={editableData?.settings?.title || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, title: e.target.value } }); }} placeholder="Titre" className="input-modern" />
+                <input type="text" value={editableData?.settings?.currency || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, currency: e.target.value } }); }} placeholder="Devise" className="input-modern" />
+                <input type="text" value={editableData?.settings?.ntfyTopic || ""} onChange={function(e) { setEditableData({ ...editableData, settings: { ...editableData.settings, ntfyTopic: e.target.value } }); }} placeholder="Topic ntfy" className="input-modern" />
               </div>
             </div>
-          ) : (
-            // ---- CATALOGUE ----
-            <div>
-              {/* Recherche */}
-              <div className="mb-4">
-                <input type="text" value={searchQuery} onChange={function(e) { setSearchQuery(e.target.value); }} placeholder="Rechercher..." className="input-modern" />
-              </div>
 
-              {/* Catégories */}
-              <div className="flex flex-wrap gap-2 mb-4 overflow-x-auto pb-2">
-                <button onClick={function() { setSelectedCategoryId(null); }} className={'btn-secondary text-sm ' + (!selectedCategoryId ? 'bg-blue-600 border-blue-500' : '')}>
-                  Tous
-                </button>
+            <div className="admin-card">
+              <div className="admin-card-title">Token FGT</div>
+              <div className="flex gap-2 items-center">
+                <input type="password" value={fgtToken} onChange={function(e) { setFgtToken(e.target.value); setIsTokenSaved(false); }} placeholder="Token" className="input-modern flex-1" />
+                <button onClick={saveFgtToken} className="btn-sm btn-primary-sm">{isTokenSaved ? '✅' : '💾'}</button>
+              </div>
+              {isTokenSaved && <p className="text-emerald-400 text-xs mt-1">✅ Sauvegarde.</p>}
+            </div>
+
+            <div className="admin-card">
+              <div className="flex justify-between items-center">
+                <span className="admin-card-title">{schema.categories.icon} Categories</span>
+                <button onClick={function() { openCatModal(null); }} className="btn-sm btn-primary-sm">+</button>
+              </div>
+              <div className="grid grid-cols-2 gap-1 mt-1">
                 {(editableData?.categories || []).map(function(c) {
                   return (
-                    <button key={c.id} onClick={function() { setSelectedCategoryId(c.id); }} className={'btn-secondary text-sm ' + (selectedCategoryId === c.id ? 'bg-blue-600 border-blue-500' : '')}>
-                      {c.icon} {c.name}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Grille produits */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                {getFiltered().map(function(p) {
-                  var isOutOfStock = p.stock <= 0;
-                  return (
-                    <div key={p.id} className="modern-card product-card p-4">
-                      <div className="aspect-square w-full mb-2 overflow-hidden rounded-lg bg-slate-800">
-                        <img
-                          src={p.image}
-                          alt={p.name}
-                          onClick={function() { setExpandedImage(p.image); }}
-                          className="w-full h-full object-cover cursor-pointer"
-                          onError={function(e) { e.target.src = "https://via.placeholder.com/200"; }}
-                        />
-                      </div>
-                      <span className="text-xs text-gray-400">{getCategoryIcon(p.categoryId)} {getCategoryName(p.categoryId)}</span>
-                      <h3 className="text-sm font-semibold text-white truncate mt-1">{p.name}</h3>
-                      <p className="text-base font-bold text-blue-400">{p.price}{currency}</p>
-                      {settings.showStock && (
-                        <p className={'text-xs ' + (isOutOfStock ? 'text-red-400' : 'text-gray-400')}>
-                          {isOutOfStock ? 'Rupture' : 'Stock: ' + p.stock}
-                        </p>
-                      )}
-                      {sogUser ? (
-                        <button onClick={function() { addToCart(p); }} disabled={isOutOfStock} className={'btn-primary w-full mt-2 text-sm ' + (isOutOfStock ? 'opacity-50' : '')}>
-                          Ajouter au panier
-                        </button>
-                      ) : (
-                        <button disabled className="btn-secondary w-full mt-2 text-sm opacity-50 cursor-not-allowed">
-                          Connexion requise
-                        </button>
-                      )}
+                    <div key={c.id} className={'flex items-center gap-1 p-1 rounded border ' + (hasPending(c, "category") ? 'border-yellow-700 bg-yellow-900/20' : 'border-slate-700 bg-slate-800/30')}>
+                      <span className="text-sm">{c.icon}</span>
+                      <span className="text-xs truncate flex-1 text-white">{c.name}</span>
+                      <button onClick={function() { openCatModal(c); }} className="text-blue-400 text-xs">✎</button>
+                      <button onClick={function() { deleteCategory(c.id); }} className="text-red-400 text-xs">✕</button>
                     </div>
                   );
                 })}
               </div>
+            </div>
 
-              {getFiltered().length === 0 && (
-                <div className="text-center py-10 text-gray-400">
-                  {searchQuery ? "Aucun produit ne correspond." : "Aucun produit dans cette categorie."}
-                </div>
-              )}
-
-              {/* Footer */}
-              <div className="mt-8 text-center text-xs text-gray-500 border-t border-slate-800 pt-4">
-                {(data?.products || []).length} PRODUITS · {(data?.categories || []).length} CATEGORIES
-                {settings.ntfyTopic && <span className="ml-4">🔔 {settings.ntfyTopic}</span>}
-                {sogUser && <span className="ml-4">Connecte</span>}
+            <div className="admin-card">
+              <div className="flex justify-between items-center">
+                <span className="admin-card-title">{schema.products.icon} Produits</span>
+                <button onClick={function() { openProdModal(null); }} className="btn-sm btn-primary-sm">+</button>
+              </div>
+              <div className="space-y-1 max-h-60 overflow-y-auto">
+                {(editableData?.products || []).map(function(p) {
+                  return (
+                    <div key={p.id} className={'flex items-center gap-2 p-1 rounded border ' + (hasPending(p, "product") ? 'border-yellow-700 bg-yellow-900/20' : 'border-slate-700 bg-slate-800/30')}>
+                      <img src={p.image} alt={p.name} className="w-8 h-8 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-medium text-white truncate">{p.name}</p>
+                        <p className="text-[0.55rem] text-gray-400">{p.price}{currency} · {getCategoryName(p.categoryId)}</p>
+                      </div>
+                      <button onClick={function() { openProdModal(p); }} className="text-blue-400 text-xs">✎</button>
+                      <button onClick={function() { deleteProduct(p.id); }} className="text-red-400 text-xs">✕</button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          )}
-        </div>
+
+            <div className="admin-card">
+              <button onClick={handleCommit} disabled={isCommitting} className={'btn-sm btn-primary-sm w-full' + (isCommitting ? ' opacity-50' : '')}>
+                {isCommitting ? 'Sauvegarde...' : 'Sauvegarder (Commit)'}
+              </button>
+            </div>
+          </div>
+        ) : (
+          // ---- CATALOGUE ----
+          <div>
+            {/* Recherche */}
+            <div className="mt-2">
+              <input type="text" value={searchQuery} onChange={function(e) { setSearchQuery(e.target.value); }} placeholder="Rechercher..." className="search-input" />
+            </div>
+
+            {/* Catégories */}
+            <div className="categories-scroll">
+              <button onClick={function() { setSelectedCategoryId(null); }} className={'category-btn ' + (!selectedCategoryId ? 'active' : '')}>
+                Tous
+              </button>
+              {(editableData?.categories || []).map(function(c) {
+                return (
+                  <button key={c.id} onClick={function() { setSelectedCategoryId(c.id); }} className={'category-btn ' + (selectedCategoryId === c.id ? 'active' : '')}>
+                    {c.icon} {c.name}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Grille produits */}
+            <div className="products-grid">
+              {getFiltered().map(function(p) {
+                var isOutOfStock = p.stock <= 0;
+                return (
+                  <div key={p.id} className="product-card">
+                    <div className="product-image">
+                      <img
+                        src={p.image}
+                        alt={p.name}
+                        onClick={function() { setExpandedImage(p.image); }}
+                        onError={function(e) { e.target.src = "https://via.placeholder.com/300"; }}
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="product-body">
+                      <div className="product-category">{getCategoryIcon(p.categoryId)} {getCategoryName(p.categoryId)}</div>
+                      <div className="product-name">{p.name}</div>
+                      <div className="product-price">{p.price}{currency}</div>
+                      {settings.showStock && (
+                        <div className={'product-stock ' + (isOutOfStock ? 'out' : '')}>
+                          {isOutOfStock ? '⚠️ Rupture' : '📦 ' + p.stock}
+                        </div>
+                      )}
+                      {sogUser ? (
+                        <button onClick={function() { addToCart(p); }} disabled={isOutOfStock} className={'product-btn primary' + (isOutOfStock ? ' opacity-50' : '')}>
+                          🛒 Ajouter
+                        </button>
+                      ) : (
+                        <button disabled className="product-btn secondary">🔒</button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {getFiltered().length === 0 && (
+              <div className="text-center py-6 text-gray-400 text-sm">
+                {searchQuery ? "Aucun produit." : "Aucun produit dans cette categorie."}
+              </div>
+            )}
+
+            {/* Footer */}
+            <div className="footer">
+              {(data?.products || []).length} PRODUITS · {(data?.categories || []).length} CATEGORIES
+              {settings.ntfyTopic && <span className="ml-2">🔔 {settings.ntfyTopic}</span>}
+              {sogUser && <span className="ml-2">✅ Connecte</span>}
+            </div>
+          </div>
+        )}
 
         {/* ---- MODALS ---- */}
 
-        {/* Modal mot de passe admin */}
         {showPasswordModal && (
-          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setShowPasswordModal(false); }}>
-            <div className="modern-card max-w-md w-full p-6" onClick={function(e) { e.stopPropagation(); }}>
-              <h3 className="text-xl font-bold text-white mb-4">Acces admin</h3>
-              <p className="text-gray-300 text-sm mb-4">Entrez votre mot de passe.</p>
+          <div className="fixed inset-0 modal-overlay z-50" onClick={function() { setShowPasswordModal(false); }}>
+            <div className="modal-card" onClick={function(e) { e.stopPropagation(); }}>
+              <h3 className="font-bold text-white">Acces admin</h3>
+              <p className="text-gray-300 text-sm my-2">Mot de passe :</p>
               <input type="password" value={adminPassword} onChange={function(e) { setAdminPassword(e.target.value); }} placeholder="Mot de passe" className="input-modern" onKeyDown={function(e) { if (e.key === "Enter") handleAdminLogin(); }} />
-              <div className="flex gap-2 mt-4">
-                <button onClick={handleAdminLogin} className="btn-primary flex-1">Valider</button>
-                <button onClick={function() { setShowPasswordModal(false); }} className="btn-secondary">Annuler</button>
+              <div className="flex gap-2 mt-3">
+                <button onClick={handleAdminLogin} className="btn-sm btn-primary-sm flex-1">Valider</button>
+                <button onClick={function() { setShowPasswordModal(false); }} className="btn-sm btn-secondary-sm">Annuler</button>
               </div>
-              {msg.text && msg.type === "error" && <p className="text-red-400 text-sm mt-2">{msg.text}</p>}
+              {msg.text && msg.type === "error" && <p className="text-red-400 text-xs mt-2">{msg.text}</p>}
             </div>
           </div>
         )}
 
-        {/* Modal image agrandie */}
         {expandedImage && (
-          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setExpandedImage(null); }}>
-            <div className="max-w-3xl w-full" onClick={function(e) { e.stopPropagation(); }}>
-              <img src={expandedImage} alt="Agrandissement" className="w-full rounded-xl" onError={function(e) { e.target.src = "https://via.placeholder.com/800"; }} />
-              <button onClick={function() { setExpandedImage(null); }} className="absolute top-4 right-4 text-white text-2xl">×</button>
+          <div className="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4" onClick={function() { setExpandedImage(null); }}>
+            <div className="max-w-full max-h-full" onClick={function(e) { e.stopPropagation(); }}>
+              <img src={expandedImage} alt="agrandissement" className="max-w-full max-h-screen rounded-lg" onError={function(e) { e.target.src = "https://via.placeholder.com/600"; }} />
+              <button onClick={function() { setExpandedImage(null); }} className="absolute top-2 right-4 text-white text-2xl">×</button>
             </div>
           </div>
         )}
 
-        {/* Modal Panier */}
         {showCart && (
-          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setShowCart(false); }}>
-            <div className="modern-card max-w-md w-full p-6 max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
-              <h3 className="text-xl font-bold text-white mb-4">Mon Panier</h3>
+          <div className="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4" onClick={function() { setShowCart(false); }}>
+            <div className="modal-card max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
+              <h3 className="font-bold text-white text-lg">Mon Panier</h3>
               {cart.length === 0 ? (
-                <p className="py-4 text-center text-gray-400">Panier vide</p>
+                <p className="py-4 text-center text-gray-400 text-sm">Vide</p>
               ) : (
                 <div>
-                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                  <div className="space-y-2 max-h-52 overflow-y-auto">
                     {cart.map(function(i) {
                       return (
-                        <div key={i.id} className="flex items-center gap-3 bg-slate-800/40 p-2 rounded-lg border border-slate-700">
-                          <img src={i.image} alt={i.name} className="w-12 h-12 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
-                          <div className="flex-1">
-                            <p className="text-sm font-medium text-white">{i.name}</p>
-                            <p className="text-xs text-gray-400">{i.price}{currency}</p>
+                        <div key={i.id} className="flex items-center gap-2 bg-slate-800/40 p-2 rounded border border-slate-700">
+                          <img src={i.image} alt={i.name} className="w-10 h-10 object-cover rounded-full" onError={function(e) { e.target.src = "https://via.placeholder.com/50"; }} />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-medium text-white truncate">{i.name}</p>
+                            <p className="text-[0.6rem] text-gray-400">{i.price}{currency}</p>
                           </div>
                           <div className="flex items-center gap-1">
-                            <button onClick={function() { updateQty(i.id, -1); }} className="btn-secondary text-xs px-2 py-1">-</button>
-                            <span className="w-6 text-center text-white">{i.quantity}</span>
-                            <button onClick={function() { updateQty(i.id, 1); }} className="btn-secondary text-xs px-2 py-1">+</button>
-                            <button onClick={function() { removeFromCart(i.id); }} className="btn-danger text-sm ml-1">×</button>
+                            <button onClick={function() { updateQty(i.id, -1); }} className="btn-sm btn-secondary-sm text-xs px-2 py-0.5">−</button>
+                            <span className="w-6 text-center text-sm">{i.quantity}</span>
+                            <button onClick={function() { updateQty(i.id, 1); }} className="btn-sm btn-secondary-sm text-xs px-2 py-0.5">+</button>
+                            <button onClick={function() { removeFromCart(i.id); }} className="text-red-400 text-xs px-1">✕</button>
                           </div>
                         </div>
                       );
                     })}
                   </div>
                   <div className="flex justify-between font-bold border-t border-slate-700 pt-2 mt-2">
-                    <span className="text-white">Total</span>
+                    <span>Total</span>
                     <span className="text-blue-400">{getTotal()}{currency}</span>
                   </div>
-
-                  <div className={'space-y-2 mt-4 ' + (!sogUser ? 'opacity-50 pointer-events-none' : '')}>
-                    <input type="text" value={order.name} onChange={function(e) { setOrder({ ...order, name: e.target.value }); }} placeholder="Nom complet *" className="input-modern" />
+                  <div className={'space-y-2 mt-3 ' + (!sogUser ? 'opacity-50 pointer-events-none' : '')}>
+                    <input type="text" value={order.name} onChange={function(e) { setOrder({ ...order, name: e.target.value }); }} placeholder="Nom *" className="input-modern" />
                     <input type="text" value={order.address} onChange={function(e) { setOrder({ ...order, address: e.target.value }); }} placeholder="Adresse *" className="input-modern" />
-                    <input type="tel" value={order.phone} onChange={function(e) { setOrder({ ...order, phone: e.target.value }); }} placeholder="Telephone *" className="input-modern" />
-                    <textarea value={order.comments} onChange={function(e) { setOrder({ ...order, comments: e.target.value }); }} placeholder="Commentaires (facultatif)" rows="2" className="input-modern" style={{ resize: 'vertical' }} />
+                    <input type="tel" value={order.phone} onChange={function(e) { setOrder({ ...order, phone: e.target.value }); }} placeholder="Tel *" className="input-modern" />
+                    <textarea value={order.comments} onChange={function(e) { setOrder({ ...order, comments: e.target.value }); }} placeholder="Commentaires" rows="2" className="input-modern" />
                   </div>
-
-                  {!sogUser && (
-                    <div className="mt-2 text-yellow-400 text-sm text-center">
-                      Connectez-vous a SOG pour valider la commande
-                    </div>
-                  )}
-
-                  <div className="modal-action mt-4">
-                    <button onClick={checkout} disabled={!sogUser || cart.length === 0} className={'btn-primary w-full ' + (!sogUser || cart.length === 0 ? 'opacity-50' : '')}>
-                      Valider la commande
-                    </button>
-                  </div>
+                  {!sogUser && <p className="text-yellow-400 text-xs text-center mt-2">Connectez-vous pour valider</p>}
+                  <button onClick={checkout} disabled={!sogUser || cart.length === 0} className={'btn-sm btn-primary-sm w-full mt-3' + (!sogUser || cart.length === 0 ? ' opacity-50' : '')}>
+                    Valider
+                  </button>
                 </div>
               )}
             </div>
           </div>
         )}
 
-        {/* Modal générique (création/édition) */}
         {modal.open && (
-          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={closeModal}>
-            <div className="modern-card max-w-md w-full p-6 max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
-              <h3 className="text-xl font-bold text-white mb-4">
+          <div className="fixed inset-0 modal-overlay z-50 flex items-center justify-center p-4" onClick={closeModal}>
+            <div className="modal-card max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
+              <h3 className="font-bold text-white">
                 {modal.creating ? "Nouveau " + (modal.type === "category" ? "categorie" : "produit") : "Modifier " + (modal.type === "category" ? "la categorie" : "le produit")}
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-3 mt-3">
                 {modal.type === "category"
                   ? schema.categories.fields.map(function(f) { return renderField(f); })
                   : schema.products.fields.map(function(f) {
@@ -1200,10 +1286,10 @@
                 }
               </div>
               <div className="flex gap-2 mt-4">
-                <button onClick={modal.type === "category" ? saveCategory : saveProduct} className="btn-primary flex-1">
+                <button onClick={modal.type === "category" ? saveCategory : saveProduct} className="btn-sm btn-primary-sm flex-1">
                   {modal.creating ? 'Creer' : 'Sauvegarder'}
                 </button>
-                <button onClick={closeModal} className="btn-secondary">Annuler</button>
+                <button onClick={closeModal} className="btn-sm btn-secondary-sm">Annuler</button>
               </div>
             </div>
           </div>
